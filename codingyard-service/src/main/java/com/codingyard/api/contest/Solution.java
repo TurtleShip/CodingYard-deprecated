@@ -2,6 +2,7 @@ package com.codingyard.api.contest;
 
 import com.codingyard.api.user.User;
 
+import java.nio.file.Path;
 import java.util.Date;
 
 public class Solution {
@@ -9,15 +10,24 @@ public class Solution {
     private final Contest contest;
     private final User author;
     private final Date submissionDate;
+    private Path filePath;
 
-    private User authorizer;
-    private Date acceptedDate;
-    private boolean isAccepted;
+    private User authorizer; // The user who accepted this solution
+    private Date acceptedDate; // The date when this solution has been accepted
+    private boolean isAccepted; // True is this solution has been accepted
 
-    public Solution(final Contest contest, final User author, final Date submissionDate) {
+    /**
+     *
+     * @param contest The contest this solution belongs to
+     * @param author The author of this solution
+     * @param submissionDate The date when the solution was submitted
+     * @param filePath The path where this solution has been saved
+     */
+    public Solution(final Contest contest, final User author, final Date submissionDate, final Path filePath) {
         this.contest = contest;
         this.author = author;
         this.submissionDate = submissionDate;
+        this.filePath = filePath;
         this.isAccepted = false;
     }
 
@@ -31,6 +41,10 @@ public class Solution {
 
     public Date getSubmissionDate() {
         return submissionDate;
+    }
+
+    public Path getFilePath() {
+        return filePath;
     }
 
     public User getAuthorizer() {
@@ -55,5 +69,9 @@ public class Solution {
 
     public void setAccepted(boolean isAccepted) {
         this.isAccepted = isAccepted;
+    }
+
+    public void setFilePath(Path filePath) {
+        this.filePath = filePath;
     }
 }
