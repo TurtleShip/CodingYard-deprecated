@@ -8,12 +8,16 @@ public class User {
     private final String lastName;
     private Role role;
 
-    public User(String username, String password, String firstName, String lastName) {
+    public User(String username, String password, String firstName, String lastName, Role role) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.role = Role.GUEST;
+        this.role = role;
+    }
+
+    public User(String username, String password, String firstName, String lastName) {
+        this(username, password, firstName, lastName, Role.MEMBER);
     }
 
     public String getUsername() {
