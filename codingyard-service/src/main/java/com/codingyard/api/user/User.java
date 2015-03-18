@@ -1,12 +1,34 @@
 package com.codingyard.api.user;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "user")
 public class User {
 
-    private final String username;
-    private final String password;
-    private final String firstName;
-    private final String lastName;
+    private Long id;
+
+    @Column(name="user_name", nullable = false)
+    private String username;
+
+    @Column(name="password", nullable = false)
+    private String password;
+
+    @Column(name="first_name", nullable = false)
+    private String firstName;
+
+    @Column(name="last_name", nullable = false)
+    private String lastName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
     private Role role;
+
+    // package private. Needed for hibernate
+    User() {
+    }
 
     public User(String username, String password, String firstName, String lastName, Role role) {
         this.username = username;
@@ -18,6 +40,13 @@ public class User {
 
     public User(String username, String password, String firstName, String lastName) {
         this(username, password, firstName, lastName, Role.MEMBER);
+    }
+
+    @Id
+    @GeneratedValue(generator = "increment")
+    @GenericGenerator(name = "increment", strategy = "increment")
+    public Long getId() {
+        return id;
     }
 
     public String getUsername() {
