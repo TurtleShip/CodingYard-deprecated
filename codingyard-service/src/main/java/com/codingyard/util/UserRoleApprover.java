@@ -1,7 +1,7 @@
 package com.codingyard.util;
 
-import com.codingyard.api.user.Role;
-import com.codingyard.api.user.User;
+import com.codingyard.entity.user.Role;
+import com.codingyard.entity.user.User;
 
 public class UserRoleApprover {
 

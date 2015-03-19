@@ -1,4 +1,4 @@
-package com.codingyard.api.user;
+package com.codingyard.entity.user;
 
 public enum Role {
 

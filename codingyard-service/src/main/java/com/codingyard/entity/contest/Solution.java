@@ -1,6 +1,6 @@
-package com.codingyard.api.contest;
+package com.codingyard.entity.contest;
 
-import com.codingyard.api.user.User;
+import com.codingyard.entity.user.User;
 
 import java.nio.file.Path;
 import java.util.Date;

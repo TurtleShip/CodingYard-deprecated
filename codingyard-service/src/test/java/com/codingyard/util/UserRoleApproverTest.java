@@ -1,14 +1,14 @@
 package com.codingyard.util;
 
 
-import com.codingyard.api.user.User;
+import com.codingyard.entity.user.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static com.codingyard.api.user.Role.*;
+import static com.codingyard.entity.user.Role.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;

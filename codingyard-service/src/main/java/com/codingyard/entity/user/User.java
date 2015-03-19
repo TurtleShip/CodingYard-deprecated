@@ -1,4 +1,4 @@
-package com.codingyard.api.user;
+package com.codingyard.entity.user;
 
 import org.hibernate.annotations.GenericGenerator;
 

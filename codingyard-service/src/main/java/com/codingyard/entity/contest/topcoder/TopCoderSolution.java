@@ -1,8 +1,8 @@
-package com.codingyard.api.contest.topcoder;
+package com.codingyard.entity.contest.topcoder;
 
-import com.codingyard.api.contest.Contest;
-import com.codingyard.api.contest.Solution;
-import com.codingyard.api.user.User;
+import com.codingyard.entity.contest.Contest;
+import com.codingyard.entity.contest.Solution;
+import com.codingyard.entity.user.User;
 
 import java.nio.file.Path;
 import java.util.Date;
