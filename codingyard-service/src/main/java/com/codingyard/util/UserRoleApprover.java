@@ -1,7 +1,7 @@
 package com.codingyard.util;
 
 import com.codingyard.entity.user.Role;
-import com.codingyard.entity.user.User;
+import com.codingyard.entity.user.CodingyardUser;
 
 public class UserRoleApprover {
 
@@ -13,13 +13,13 @@ public class UserRoleApprover {
      * 2) {@code approver} has higher or equal role level compared to {@code newRole}
      *
      * @param approver   The user who is trying to approve.
-     * @param targetUser The user whose role is being changed.
+     * @param targetCodingyardUser The user whose role is being changed.
      * @param newRole    The new role to which the targetUser will be changed.
      * @return true if {@code approver} successfully approved {@code targetUser}'s role change to {@code newRole}.
      */
-    public static boolean approve(final User approver, final User targetUser, final Role newRole) {
-        if (hasHighPermission(approver, targetUser) && approver.getRole().getLevel() >= newRole.getLevel()) {
-            targetUser.setRole(newRole);
+    public static boolean approve(final CodingyardUser approver, final CodingyardUser targetCodingyardUser, final Role newRole) {
+        if (hasHighPermission(approver, targetCodingyardUser) && approver.getRole().getLevel() >= newRole.getLevel()) {
+            targetCodingyardUser.setRole(newRole);
             return true;
         }
         return false;
@@ -33,7 +33,7 @@ public class UserRoleApprover {
      * @param lower  The user whose permission should be lower.
      * @return true if {@code higher} has higher permission that {@code lower}
      */
-    public static boolean hasHighPermission(final User higher, final User lower) {
+    public static boolean hasHighPermission(final CodingyardUser higher, final CodingyardUser lower) {
         return higher.getRole().getLevel() > lower.getRole().getLevel();
     }
 

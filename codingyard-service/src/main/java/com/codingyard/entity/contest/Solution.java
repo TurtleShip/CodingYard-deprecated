@@ -1,6 +1,6 @@
 package com.codingyard.entity.contest;
 
-import com.codingyard.entity.user.User;
+import com.codingyard.entity.user.CodingyardUser;
 
 import java.nio.file.Path;
 import java.util.Date;
@@ -8,11 +8,11 @@ import java.util.Date;
 public class Solution {
 
     private final Contest contest;
-    private final User author;
+    private final CodingyardUser author;
     private final Date submissionDate;
     private Path filePath;
 
-    private User authorizer; // The user who accepted this solution
+    private CodingyardUser authorizer; // The user who accepted this solution
     private Date acceptedDate; // The date when this solution has been accepted
     private boolean isAccepted; // True is this solution has been accepted
 
@@ -23,7 +23,7 @@ public class Solution {
      * @param submissionDate The date when the solution was submitted
      * @param filePath The path where this solution has been saved
      */
-    public Solution(final Contest contest, final User author, final Date submissionDate, final Path filePath) {
+    public Solution(final Contest contest, final CodingyardUser author, final Date submissionDate, final Path filePath) {
         this.contest = contest;
         this.author = author;
         this.submissionDate = submissionDate;
@@ -35,7 +35,7 @@ public class Solution {
         return contest;
     }
 
-    public User getAuthor() {
+    public CodingyardUser getAuthor() {
         return author;
     }
 
@@ -47,7 +47,7 @@ public class Solution {
         return filePath;
     }
 
-    public User getAuthorizer() {
+    public CodingyardUser getAuthorizer() {
         return authorizer;
     }
 
@@ -59,7 +59,7 @@ public class Solution {
         return isAccepted;
     }
 
-    public void setAuthorizer(User authorizer) {
+    public void setAuthorizer(CodingyardUser authorizer) {
         this.authorizer = authorizer;
     }
 
