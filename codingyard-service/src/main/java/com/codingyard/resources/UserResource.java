@@ -32,6 +32,7 @@ public class UserResource {
     @POST
     @Metered
     @UnitOfWork
+    @Produces(MediaType.APPLICATION_JSON)
     public Long createUser(@FormParam("username") @NotNull final String username,
                            @FormParam("password") @NotNull final String password,
                            @FormParam("firstName") @NotNull final String firstName,
