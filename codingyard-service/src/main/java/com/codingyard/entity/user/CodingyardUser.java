@@ -12,28 +12,11 @@ import java.util.Objects;
 @Table(name = "codingyard_user")
 public class CodingyardUser {
 
-    @JsonIgnore
     private Long id;
-
-    @JsonProperty("username")
-    @Column(name = "user_name", nullable = false)
     private String username;
-
-    @JsonIgnore
-    @Column(name = "password", nullable = false)
     private String password;
-
-    @JsonProperty("first_name")
-    @Column(name = "first_name", nullable = false)
     private String firstName;
-
-    @JsonProperty("last_name")
-    @Column(name = "last_name", nullable = false)
     private String lastName;
-
-    @JsonProperty("role")
-    @Column(name = "role", nullable = false)
-    @Enumerated(EnumType.STRING)
     private Role role;
 
     // package private. Needed for hibernate
@@ -48,6 +31,7 @@ public class CodingyardUser {
         this.role = role;
     }
 
+    @JsonIgnore
     @Id
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
@@ -55,22 +39,33 @@ public class CodingyardUser {
         return id;
     }
 
+    @JsonProperty("username")
+    @Column(name = "user_name", nullable = false)
     public String getUsername() {
         return username;
     }
 
+    @JsonIgnore
+    @Column(name = "password", nullable = false)
     public String getPassword() {
         return password;
     }
 
+    @JsonProperty("first_name")
+    @Column(name = "first_name", nullable = false)
     public String getFirstName() {
         return firstName;
     }
 
+    @JsonProperty("last_name")
+    @Column(name = "last_name", nullable = false)
     public String getLastName() {
         return lastName;
     }
 
+    @JsonProperty("role")
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "wassup", nullable = false)
     public Role getRole() {
         return role;
     }
