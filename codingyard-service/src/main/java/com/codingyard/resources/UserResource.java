@@ -2,8 +2,8 @@ package com.codingyard.resources;
 
 import com.codahale.metrics.annotation.Metered;
 import com.codingyard.dao.UserDAO;
-import com.codingyard.entity.user.Role;
 import com.codingyard.entity.user.CodingyardUser;
+import com.codingyard.entity.user.Role;
 import com.codingyard.util.Encryptor;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.jersey.params.LongParam;
@@ -42,4 +42,7 @@ public class UserResource {
         final CodingyardUser codingyardUser = new CodingyardUser(username, Encryptor.encrypt(password), firstName, lastName, role);
         return userDAO.save(codingyardUser);
     }
+
+    // TODO: Add an endpoint to change user's role. Make sure that authorizer has a proper permission to change
+    // another user's role
 }

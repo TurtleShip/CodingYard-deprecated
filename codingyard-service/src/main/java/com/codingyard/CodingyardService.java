@@ -29,6 +29,12 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
                     final Environment environment) throws Exception {
         environment.jersey().register(new HelloResource());
         environment.jersey().register(new UserResource(new UserDAO(hibernate.getSessionFactory())));
+
+        /*
+         TODO: Add an authenticator. Authenticator should do below
+          1) Check user matches who he claims to be.
+          2) Return user's permission.
+          */
     }
 
     private HibernateBundle<CodingyardConfiguration> buildHibernateBundle() {
