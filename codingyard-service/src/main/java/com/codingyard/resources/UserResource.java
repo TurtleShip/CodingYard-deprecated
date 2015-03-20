@@ -9,6 +9,7 @@ import io.dropwizard.jersey.params.LongParam;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 
 @Path("/user")
 public class UserResource {
@@ -23,6 +24,7 @@ public class UserResource {
     @GET
     @Metered
     @UnitOfWork
+    @Produces(MediaType.APPLICATION_JSON)
     public CodingyardUser findUser(@PathParam("id") LongParam id) {
         return userDAO.findById(id.get());
     }
