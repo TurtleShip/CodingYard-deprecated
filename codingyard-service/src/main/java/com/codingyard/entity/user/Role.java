@@ -2,7 +2,7 @@ package com.codingyard.entity.user;
 
 public enum Role {
 
-    GLOBAL_ADMIN("Global admin", 3), ADMIN("Admin" ,2), MEMBER("Member", 1), GUEST("Guest", 0);
+    GLOBAL_ADMIN("GLOBAL_ADMIN", 3), ADMIN("ADMIN" ,2), MEMBER("MEMBER", 1), GUEST("GUEST", 0);
 
     private final String title;
     private final int level;
@@ -19,4 +19,10 @@ public enum Role {
     public int getLevel() {
         return level;
     }
+
+    @Override
+    public String toString() {
+        return title;
+    }
+
 }

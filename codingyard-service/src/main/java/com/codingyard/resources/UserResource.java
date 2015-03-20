@@ -19,6 +19,7 @@ public class UserResource {
         this.userDAO = userDAO;
     }
 
+    @Path("/{id}")
     @GET
     @Metered
     @UnitOfWork
