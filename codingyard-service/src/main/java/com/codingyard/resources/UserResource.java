@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Metered;
 import com.codingyard.dao.UserDAO;
 import com.codingyard.entity.user.Role;
 import com.codingyard.entity.user.CodingyardUser;
+import com.codingyard.util.Encryptor;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.jersey.params.LongParam;
 
@@ -38,7 +39,7 @@ public class UserResource {
                            @FormParam("firstName") @NotNull final String firstName,
                            @FormParam("lastName") @NotNull final String lastName,
                            @FormParam("role") @NotNull final Role role) {
-        final CodingyardUser codingyardUser = new CodingyardUser(username, password, firstName, lastName, role);
+        final CodingyardUser codingyardUser = new CodingyardUser(username, Encryptor.encrypt(password), firstName, lastName, role);
         return userDAO.save(codingyardUser);
     }
 }
