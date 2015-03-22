@@ -33,6 +33,7 @@ public class CodingyardUser {
 
     @JsonIgnore
     @Id
+    @Column(name = "user_id", nullable = false, unique = true)
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
     public Long getId() {
@@ -40,7 +41,7 @@ public class CodingyardUser {
     }
 
     @JsonProperty("username")
-    @Column(name = "user_name", nullable = false)
+    @Column(name = "user_name", nullable = false, unique = true)
     public String getUsername() {
         return username;
     }
