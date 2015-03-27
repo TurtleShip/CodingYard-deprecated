@@ -1,7 +1,9 @@
 package com.codingyard.entity.user;
 
+import com.codingyard.entity.auth.CodingyardToken;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -12,12 +14,13 @@ import java.util.Objects;
 @Table(name = "codingyard_user")
 public class CodingyardUser {
 
-    private Long id;
+    private Long userId;
     private String username;
     private String password;
     private String firstName;
     private String lastName;
     private Role role;
+    private CodingyardToken token;
 
     // package private. Needed for hibernate
     CodingyardUser() {
@@ -34,10 +37,9 @@ public class CodingyardUser {
     @JsonIgnore
     @Id
     @Column(name = "user_id", nullable = false, unique = true)
-    @GeneratedValue(generator = "increment")
-    @GenericGenerator(name = "increment", strategy = "increment")
-    public Long getId() {
-        return id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    public Long getUserId() {
+        return userId;
     }
 
     @JsonProperty("username")
@@ -66,13 +68,19 @@ public class CodingyardUser {
 
     @JsonProperty("role")
     @Enumerated(value = EnumType.STRING)
-    @Column(name = "wassup", nullable = false)
+    @Column(name = "role", nullable = false)
     public Role getRole() {
         return role;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @JsonIgnore
+    @OneToOne(optional = false, mappedBy = "user", cascade = CascadeType.ALL)
+    public CodingyardToken getToken() {
+        return token;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public void setUsername(String username) {
@@ -93,6 +101,10 @@ public class CodingyardUser {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public void setToken(CodingyardToken token) {
+        this.token = token;
     }
 
     @Override

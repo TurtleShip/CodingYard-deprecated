@@ -1,8 +1,10 @@
 package com.codingyard.entity.auth;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import com.codingyard.entity.user.CodingyardUser;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 
@@ -10,15 +12,34 @@ import java.util.Objects;
 @Table(name = "codingyard_token")
 public class CodingyardToken {
 
+    private Long userId;
+    private CodingyardUser user;
     private String value;
     private Date createdAt;
 
     // Private package. Needed for Hibernate
-    CodingyardToken() {}
+    CodingyardToken() {
+    }
 
     public CodingyardToken(final String value, final Date createdAt) {
         this.value = value;
         this.createdAt = createdAt;
+    }
+
+    @Id
+    @Column(name = "user_id", unique = true, nullable = false)
+    @GeneratedValue(generator = "codingyardUserIdGenerator")
+    @GenericGenerator(name = "codingyardUserIdGenerator",
+        strategy = "foreign",
+        parameters = {@Parameter(value = "user", name = "property")})
+    public Long getUserId() {
+        return userId;
+    }
+
+    @OneToOne
+    @PrimaryKeyJoinColumn(name = "user_id")
+    public CodingyardUser getUser() {
+        return user;
     }
 
     @Column(name = "value", nullable = false, unique = true)
@@ -29,6 +50,14 @@ public class CodingyardToken {
     @Column(name = "created_at", nullable = false)
     public Date getCreatedAt() {
         return createdAt;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public void setUser(CodingyardUser user) {
+        this.user = user;
     }
 
     public void setValue(String value) {

@@ -2,6 +2,7 @@ package com.codingyard.resources;
 
 import com.codahale.metrics.annotation.Metered;
 import com.codingyard.dao.UserDAO;
+import com.codingyard.entity.auth.CodingyardToken;
 import com.codingyard.entity.user.CodingyardUser;
 import com.codingyard.entity.user.Role;
 import com.codingyard.util.Encryptor;
@@ -11,6 +12,7 @@ import io.dropwizard.jersey.params.LongParam;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.Date;
 
 @Path("/user")
 public class UserResource {
@@ -40,6 +42,9 @@ public class UserResource {
                            @FormParam("lastName") @NotNull final String lastName,
                            @FormParam("role") @NotNull final Role role) {
         final CodingyardUser codingyardUser = new CodingyardUser(username, Encryptor.encrypt(password), firstName, lastName, role);
+        final CodingyardToken token = new CodingyardToken("WAWGEGWEGG", new Date());
+        codingyardUser.setToken(token);
+        token.setUser(codingyardUser);
         return userDAO.save(codingyardUser);
     }
 

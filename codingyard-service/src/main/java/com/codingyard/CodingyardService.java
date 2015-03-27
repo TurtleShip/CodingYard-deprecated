@@ -2,6 +2,7 @@ package com.codingyard;
 
 import com.codingyard.config.CodingyardConfiguration;
 import com.codingyard.dao.UserDAO;
+import com.codingyard.entity.auth.CodingyardToken;
 import com.codingyard.entity.user.CodingyardUser;
 import com.codingyard.resources.HelloResource;
 import com.codingyard.resources.UserResource;
@@ -39,7 +40,8 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
 
     private HibernateBundle<CodingyardConfiguration> buildHibernateBundle() {
         return new HibernateBundle<CodingyardConfiguration>(
-            CodingyardUser.class
+            CodingyardUser.class,
+            CodingyardToken.class
         ) {
             @Override
             public DataSourceFactory getDataSourceFactory(CodingyardConfiguration configuration) {

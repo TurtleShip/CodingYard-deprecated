@@ -17,7 +17,7 @@ public class UserDAO extends AbstractDAO<CodingyardUser> {
     }
 
     public long save(final CodingyardUser codingyardUser) {
-        return persist(codingyardUser).getId();
+        return persist(codingyardUser).getUserId();
     }
 
     public List<CodingyardUser> findAll() {
