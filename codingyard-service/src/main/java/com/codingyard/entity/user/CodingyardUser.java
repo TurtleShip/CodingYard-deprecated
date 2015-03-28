@@ -3,8 +3,7 @@ package com.codingyard.entity.user;
 import com.codingyard.entity.auth.CodingyardToken;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.GenericGenerator;
+import static com.google.common.base.Objects.toStringHelper;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -34,7 +33,7 @@ public class CodingyardUser {
         this.role = role;
     }
 
-    @JsonIgnore
+    @JsonProperty("id")
     @Id
     @Column(name = "user_id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -125,5 +124,16 @@ public class CodingyardUser {
             && Objects.equals(this.firstName, other.firstName)
             && Objects.equals(this.lastName, other.lastName)
             && Objects.equals(this.role, other.role);
+    }
+
+    @Override
+    public String toString() {
+        return toStringHelper(CodingyardUser.class)
+            .add("userId", userId)
+            .add("userName", username)
+            .add("firstName", firstName)
+            .add("lastName", lastName)
+            .add("role", role)
+            .toString();
     }
 }
