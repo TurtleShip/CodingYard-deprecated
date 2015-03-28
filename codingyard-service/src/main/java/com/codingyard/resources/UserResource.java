@@ -44,7 +44,7 @@ public class UserResource {
                            @FormParam("lastName") @NotNull final String lastName,
                            @FormParam("role") @NotNull final Role role) {
         final CodingyardUser codingyardUser = new CodingyardUser(username, Encryptor.encrypt(password), firstName, lastName, role);
-        final CodingyardToken token = new CodingyardToken("WAWGEGWEGG", new Date());
+        final CodingyardToken token = CodingyardToken.Builder.build();
         codingyardUser.setToken(token);
         token.setUser(codingyardUser);
         return userDAO.save(codingyardUser);
