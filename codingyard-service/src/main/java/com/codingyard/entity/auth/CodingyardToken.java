@@ -7,6 +7,7 @@ import org.hibernate.annotations.Parameter;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "codingyard_token")
@@ -84,5 +85,14 @@ public class CodingyardToken {
         final CodingyardToken other = (CodingyardToken) obj;
         return Objects.equals(this.value, other.value)
             && Objects.equals(this.createdAt, other.createdAt);
+    }
+
+    public static class Builder {
+
+        public static CodingyardToken build() {
+            final Date currentTime = new Date();
+            final String token = UUID.randomUUID().toString() + currentTime.getTime();
+            return new CodingyardToken(token, currentTime);
+        }
     }
 }

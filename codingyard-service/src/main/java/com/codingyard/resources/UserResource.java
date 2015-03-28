@@ -6,12 +6,14 @@ import com.codingyard.entity.auth.CodingyardToken;
 import com.codingyard.entity.user.CodingyardUser;
 import com.codingyard.entity.user.Role;
 import com.codingyard.util.Encryptor;
+import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.jersey.params.LongParam;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.Date;
 
 @Path("/user")
@@ -47,6 +49,26 @@ public class UserResource {
         token.setUser(codingyardUser);
         return userDAO.save(codingyardUser);
     }
+
+    @Path("/login")
+    @POST
+    @Metered
+    @UnitOfWork
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response login(@Auth CodingyardUser user) {
+
+        final CodingyardToken newToken = CodingyardToken.Builder.build();
+        final CodingyardToken oldToken = user.getToken();
+        oldToken.setCreatedAt(newToken.getCreatedAt());
+        oldToken.setValue(newToken.getValue());
+
+        userDAO.save(user);
+        return Response.status(Response.Status.OK)
+            .entity(newToken.getValue())
+            .build();
+    }
+
 
     // TODO: Add an endpoint to change user's role. Make sure that authorizer has a proper permission to change
     // another user's role

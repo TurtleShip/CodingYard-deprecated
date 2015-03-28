@@ -1,12 +1,13 @@
 package com.codingyard;
 
+import com.codingyard.auth.UserCredentialAuthenticator;
 import com.codingyard.config.CodingyardConfiguration;
 import com.codingyard.dao.UserDAO;
 import com.codingyard.entity.auth.CodingyardToken;
 import com.codingyard.entity.user.CodingyardUser;
-import com.codingyard.resources.HelloResource;
 import com.codingyard.resources.UserResource;
 import io.dropwizard.Application;
+import io.dropwizard.auth.basic.BasicAuthProvider;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -28,8 +29,10 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
     @Override
     public void run(final CodingyardConfiguration configuration,
                     final Environment environment) throws Exception {
-        environment.jersey().register(new HelloResource());
-        environment.jersey().register(new UserResource(new UserDAO(hibernate.getSessionFactory())));
+        final UserDAO userDAO = new UserDAO(hibernate.getSessionFactory());
+
+        environment.jersey().register(new UserResource(userDAO));
+        addAuthentication(environment, userDAO);
 
         /*
          TODO: Add an authenticator. Authenticator should do below
@@ -48,5 +51,11 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
                 return configuration.getDataSourceFactory();
             }
         };
+    }
+
+    private void addAuthentication(final Environment environment, final UserDAO userDAO) {
+        environment.jersey().register(
+            new BasicAuthProvider<>(new UserCredentialAuthenticator(userDAO), "Basic User Auth")
+        );
     }
 }
