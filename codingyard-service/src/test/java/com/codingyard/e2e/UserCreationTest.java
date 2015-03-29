@@ -2,6 +2,7 @@ package com.codingyard.e2e;
 
 import com.codingyard.CodingyardService;
 import com.codingyard.config.CodingyardConfiguration;
+import com.codingyard.config.GlobalAdminConfiguration;
 import com.codingyard.entity.user.CodingyardUser;
 import com.codingyard.entity.user.Role;
 import com.google.common.io.Resources;
@@ -89,8 +90,23 @@ public class UserCreationTest {
         assertThat(firstToken).isNotEqualTo(secondToken);
     }
 
+    @Test
+    public void globalAdminShouldBeCreatedAtStartUp() {
+        final GlobalAdminConfiguration globalAdmin = RULE.getConfiguration().getGlobalAdminConfiguration();
+        final String username = globalAdmin.getUsername();
+        final String password = globalAdmin.getPassword();
+
+        final Response response = login(username, password);
+
+        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+    }
+
     private Response login(final CodingyardUser user) {
-        HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(user.getUsername(), user.getPassword());
+        return login(user.getUsername(), user.getPassword());
+    }
+
+    private Response login(final String username, final String password) {
+        HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(username, password);
         client.register(feature);
         return client.target(String.format("http://localhost:%d/%s/login", RULE.getLocalPort(), USER_API))
             .request()
@@ -98,7 +114,9 @@ public class UserCreationTest {
     }
 
     private CodingyardUser generateRandomUser(final Role role) {
-        return new CodingyardUser.Builder(randomString(), randomString()).build();
+        return new CodingyardUser.Builder(randomString(), randomString())
+            .role(role)
+            .build();
     }
 
     private Response createNewUser(final CodingyardUser user) {

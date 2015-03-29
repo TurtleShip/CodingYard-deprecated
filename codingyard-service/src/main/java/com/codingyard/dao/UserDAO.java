@@ -1,5 +1,6 @@
 package com.codingyard.dao;
 
+import com.codingyard.entity.auth.CodingyardToken;
 import com.codingyard.entity.user.CodingyardUser;
 import com.google.common.base.Optional;
 import io.dropwizard.hibernate.AbstractDAO;
@@ -29,6 +30,14 @@ public class UserDAO extends AbstractDAO<CodingyardUser> {
 
     public long save(final CodingyardUser codingyardUser) {
         return persist(codingyardUser).getUserId();
+    }
+
+    public CodingyardToken refreshToken(final CodingyardUser user) {
+        final CodingyardToken newToken = CodingyardToken.Builder.build();
+        user.getToken().setCreatedAt(newToken.getCreatedAt());
+        user.getToken().setValue(newToken.getValue());
+        persist(user);
+        return user.getToken();
     }
 
     public List<CodingyardUser> findAll() {

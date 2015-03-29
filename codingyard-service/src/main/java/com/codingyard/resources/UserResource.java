@@ -2,7 +2,6 @@ package com.codingyard.resources;
 
 import com.codahale.metrics.annotation.Metered;
 import com.codingyard.dao.UserDAO;
-import com.codingyard.entity.auth.CodingyardToken;
 import com.codingyard.entity.user.CodingyardUser;
 import com.codingyard.entity.user.Role;
 import io.dropwizard.auth.Auth;
@@ -47,9 +46,6 @@ public class UserResource {
             .role(role)
             .build();
 
-        final CodingyardToken token = CodingyardToken.Builder.build();
-        codingyardUser.setToken(token);
-        token.setUser(codingyardUser);
         return userDAO.save(codingyardUser);
     }
 
@@ -61,14 +57,9 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(@Auth CodingyardUser user) {
 
-        final CodingyardToken newToken = CodingyardToken.Builder.build();
-        final CodingyardToken oldToken = user.getToken();
-        oldToken.setCreatedAt(newToken.getCreatedAt());
-        oldToken.setValue(newToken.getValue());
-
-        userDAO.save(user);
+        userDAO.refreshToken(user);
         return Response.status(Response.Status.OK)
-            .entity(newToken.getValue())
+            .entity(user.getToken().getValue())
             .build();
     }
 

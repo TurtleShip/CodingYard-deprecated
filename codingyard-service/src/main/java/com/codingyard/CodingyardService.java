@@ -3,10 +3,12 @@ package com.codingyard;
 import com.codingyard.auth.TokenAuthenticator;
 import com.codingyard.auth.UserCredentialAuthenticator;
 import com.codingyard.config.CodingyardConfiguration;
+import com.codingyard.config.GlobalAdminConfiguration;
 import com.codingyard.dao.TokenDAO;
 import com.codingyard.dao.UserDAO;
 import com.codingyard.entity.auth.CodingyardToken;
 import com.codingyard.entity.user.CodingyardUser;
+import com.codingyard.entity.user.Role;
 import com.codingyard.resources.UserResource;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthFactory;
@@ -17,6 +19,10 @@ import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.hibernate.CacheMode;
+import org.hibernate.FlushMode;
+import org.hibernate.Session;
+import org.hibernate.context.internal.ManagedSessionContext;
 
 public class CodingyardService extends Application<CodingyardConfiguration> {
 
@@ -40,6 +46,7 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
 
         environment.jersey().register(new UserResource(userDAO));
         addAuthentication(environment, userDAO, tokenDAO);
+        addGlobalAdmin(configuration.getGlobalAdminConfiguration(), userDAO);
 
     }
 
@@ -65,5 +72,24 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
         environment.jersey().register(
             AuthFactory.binder(chainedAuthFactory)
         );
+    }
+
+    // Can't annotate this with @UnitOfWork since the annotation is meant for only resource endpoints :(
+    private void addGlobalAdmin(final GlobalAdminConfiguration config, final UserDAO userDAO) {
+
+        Session session = hibernate.getSessionFactory().openSession();
+        session.setDefaultReadOnly(false);
+        session.setCacheMode(CacheMode.IGNORE);
+        session.setFlushMode(FlushMode.ALWAYS);
+        ManagedSessionContext.bind(session);
+
+        final CodingyardUser globalAdmin = new CodingyardUser.Builder(config.getUsername(), config.getPassword())
+            .firstName(config.getFirstName())
+            .lastName(config.getLastName())
+            .role(Role.ADMIN)
+            .build();
+        userDAO.save(globalAdmin);
+        session.flush();
+        session.close();
     }
 }

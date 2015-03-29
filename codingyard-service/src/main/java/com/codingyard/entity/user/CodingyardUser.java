@@ -179,7 +179,11 @@ public class CodingyardUser {
         }
 
         public CodingyardUser build() {
-            return new CodingyardUser(username, Encryptor.encrypt(password), firstName, lastName, role);
+            final CodingyardUser user = new CodingyardUser(username, Encryptor.encrypt(password), firstName, lastName, role);
+            final CodingyardToken token = CodingyardToken.Builder.build();
+            user.setToken(token);
+            token.setUser(user);
+            return user;
         }
     }
 }
