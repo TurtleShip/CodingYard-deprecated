@@ -16,8 +16,8 @@ public class UserDAO extends AbstractDAO<CodingyardUser> {
         super(factory);
     }
 
-    public CodingyardUser findById(final Long id) {
-        return get(id);
+    public Optional<CodingyardUser> findById(final Long id) {
+        return Optional.fromNullable(get(id));
     }
 
     public Optional<CodingyardUser> findByUsername(final String username) {

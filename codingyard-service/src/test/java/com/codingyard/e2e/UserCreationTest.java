@@ -5,6 +5,7 @@ import com.codingyard.config.CodingyardConfiguration;
 import com.codingyard.config.GlobalAdminConfiguration;
 import com.codingyard.entity.user.CodingyardUser;
 import com.codingyard.entity.user.Role;
+import com.codingyard.payload.RoleChangePayload;
 import com.google.common.io.Resources;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.testing.junit.DropwizardAppRule;
@@ -99,6 +100,33 @@ public class UserCreationTest {
         final Response response = login(username, password);
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+    }
+
+    @Test
+    public void globalAdminCanPromoteGuest() {
+        final GlobalAdminConfiguration globalAdmin = RULE.getConfiguration().getGlobalAdminConfiguration();
+        final String username = globalAdmin.getUsername();
+        final String password = globalAdmin.getPassword();
+        final Response adminResponse = login(username, password);
+        final String token = adminResponse.readEntity(String.class);
+
+        final CodingyardUser guest = generateRandomUser(Role.GUEST);
+        final Response guestResponse = createNewUser(guest);
+        final Long guestId = guestResponse.readEntity(Long.class);
+
+        assertThat(guestResponse.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+
+
+        final RoleChangePayload request = new RoleChangePayload(guestId, Role.MEMBER);
+        final Response response = client.target(String.format("Http://localhost:%d/%s/role", RULE.getLocalPort(), USER_API))
+            .request()
+            .header("Authorization", "bearer " + token)
+            .put(Entity.json(request));
+
+        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+
+
+
     }
 
     private Response login(final CodingyardUser user) {

@@ -3,11 +3,14 @@ package com.codingyard.resources;
 import com.codahale.metrics.annotation.Metered;
 import com.codingyard.dao.UserDAO;
 import com.codingyard.entity.user.CodingyardUser;
-import com.codingyard.entity.user.Role;
+import com.codingyard.payload.RoleChangePayload;
+import com.codingyard.util.UserRoleApprover;
+import com.google.common.base.Optional;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.jersey.params.LongParam;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -27,8 +30,13 @@ public class UserResource {
     @Metered
     @UnitOfWork
     @Produces(MediaType.APPLICATION_JSON)
-    public CodingyardUser findUser(@PathParam("id") LongParam id) {
-        return userDAO.findById(id.get());
+    public Response findUser(@PathParam("id") LongParam id) {
+        Optional<CodingyardUser> searchResult = userDAO.findById(id.get());
+        if (searchResult.isPresent()) {
+            return Response.ok(searchResult.get()).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 
     @POST
@@ -62,6 +70,34 @@ public class UserResource {
     }
 
 
-    // TODO: Add an endpoint to change user's role. Make sure that authorizer has a proper permission to change
-    // another user's role
+    @Path("/role")
+    @PUT
+    @Metered
+    @UnitOfWork
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response changeRole(@Auth CodingyardUser approver,
+                               @Valid RoleChangePayload request) {
+
+        final Long lowerUserId = request.getUserId();
+        final Optional<CodingyardUser> searchResult = userDAO.findById(lowerUserId);
+        if (!searchResult.isPresent()) {
+            return Response.status(Response.Status.NOT_FOUND)
+                .entity(String.format("User with id %d was not found.\n", lowerUserId))
+                .build();
+        }
+        final CodingyardUser lowerUser = searchResult.get();
+
+        final boolean isApproved = UserRoleApprover.approve(approver, lowerUser, request.getNewRole());
+
+        if (isApproved) {
+            return Response.ok()
+                .entity(String.format("User %s's role change to %s was successfully approved by user %s.\n", lowerUser.getUsername(), lowerUser.getRole(), approver.getUsername()))
+                .build();
+        } else {
+            return Response.status(Response.Status.FORBIDDEN)
+                .entity(String.format("User %s does not have permission to change user %s's role to %s.\n", approver.getUsername(), lowerUser.getUsername(), request.getNewRole()))
+                .build();
+        }
+    }
 }
