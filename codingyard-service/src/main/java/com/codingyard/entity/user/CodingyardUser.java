@@ -3,7 +3,7 @@ package com.codingyard.entity.user;
 import com.codingyard.entity.auth.CodingyardToken;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import static com.google.common.base.Objects.toStringHelper;
+import com.google.common.base.MoreObjects;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -128,7 +128,7 @@ public class CodingyardUser {
 
     @Override
     public String toString() {
-        return toStringHelper(CodingyardUser.class)
+        return MoreObjects.toStringHelper(CodingyardUser.class)
             .add("userId", userId)
             .add("userName", username)
             .add("firstName", firstName)
