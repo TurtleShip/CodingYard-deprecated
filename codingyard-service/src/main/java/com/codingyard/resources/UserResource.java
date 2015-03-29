@@ -5,7 +5,6 @@ import com.codingyard.dao.UserDAO;
 import com.codingyard.entity.auth.CodingyardToken;
 import com.codingyard.entity.user.CodingyardUser;
 import com.codingyard.entity.user.Role;
-import com.codingyard.util.Encryptor;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.jersey.params.LongParam;
@@ -14,7 +13,6 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Date;
 
 @Path("/user")
 public class UserResource {
@@ -43,7 +41,12 @@ public class UserResource {
                            @FormParam("firstName") @NotNull final String firstName,
                            @FormParam("lastName") @NotNull final String lastName,
                            @FormParam("role") @NotNull final Role role) {
-        final CodingyardUser codingyardUser = new CodingyardUser(username, Encryptor.encrypt(password), firstName, lastName, role);
+        final CodingyardUser codingyardUser = new CodingyardUser.Builder(username, password)
+            .firstName(firstName)
+            .lastName(lastName)
+            .role(role)
+            .build();
+
         final CodingyardToken token = CodingyardToken.Builder.build();
         codingyardUser.setToken(token);
         token.setUser(codingyardUser);

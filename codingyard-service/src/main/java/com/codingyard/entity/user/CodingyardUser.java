@@ -1,6 +1,7 @@
 package com.codingyard.entity.user;
 
 import com.codingyard.entity.auth.CodingyardToken;
+import com.codingyard.util.Encryptor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
@@ -25,7 +26,7 @@ public class CodingyardUser {
     CodingyardUser() {
     }
 
-    public CodingyardUser(String username, String password, String firstName, String lastName, Role role) {
+    private CodingyardUser(String username, String password, String firstName, String lastName, Role role) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -135,5 +136,50 @@ public class CodingyardUser {
             .add("lastName", lastName)
             .add("role", role)
             .toString();
+    }
+
+    public static class Builder {
+        private static final String DEFAULT_FIRSTNAME = "default";
+        private static final String DEFAULT_LASTNAME = "default";
+        private static final Role DEFAULT_ROLE = Role.GUEST;
+
+        private final String username;
+        private final String password;
+        private String firstName = DEFAULT_FIRSTNAME;
+        private String lastName = DEFAULT_LASTNAME;
+        private Role role = DEFAULT_ROLE;
+
+        /**
+         * Builder for CodingyardUser<br/>
+         * The below are default values<br/>
+         * firstName : "default"<br/>
+         * lastName  : "default"<br/>
+         * role      : Role.GUEST
+         * @param username username of this user.
+         * @param password password of this user. Note that password will be encrypted using {@code Encryptor.encrypt}.
+         */
+        public Builder(String username, String password) {
+            this.username = username;
+            this.password = password;
+        }
+
+        public Builder firstName(String firstName) {
+            this.firstName = firstName;
+            return this;
+        }
+
+        public Builder lastName(String lastName) {
+            this.lastName = lastName;
+            return this;
+        }
+
+        public Builder role(Role role) {
+            this.role = role;
+            return this;
+        }
+
+        public CodingyardUser build() {
+            return new CodingyardUser(username, Encryptor.encrypt(password), firstName, lastName, role);
+        }
     }
 }

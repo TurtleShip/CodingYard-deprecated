@@ -13,7 +13,11 @@ import static org.junit.Assert.assertTrue;
 public class CodingyardUserTest {
     private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
-    final CodingyardUser user = new CodingyardUser("TurtleShip", "safe_password", "Seulgi", "Kim", Role.GLOBAL_ADMIN);
+    final CodingyardUser user = new CodingyardUser.Builder("TurtleShip", "safe_password")
+        .firstName("Seulgi")
+        .lastName("Kim")
+        .role(Role.GLOBAL_ADMIN)
+        .build();
 
     @Before
     public void setUp() {

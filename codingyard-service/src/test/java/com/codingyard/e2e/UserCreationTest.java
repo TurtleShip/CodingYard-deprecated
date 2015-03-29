@@ -98,7 +98,7 @@ public class UserCreationTest {
     }
 
     private CodingyardUser generateRandomUser(final Role role) {
-        return new CodingyardUser(randomString(), randomString(), randomString(), randomString(), role);
+        return new CodingyardUser.Builder(randomString(), randomString()).build();
     }
 
     private Response createNewUser(final CodingyardUser user) {
