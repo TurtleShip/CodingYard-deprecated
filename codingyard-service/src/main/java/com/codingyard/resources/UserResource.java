@@ -38,12 +38,10 @@ public class UserResource {
     public Long createUser(@FormParam("username") @NotNull final String username,
                            @FormParam("password") @NotNull final String password,
                            @FormParam("firstName") @NotNull final String firstName,
-                           @FormParam("lastName") @NotNull final String lastName,
-                           @FormParam("role") @NotNull final Role role) {
+                           @FormParam("lastName") @NotNull final String lastName) {
         final CodingyardUser codingyardUser = new CodingyardUser.Builder(username, password)
             .firstName(firstName)
             .lastName(lastName)
-            .role(role)
             .build();
 
         return userDAO.save(codingyardUser);
