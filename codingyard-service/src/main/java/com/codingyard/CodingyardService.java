@@ -7,7 +7,8 @@ import com.codingyard.entity.auth.CodingyardToken;
 import com.codingyard.entity.user.CodingyardUser;
 import com.codingyard.resources.UserResource;
 import io.dropwizard.Application;
-import io.dropwizard.auth.basic.BasicAuthProvider;
+import io.dropwizard.auth.AuthFactory;
+import io.dropwizard.auth.basic.BasicAuthFactory;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -55,7 +56,7 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
 
     private void addAuthentication(final Environment environment, final UserDAO userDAO) {
         environment.jersey().register(
-            new BasicAuthProvider<>(new UserCredentialAuthenticator(userDAO), "Basic User Auth")
+            AuthFactory.binder(new BasicAuthFactory<>(new UserCredentialAuthenticator(userDAO), "Basic User Auth", CodingyardUser.class))
         );
     }
 }

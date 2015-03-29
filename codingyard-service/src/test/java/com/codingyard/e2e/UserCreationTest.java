@@ -5,12 +5,9 @@ import com.codingyard.config.CodingyardConfiguration;
 import com.codingyard.entity.user.CodingyardUser;
 import com.codingyard.entity.user.Role;
 import com.google.common.io.Resources;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -18,7 +15,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Form;
 import javax.ws.rs.core.Response;
 import java.util.UUID;
 
@@ -46,19 +45,22 @@ public class UserCreationTest {
 
     @After
     public void teardown() {
-        client.destroy();
+        client.close();
     }
 
     @Test
     public void createUserAndRetrieveUserInfo() {
         final CodingyardUser expected = generateRandomUser(Role.GUEST);
-        final Long seulgiId = createNewUser(expected);
+        final Response responseForUserCreation = createNewUser(expected);
+        final Long userId = responseForUserCreation.readEntity(Long.class);
 
-        final ClientResponse response =
-            client.resource(String.format("http://localhost:%d/%s/%d", RULE.getLocalPort(), USER_API, seulgiId))
-                .get(ClientResponse.class);
+        assertThat(responseForUserCreation.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
-        final CodingyardUser actual = response.getEntity(CodingyardUser.class);
+        final Response response = client.target(String.format("http://localhost:%d/%s/%d", RULE.getLocalPort(), USER_API, userId))
+            .request()
+            .get();
+
+        final CodingyardUser actual = response.readEntity(CodingyardUser.class);
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         assertThat(actual.getUsername()).isEqualTo(expected.getUsername());
@@ -73,10 +75,10 @@ public class UserCreationTest {
         final CodingyardUser user = generateRandomUser(Role.GUEST);
         createNewUser(user);
 
-        final ClientResponse firstResponse = login(user);
-        final ClientResponse secondResponse = login(user);
-        final String firstToken = firstResponse.getEntity(String.class);
-        final String secondToken = secondResponse.getEntity(String.class);
+        final Response firstResponse = login(user);
+        final Response secondResponse = login(user);
+        final String firstToken = firstResponse.readEntity(String.class);
+        final String secondToken = secondResponse.readEntity(String.class);
 
         assertThat(firstResponse.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         assertThat(secondResponse.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
@@ -87,36 +89,32 @@ public class UserCreationTest {
         assertThat(firstToken).isNotEqualTo(secondToken);
     }
 
-    private ClientResponse login(final CodingyardUser user) {
-        client.addFilter(new HTTPBasicAuthFilter(user.getUsername(), user.getPassword()));
-        return client.resource(String.format("http://localhost:%d/%s/login", RULE.getLocalPort(), USER_API))
-            .post(ClientResponse.class);
+    private Response login(final CodingyardUser user) {
+        HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(user.getUsername(), user.getPassword());
+        client.register(feature);
+        return client.target(String.format("http://localhost:%d/%s/login", RULE.getLocalPort(), USER_API))
+            .request()
+            .post(Entity.json(null));
     }
 
     private CodingyardUser generateRandomUser(final Role role) {
         return new CodingyardUser(randomString(), randomString(), randomString(), randomString(), role);
     }
 
-    private Long createNewUser(final CodingyardUser user) {
-
-        final ClientResponse response =
-            client.resource(String.format("http://localhost:%d/%s", RULE.getLocalPort(), USER_API))
-                .post(ClientResponse.class, createFormDataForUser(user));
-
-        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-
-        return response.getEntity(Long.class);
+    private Response createNewUser(final CodingyardUser user) {
+        return client.target(String.format("http://localhost:%d/%s", RULE.getLocalPort(), USER_API))
+            .request()
+            .post(Entity.form(createFormDataForUser(user)));
     }
 
 
-    private MultivaluedMap<String, String> createFormDataForUser(final CodingyardUser user) {
-        MultivaluedMap<String, String> formData = new MultivaluedMapImpl();
-        formData.add("username", user.getUsername());
-        formData.add("password", user.getPassword());
-        formData.add("firstName", user.getFirstName());
-        formData.add("lastName", user.getLastName());
-        formData.add("role", user.getRole().name());
-        return formData;
+    private Form createFormDataForUser(final CodingyardUser user) {
+        return new Form()
+            .param("username", user.getUsername())
+            .param("password", user.getPassword())
+            .param("firstName", user.getFirstName())
+            .param("lastName", user.getLastName())
+            .param("role", user.getRole().name());
     }
 
     private String randomString() {

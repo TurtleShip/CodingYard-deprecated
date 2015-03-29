@@ -27,7 +27,7 @@
     </modules>
 
     <properties>
-        <dropwizard.version>0.7.1</dropwizard.version>
+        <dropwizard.version>0.8.0</dropwizard.version>
         <assertj.version>2.0.0</assertj.version>
         <hibernate.version>4.3.8.Final</hibernate.version>
         <jasypt.version>1.9.2</jasypt.version>
@@ -111,8 +111,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
