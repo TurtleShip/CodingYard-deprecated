@@ -11,15 +11,23 @@ public class CodingyardConfiguration extends Configuration {
 
     @Valid
     @NotNull
-    @JsonProperty("database")
     private DataSourceFactory database = new DataSourceFactory();
 
-    public CodingyardConfiguration(@JsonProperty("database") DataSourceFactory database) {
+    @Valid
+    @NotNull
+    private GlobalAdminConfiguration globalAdminConfiguration;
+
+    public CodingyardConfiguration(@JsonProperty("database") DataSourceFactory database,
+                                   @JsonProperty("globalAdmin") GlobalAdminConfiguration globalAdminConfiguration) {
         this.database = database;
+        this.globalAdminConfiguration = globalAdminConfiguration;
     }
 
-    @JsonProperty("database")
     public DataSourceFactory getDataSourceFactory() {
         return database;
+    }
+
+    public GlobalAdminConfiguration getGlobalAdminConfiguration() {
+        return globalAdminConfiguration;
     }
 }

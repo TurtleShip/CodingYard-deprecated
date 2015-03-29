@@ -32,6 +32,10 @@ database:
   # whether or not idle connections should be validated
   checkConnectionWhileIdle: false
 
+globalAdmin:
+    username: admin
+    password: admin
+    
 server:
   applicationConnectors:
     - type: http
