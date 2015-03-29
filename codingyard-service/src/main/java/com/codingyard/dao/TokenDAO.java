@@ -1,11 +1,10 @@
 package com.codingyard.dao;
 
 import com.codingyard.entity.auth.CodingyardToken;
+import com.google.common.base.Optional;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
-
-import java.util.Optional;
 
 public class TokenDAO extends AbstractDAO<CodingyardToken> {
 
@@ -23,6 +22,6 @@ public class TokenDAO extends AbstractDAO<CodingyardToken> {
             .add(Restrictions.eq("value", value))
             .uniqueResult();
 
-        return Optional.ofNullable(result);
+        return Optional.fromNullable(result);
     }
 }
