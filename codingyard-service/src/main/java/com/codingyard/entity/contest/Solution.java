@@ -13,8 +13,7 @@ public class Solution {
     private Contest contest;
     private CodingyardUser author;
     private Date submissionDate;
-    private String bucketName; // bucket where the solution is saved
-    private String key; // key used to store the solution
+    private String filePath;
 
     // package private. Needed for Hibernate
     Solution() {
@@ -54,14 +53,9 @@ public class Solution {
         return submissionDate;
     }
 
-    @Column(name = "bucket_name", nullable = false)
-    public String getBucketName() {
-        return bucketName;
-    }
-
-    @Column(name = "key", nullable = false)
-    public String getKey() {
-        return key;
+    @Column(name = "file_path", nullable = false)
+    public String getFilePath() {
+        return filePath;
     }
 
     public void setSolutionId(Long solutionId) {
@@ -80,11 +74,7 @@ public class Solution {
         this.submissionDate = submissionDate;
     }
 
-    public void setBucketName(String bucketName) {
-        this.bucketName = bucketName;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }
