@@ -1,13 +1,16 @@
 package com.codingyard.entity.user;
 
 import com.codingyard.entity.auth.CodingyardToken;
+import com.codingyard.entity.contest.Solution;
 import com.codingyard.util.Encryptor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
+import com.google.common.collect.Sets;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 // Note that table name cannot be 'user' since it is reserved table name for postgresql
 @Entity
@@ -21,6 +24,7 @@ public class CodingyardUser {
     private String lastName;
     private Role role;
     private CodingyardToken token;
+    private Set<Solution> solutions = Sets.newHashSet();
 
     // package private. Needed for hibernate
     CodingyardUser() {
@@ -79,6 +83,12 @@ public class CodingyardUser {
         return token;
     }
 
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author", cascade = CascadeType.ALL)
+    public Set<Solution> getSolutions() {
+        return solutions;
+    }
+
     public void setUserId(Long userId) {
         this.userId = userId;
     }
@@ -105,6 +115,10 @@ public class CodingyardUser {
 
     public void setToken(CodingyardToken token) {
         this.token = token;
+    }
+
+    public void setSolutions(Set<Solution> solutions) {
+        this.solutions = solutions;
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.codingyard.config.GlobalAdminConfiguration;
 import com.codingyard.dao.TokenDAO;
 import com.codingyard.dao.UserDAO;
 import com.codingyard.entity.auth.CodingyardToken;
+import com.codingyard.entity.contest.Solution;
 import com.codingyard.entity.user.CodingyardUser;
 import com.codingyard.entity.user.Role;
 import com.codingyard.resources.UserResource;
@@ -53,7 +54,8 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
     private HibernateBundle<CodingyardConfiguration> buildHibernateBundle() {
         return new HibernateBundle<CodingyardConfiguration>(
             CodingyardUser.class,
-            CodingyardToken.class
+            CodingyardToken.class,
+            Solution.class
         ) {
             @Override
             public DataSourceFactory getDataSourceFactory(CodingyardConfiguration configuration) {

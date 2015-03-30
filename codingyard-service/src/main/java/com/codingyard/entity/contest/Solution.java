@@ -2,76 +2,89 @@ package com.codingyard.entity.contest;
 
 import com.codingyard.entity.user.CodingyardUser;
 
-import java.nio.file.Path;
+import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name = "solution")
 public class Solution {
 
-    private final Contest contest;
-    private final CodingyardUser author;
-    private final Date submissionDate;
-    private Path filePath;
+    private Long solutionId;
+    private Contest contest;
+    private CodingyardUser author;
+    private Date submissionDate;
+    private String bucketName; // bucket where the solution is saved
+    private String key; // key used to store the solution
 
-    private CodingyardUser authorizer; // The user who accepted this solution
-    private Date acceptedDate; // The date when this solution has been accepted
-    private boolean isAccepted; // True is this solution has been accepted
+    // package private. Needed for Hibernate
+    Solution() {
+    }
 
     /**
-     *
-     * @param contest The contest this solution belongs to
-     * @param author The author of this solution
+     * @param contest        The contest this solution belongs to
+     * @param author         The author of this solution
      * @param submissionDate The date when the solution was submitted
-     * @param filePath The path where this solution has been saved
      */
-    public Solution(final Contest contest, final CodingyardUser author, final Date submissionDate, final Path filePath) {
+    public Solution(final Contest contest, final CodingyardUser author, final Date submissionDate) {
         this.contest = contest;
         this.author = author;
         this.submissionDate = submissionDate;
-        this.filePath = filePath;
-        this.isAccepted = false;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "solution_id", unique = true, nullable = false)
+    public Long getSolutionId() {
+        return solutionId;
+    }
+
+    @Column(name = "contest", nullable = false)
     public Contest getContest() {
         return contest;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     public CodingyardUser getAuthor() {
         return author;
     }
 
+    @Column(name = "submitted", nullable = false)
     public Date getSubmissionDate() {
         return submissionDate;
     }
 
-    public Path getFilePath() {
-        return filePath;
+    @Column(name = "bucket_name", nullable = false)
+    public String getBucketName() {
+        return bucketName;
     }
 
-    public CodingyardUser getAuthorizer() {
-        return authorizer;
+    @Column(name = "key", nullable = false)
+    public String getKey() {
+        return key;
     }
 
-    public Date getAcceptedDate() {
-        return acceptedDate;
+    public void setSolutionId(Long solutionId) {
+        this.solutionId = solutionId;
     }
 
-    public boolean isAccepted() {
-        return isAccepted;
+    public void setContest(Contest contest) {
+        this.contest = contest;
     }
 
-    public void setAuthorizer(CodingyardUser authorizer) {
-        this.authorizer = authorizer;
+    public void setAuthor(CodingyardUser author) {
+        this.author = author;
     }
 
-    public void setAcceptedDate(Date acceptedDate) {
-        this.acceptedDate = acceptedDate;
+    public void setSubmissionDate(Date submissionDate) {
+        this.submissionDate = submissionDate;
     }
 
-    public void setAccepted(boolean isAccepted) {
-        this.isAccepted = isAccepted;
+    public void setBucketName(String bucketName) {
+        this.bucketName = bucketName;
     }
 
-    public void setFilePath(Path filePath) {
-        this.filePath = filePath;
+    public void setKey(String key) {
+        this.key = key;
     }
 }
