@@ -6,8 +6,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "solution")
-public class Solution {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Solution {
 
     private Long solutionId;
     private Contest contest;
