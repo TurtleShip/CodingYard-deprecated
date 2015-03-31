@@ -16,6 +16,11 @@
     <dependencies>
 
         <dependency>
+            <groupId>com.codingyard</groupId>
+            <artifactId>codingyard-api</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-client</artifactId>
         </dependency>
