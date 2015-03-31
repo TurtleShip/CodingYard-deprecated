@@ -16,12 +16,11 @@ public class TopCoderSolution extends Solution {
     private TopCoderDifficulty difficulty;
     private TopCoderDivision division;
 
-    public TopCoderSolution(final Contest contest,
-                            final CodingyardUser author,
+    public TopCoderSolution(final CodingyardUser author,
                             final Date submissionDate,
                             final TopCoderDifficulty difficulty,
                             final TopCoderDivision division) {
-        super(contest, author, submissionDate);
+        super(Contest.TOP_CODER, author, submissionDate);
         this.difficulty = difficulty;
         this.division = division;
     }
