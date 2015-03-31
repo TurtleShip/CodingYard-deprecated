@@ -11,17 +11,22 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.URL;
 
 public class CodingyardClient {
 
     private final Client client;
+    private final URL root;
 
-    public CodingyardClient(Client client) {
+    public CodingyardClient(final Client client, final URL root) {
         this.client = client;
+        this.root = root;
+        client.register(HttpAuthenticationFeature.basicBuilder().credentials("","").build());
     }
 
     public Response getUser(final Long userId) {
-        return client.target(UserResourcePath.findUserPath(userId))
+
+        return client.target(root.toString() + UserResourcePath.findUserPath(userId))
             .request(MediaType.APPLICATION_JSON)
             .get();
     }
@@ -36,7 +41,7 @@ public class CodingyardClient {
             .param("firstName", firstName)
             .param("lastName", lastName);
 
-        return client.target(UserResourcePath.CREATE_USER_PATH)
+        return client.target(root.toString() + UserResourcePath.CREATE_USER_PATH)
             .request(MediaType.APPLICATION_JSON)
             .post(Entity.form(form));
     }
@@ -46,10 +51,12 @@ public class CodingyardClient {
     }
 
     public Response login(final String username, final String password) {
-        client.register(HttpAuthenticationFeature.basic(username, password));
-        return client.target(UserResourcePath.LOGIN_PATH)
+        return client.target(root.toString() + UserResourcePath.LOGIN_PATH)
             .request(MediaType.APPLICATION_JSON)
+            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, username)
+            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, password)
             .post(Entity.json(""));
+
     }
 
     public Response login(final CodingyardUser user) {
@@ -60,7 +67,7 @@ public class CodingyardClient {
                                final Long targetUserId,
                                final Role newRole) {
         final RoleChangePayload request = new RoleChangePayload(targetUserId, newRole);
-        return client.target(UserResourcePath.CHANGE_ROLE_PATH)
+        return client.target(root.toString() + UserResourcePath.CHANGE_ROLE_PATH)
             .request(MediaType.APPLICATION_JSON)
             .header("Authorization", bearerToken(approverToken))
             .put(Entity.json(request));
