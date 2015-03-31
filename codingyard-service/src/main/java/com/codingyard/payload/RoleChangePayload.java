@@ -10,13 +10,8 @@ import java.util.Objects;
 
 public class RoleChangePayload {
 
-    @NotNull
-    @JsonProperty("user_id")
-    Long userId;
-
-    @NotNull
-    @JsonProperty("new_role")
-    Role newRole;
+    private final Long userId;
+    private final Role newRole;
 
     @JsonCreator
     public RoleChangePayload(@NotNull @JsonProperty("user_id") Long userId,
@@ -25,10 +20,14 @@ public class RoleChangePayload {
         this.newRole = newRole;
     }
 
+    @NotNull
+    @JsonProperty("user_id")
     public Long getUserId() {
         return userId;
     }
 
+    @NotNull
+    @JsonProperty("new_role")
     public Role getNewRole() {
         return newRole;
     }

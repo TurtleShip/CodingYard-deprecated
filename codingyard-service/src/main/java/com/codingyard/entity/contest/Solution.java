@@ -14,6 +14,7 @@ public abstract class Solution {
     private CodingyardUser author;
     private Date submissionDate;
     private String filePath;
+    private Language language;
 
     // package private. Needed for Hibernate
     Solution() {
@@ -23,11 +24,19 @@ public abstract class Solution {
      * @param contest        The contest this solution belongs to
      * @param author         The author of this solution
      * @param submissionDate The date when the solution was submitted
+     * @param filePath       The path where this solution is saved locally
+     * @param language       The language in which this solution is written
      */
-    public Solution(final Contest contest, final CodingyardUser author, final Date submissionDate) {
+    public Solution(final Contest contest,
+                    final CodingyardUser author,
+                    final Date submissionDate,
+                    final String filePath,
+                    final Language language) {
         this.contest = contest;
         this.author = author;
         this.submissionDate = submissionDate;
+        this.filePath = filePath;
+        this.language = language;
     }
 
     @Id
@@ -58,6 +67,11 @@ public abstract class Solution {
         return filePath;
     }
 
+    @Column(name = "language", nullable = false)
+    public Language getLanguage() {
+        return language;
+    }
+
     public void setSolutionId(Long solutionId) {
         this.solutionId = solutionId;
     }
@@ -76,5 +90,9 @@ public abstract class Solution {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 }
