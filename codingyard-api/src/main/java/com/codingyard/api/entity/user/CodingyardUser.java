@@ -2,6 +2,7 @@ package com.codingyard.api.entity.user;
 
 import com.codingyard.api.entity.auth.CodingyardToken;
 import com.codingyard.api.entity.contest.Solution;
+import com.codingyard.api.util.Encryptor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
@@ -170,7 +171,7 @@ public class CodingyardUser {
          * role      : Role.GUEST
          *
          * @param username username of this user.
-         * @param password password of this user.
+         * @param password password of this user. Note that password will be encrypted using {@code Encryptor.encrypt}
          */
         public Builder(String username, String password) {
             this.username = username;
@@ -193,7 +194,7 @@ public class CodingyardUser {
         }
 
         public CodingyardUser build() {
-            final CodingyardUser user = new CodingyardUser(username, password, firstName, lastName, role);
+            final CodingyardUser user = new CodingyardUser(username, Encryptor.encrypt(password), firstName, lastName, role);
             final CodingyardToken token = CodingyardToken.Builder.build();
             user.setToken(token);
             token.setUser(user);

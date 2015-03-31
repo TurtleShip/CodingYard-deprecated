@@ -1,0 +1,15 @@
+{
+  "division": "DIV1",
+  "difficulty": "HARD",
+  "language": "CPP",
+  "problem_id": 123,
+  "content": [
+    "#include <cstdio>",
+    "using namespace std;",
+    "",
+    "int main() {",
+    " cout<<\"hello world\"<<endl;",
+    " return 0;",
+    "}"
+  ]
+}

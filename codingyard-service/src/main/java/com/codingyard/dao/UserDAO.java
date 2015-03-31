@@ -1,7 +1,7 @@
 package com.codingyard.dao;
 
-import com.codingyard.entity.auth.CodingyardToken;
-import com.codingyard.entity.user.CodingyardUser;
+import com.codingyard.api.entity.auth.CodingyardToken;
+import com.codingyard.api.entity.user.CodingyardUser;
 import com.google.common.base.Optional;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;

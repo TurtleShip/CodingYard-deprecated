@@ -1,8 +1,8 @@
 package com.codingyard.auth;
 
 import com.codingyard.dao.TokenDAO;
-import com.codingyard.entity.auth.CodingyardToken;
-import com.codingyard.entity.user.CodingyardUser;
+import com.codingyard.api.entity.auth.CodingyardToken;
+import com.codingyard.api.entity.user.CodingyardUser;
 import com.google.common.base.Optional;
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;

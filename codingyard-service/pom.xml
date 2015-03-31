@@ -16,6 +16,16 @@
     <dependencies>
 
         <dependency>
+            <groupId>com.codingyard</groupId>
+            <artifactId>codingyard-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.codingyard</groupId>
+            <artifactId>codingyard-client</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-assets</artifactId>
         </dependency>
@@ -48,11 +58,6 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jasypt</groupId>
-            <artifactId>jasypt</artifactId>
         </dependency>
 
         <dependency>

@@ -40,6 +40,18 @@
         <dependencies>
 
             <dependency>
+                <groupId>com.codingyard</groupId>
+                <artifactId>codingyard-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.codingyard</groupId>
+                <artifactId>codingyard-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>io.dropwizard</groupId>
                 <artifactId>dropwizard-assets</artifactId>
                 <version>${dropwizard.version}</version>

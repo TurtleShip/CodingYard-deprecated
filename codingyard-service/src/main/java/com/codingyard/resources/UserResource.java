@@ -2,8 +2,9 @@ package com.codingyard.resources;
 
 import com.codahale.metrics.annotation.Metered;
 import com.codingyard.dao.UserDAO;
-import com.codingyard.entity.user.CodingyardUser;
-import com.codingyard.payload.RoleChangePayload;
+import com.codingyard.api.entity.user.CodingyardUser;
+import com.codingyard.api.payload.RoleChangePayload;
+import com.codingyard.api.util.Encryptor;
 import com.codingyard.util.UserRoleApprover;
 import com.google.common.base.Optional;
 import io.dropwizard.auth.Auth;

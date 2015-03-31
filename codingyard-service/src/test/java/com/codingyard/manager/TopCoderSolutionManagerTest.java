@@ -1,10 +1,10 @@
 package com.codingyard.manager;
 
 import com.codingyard.dao.TopCoderSolutionDAO;
-import com.codingyard.entity.contest.Language;
-import com.codingyard.entity.contest.topcoder.TopCoderDifficulty;
-import com.codingyard.entity.contest.topcoder.TopCoderDivision;
-import com.codingyard.entity.user.CodingyardUser;
+import com.codingyard.api.entity.contest.Language;
+import com.codingyard.api.entity.contest.topcoder.TopCoderDifficulty;
+import com.codingyard.api.entity.contest.topcoder.TopCoderDivision;
+import com.codingyard.api.entity.user.CodingyardUser;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import org.junit.Before;

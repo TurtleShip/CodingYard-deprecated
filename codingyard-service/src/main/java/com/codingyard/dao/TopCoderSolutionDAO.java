@@ -1,6 +1,6 @@
 package com.codingyard.dao;
 
-import com.codingyard.entity.contest.topcoder.TopCoderSolution;
+import com.codingyard.api.entity.contest.topcoder.TopCoderSolution;
 import com.google.common.base.Optional;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;

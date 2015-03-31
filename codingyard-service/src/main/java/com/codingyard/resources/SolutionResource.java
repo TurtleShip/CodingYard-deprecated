@@ -2,12 +2,12 @@ package com.codingyard.resources;
 
 import com.codahale.metrics.annotation.Metered;
 import com.codingyard.dao.UserDAO;
-import com.codingyard.entity.contest.Language;
-import com.codingyard.entity.contest.topcoder.TopCoderDifficulty;
-import com.codingyard.entity.contest.topcoder.TopCoderDivision;
-import com.codingyard.entity.contest.topcoder.TopCoderSolution;
-import com.codingyard.entity.user.CodingyardUser;
-import com.codingyard.entity.user.Role;
+import com.codingyard.api.entity.contest.Language;
+import com.codingyard.api.entity.contest.topcoder.TopCoderDifficulty;
+import com.codingyard.api.entity.contest.topcoder.TopCoderDivision;
+import com.codingyard.api.entity.contest.topcoder.TopCoderSolution;
+import com.codingyard.api.entity.user.CodingyardUser;
+import com.codingyard.api.entity.user.Role;
 import com.codingyard.manager.TopCoderSolutionManager;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
