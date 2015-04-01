@@ -35,3 +35,5 @@ database:
 globalAdmin:
     username: admin
     password: admin
+
+solutionDir: "solution"

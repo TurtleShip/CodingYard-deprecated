@@ -1,16 +1,19 @@
 package com.codingyard;
 
-import com.codingyard.auth.TokenAuthenticator;
-import com.codingyard.auth.UserCredentialAuthenticator;
-import com.codingyard.config.CodingyardConfiguration;
-import com.codingyard.config.GlobalAdminConfiguration;
-import com.codingyard.dao.TokenDAO;
-import com.codingyard.dao.UserDAO;
 import com.codingyard.api.entity.auth.CodingyardToken;
 import com.codingyard.api.entity.contest.Solution;
 import com.codingyard.api.entity.contest.topcoder.TopCoderSolution;
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.entity.user.Role;
+import com.codingyard.auth.TokenAuthenticator;
+import com.codingyard.auth.UserCredentialAuthenticator;
+import com.codingyard.config.CodingyardConfiguration;
+import com.codingyard.config.GlobalAdminConfiguration;
+import com.codingyard.dao.TokenDAO;
+import com.codingyard.dao.TopCoderSolutionDAO;
+import com.codingyard.dao.UserDAO;
+import com.codingyard.manager.TopCoderSolutionManager;
+import com.codingyard.resources.SolutionResource;
 import com.codingyard.resources.UserResource;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthFactory;
@@ -45,11 +48,17 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
 
         final UserDAO userDAO = new UserDAO(hibernate.getSessionFactory());
         final TokenDAO tokenDAO = new TokenDAO(hibernate.getSessionFactory());
+        final TopCoderSolutionDAO tcDAO = new TopCoderSolutionDAO(hibernate.getSessionFactory());
 
-        environment.jersey().register(new UserResource(userDAO));
+        addResources(configuration, environment, userDAO, tcDAO);
         addAuthentication(environment, userDAO, tokenDAO);
         addGlobalAdmin(configuration.getGlobalAdminConfiguration(), userDAO);
+    }
 
+    private void addResources(final CodingyardConfiguration configuration, final Environment environment,
+                              final UserDAO userDAO, final TopCoderSolutionDAO tcDAO) {
+        environment.jersey().register(new SolutionResource(userDAO, new TopCoderSolutionManager(tcDAO, configuration.getSolutionDir())));
+        environment.jersey().register(new UserResource(userDAO));
     }
 
     private HibernateBundle<CodingyardConfiguration> buildHibernateBundle() {
