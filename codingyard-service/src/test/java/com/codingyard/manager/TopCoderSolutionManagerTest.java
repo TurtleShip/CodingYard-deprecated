@@ -41,17 +41,16 @@ public class TopCoderSolutionManagerTest {
         final TopCoderDifficulty difficulty = TopCoderDifficulty.HARD;
         final long problemId = 123;
         final Language language = Language.OTHER;
-        final List<String> content = Lists.newArrayList();
+        final String firstSentence = "Hello, it is a beautiful day! :)";
+        final String secondSentence = "Would you like a cup of coffee?";
+        final String newLine = System.getProperty("line.separator");
+        final String content = firstSentence + newLine + secondSentence;
 
-        content.add("Hello, it is a beautiful day! :)");
-        content.add("Would you like a cup of coffee?");
         manager.save(author, content, division, difficulty, problemId, language);
 
         final List<String> loaded = manager.load(author, division, difficulty, problemId, language);
-
-        assertThat(content.size()).isEqualTo(loaded.size());
-        for (int i = 0; i < content.size(); i++) {
-            assertThat(content.get(i)).isEqualTo(loaded.get(i));
-        }
+        assertThat(loaded.size()).isEqualTo(2);
+        assertThat(loaded.get(0)).isEqualTo(firstSentence);
+        assertThat(loaded.get(1)).isEqualTo(secondSentence);
     }
 }

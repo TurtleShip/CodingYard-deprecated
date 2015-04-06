@@ -40,7 +40,7 @@ public class SolutionResource {
                                    @FormParam("difficulty") TopCoderDifficulty difficulty,
                                    @FormParam("problem_id") Long problemId,
                                    @FormParam("language") Language language,
-                                   @FormParam("content") List<String> content) {
+                                   @FormParam("content") String content) {
 
         if (author.getRole().getLevel() == Role.GUEST.getLevel()) {
             return Response.status(Response.Status.FORBIDDEN)

@@ -47,7 +47,7 @@ public class TopCoderSolutionManager {
      * @throws IOException
      */
     public Path save(final CodingyardUser author,
-                     final List<String> content,
+                     final String content,
                      final TopCoderDivision division,
                      final TopCoderDifficulty difficulty,
                      final long problemId,
@@ -59,9 +59,7 @@ public class TopCoderSolutionManager {
         Files.createFile(path);
 
         try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.WRITE)) {
-            for (String line : content) {
-                writer.append(line).append("\n");
-            }
+            writer.append(content);
         }
 
         return path;

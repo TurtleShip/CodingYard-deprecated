@@ -1,8 +1,13 @@
 package com.codingyard.client;
 
+import com.codingyard.api.entity.contest.Language;
+import com.codingyard.api.entity.contest.topcoder.TopCoderDifficulty;
+import com.codingyard.api.entity.contest.topcoder.TopCoderDivision;
+import com.codingyard.api.entity.contest.topcoder.TopCoderSolution;
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.entity.user.Role;
 import com.codingyard.api.payload.RoleChangePayload;
+import com.codingyard.path.SolutionResourcePath;
 import com.codingyard.path.UserResourcePath;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
@@ -21,9 +26,10 @@ public class CodingyardClient {
     public CodingyardClient(final Client client, final URL root) {
         this.client = client;
         this.root = root;
-        client.register(HttpAuthenticationFeature.basicBuilder().credentials("","").build());
+        client.register(HttpAuthenticationFeature.basicBuilder().credentials("", "").build());
     }
 
+    // =============================== UserResource methods ===============================
     public Response getUser(final Long userId) {
 
         return client.target(root.toString() + UserResourcePath.findUserPath(userId))
@@ -75,6 +81,23 @@ public class CodingyardClient {
 
     }
 
+    // =============================== SolutionResource methods ===============================
+    public Response uploadTopCoderSolution(final String authorToken, final TopCoderSolution solution, final String content) {
+        final Form form = new Form()
+            .param("division", solution.getDivision().name())
+            .param("difficulty", solution.getDifficulty().name())
+            .param("problem_id", solution.getProblemId().toString())
+            .param("language", solution.getLanguage().name())
+            .param("content", content);
+
+        return client.target(root.toString() + SolutionResourcePath.TOPCODER_PATH)
+            .request(MediaType.APPLICATION_JSON)
+            .header("Authorization", bearerToken(authorToken))
+            .post(Entity.form(form));
+    }
+
+
+    // =============================== Helper methods ===============================
     private String bearerToken(final String token) {
         return String.format("bearer %s", token);
     }
