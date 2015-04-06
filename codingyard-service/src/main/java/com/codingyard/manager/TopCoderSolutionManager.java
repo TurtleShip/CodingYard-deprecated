@@ -1,11 +1,11 @@
 package com.codingyard.manager;
 
-import com.codingyard.dao.TopCoderSolutionDAO;
 import com.codingyard.api.entity.contest.Language;
 import com.codingyard.api.entity.contest.topcoder.TopCoderDifficulty;
 import com.codingyard.api.entity.contest.topcoder.TopCoderDivision;
 import com.codingyard.api.entity.contest.topcoder.TopCoderSolution;
 import com.codingyard.api.entity.user.CodingyardUser;
+import com.codingyard.dao.TopCoderSolutionDAO;
 import com.google.common.base.Optional;
 
 import java.io.BufferedWriter;
@@ -82,6 +82,14 @@ public class TopCoderSolutionManager {
                              final long problemId,
                              final Language language) throws IOException {
         return Files.readAllLines(createPath(division, difficulty, problemId, author, language));
+    }
+
+    public List<String> load(final TopCoderSolution solution) throws IOException {
+        return load(solution.getAuthor(),
+            solution.getDivision(),
+            solution.getDifficulty(),
+            solution.getProblemId(),
+            solution.getLanguage());
     }
 
     public Optional<TopCoderSolution> findById(Long id) {
