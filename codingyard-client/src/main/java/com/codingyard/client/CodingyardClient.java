@@ -96,7 +96,25 @@ public class CodingyardClient {
             .post(Entity.form(form));
     }
 
+    public Response getTopCoderSolution(final TopCoderDivision division, final TopCoderDifficulty difficulty,
+                                        final Long problemId, final Language language, final String authorUsername) {
+        return client.target(root.toString() + SolutionResourcePath.TOPCODER_PATH)
+            .queryParam("division", division)
+            .queryParam("difficulty", difficulty)
+            .queryParam("problem_id", problemId)
+            .queryParam("language", language)
+            .queryParam("author_username", authorUsername)
+            .request(MediaType.APPLICATION_JSON)
+            .get();
+    }
 
+    public Response getTopCoderSolution(final Long solutionId) {
+        return client.target(root.toString() + SolutionResourcePath.TOPCODER_PATH)
+            .path(solutionId.toString())
+            .request(MediaType.APPLICATION_JSON)
+            .get();
+    }
+    
     // =============================== Helper methods ===============================
     private String bearerToken(final String token) {
         return String.format("bearer %s", token);

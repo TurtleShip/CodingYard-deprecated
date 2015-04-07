@@ -75,11 +75,11 @@ public class SolutionResource {
     @Metered
     @UnitOfWork
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSolution(@QueryParam("division") TopCoderDivision division,
-                                @QueryParam("difficulty") TopCoderDifficulty difficulty,
-                                @QueryParam("problem_id") Long problemId,
-                                @QueryParam("language") Language language,
-                                @QueryParam("author_username") String username) {
+    public Response getTopCoderSolution(@QueryParam("division") TopCoderDivision division,
+                                        @QueryParam("difficulty") TopCoderDifficulty difficulty,
+                                        @QueryParam("problem_id") Long problemId,
+                                        @QueryParam("language") Language language,
+                                        @QueryParam("author_username") String username) {
 
         final Optional<CodingyardUser> searchResult = userDAO.findByUsername(username);
         if (!searchResult.isPresent()) {
@@ -106,7 +106,7 @@ public class SolutionResource {
     @Metered
     @UnitOfWork
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSolutionById(@PathParam("solution_id") Long solutionId) {
+    public Response getTopCoderSolutionById(@PathParam("solution_id") Long solutionId) {
 
         final Optional<TopCoderSolution> searchResult = tcManager.findById(solutionId);
         if (!searchResult.isPresent()) {
