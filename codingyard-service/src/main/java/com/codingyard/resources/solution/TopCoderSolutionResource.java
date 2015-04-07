@@ -1,4 +1,4 @@
-package com.codingyard.resources;
+package com.codingyard.resources.solution;
 
 import com.codahale.metrics.annotation.Metered;
 import com.codingyard.api.entity.contest.Language;
@@ -22,19 +22,18 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-@Path("/solution")
-public class SolutionResource {
+@Path("/solution/topcoder")
+public class TopCoderSolutionResource {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SolutionResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TopCoderSolutionResource.class);
     private final TopCoderSolutionManager tcManager;
     private final UserManager userManager;
 
-    public SolutionResource(final UserManager userManager, final TopCoderSolutionManager tcManager) {
+    public TopCoderSolutionResource(final UserManager userManager, final TopCoderSolutionManager tcManager) {
         this.tcManager = tcManager;
         this.userManager = userManager;
     }
 
-    @Path("/topcoder")
     @POST
     @Metered
     @UnitOfWork
@@ -67,7 +66,6 @@ public class SolutionResource {
         }
     }
 
-    @Path("/topcoder")
     @GET
     @Metered
     @UnitOfWork
@@ -98,7 +96,7 @@ public class SolutionResource {
         }
     }
 
-    @Path("/topcoder/{solution_id}")
+    @Path("/{solution_id}")
     @GET
     @Metered
     @UnitOfWork

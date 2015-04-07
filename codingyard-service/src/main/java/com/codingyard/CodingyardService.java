@@ -14,7 +14,7 @@ import com.codingyard.dao.TopCoderSolutionDAO;
 import com.codingyard.dao.UserDAO;
 import com.codingyard.manager.TopCoderSolutionManager;
 import com.codingyard.manager.UserManager;
-import com.codingyard.resources.SolutionResource;
+import com.codingyard.resources.solution.TopCoderSolutionResource;
 import com.codingyard.resources.UserResource;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthFactory;
@@ -58,7 +58,7 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
 
     private void addResources(final CodingyardConfiguration configuration, final Environment environment,
                               final UserManager userManager, final TopCoderSolutionDAO tcDAO) {
-        environment.jersey().register(new SolutionResource(userManager, new TopCoderSolutionManager(tcDAO, configuration.getSolutionDir())));
+        environment.jersey().register(new TopCoderSolutionResource(userManager, new TopCoderSolutionManager(tcDAO, configuration.getSolutionDir())));
         environment.jersey().register(new UserResource(userManager));
     }
 
