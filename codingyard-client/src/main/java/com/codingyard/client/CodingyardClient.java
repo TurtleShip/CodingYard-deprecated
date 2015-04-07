@@ -77,8 +77,12 @@ public class CodingyardClient {
             .request(MediaType.APPLICATION_JSON)
             .header("Authorization", bearerToken(approverToken))
             .put(Entity.json(request));
+    }
 
-
+    public Response getAllSolutions(final Long userId) {
+        return client.target(root.toString() + UserResourcePath.findSolutionsPath(userId))
+            .request(MediaType.APPLICATION_JSON)
+            .get();
     }
 
     // =============================== SolutionResource methods ===============================

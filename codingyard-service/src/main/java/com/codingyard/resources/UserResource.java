@@ -13,6 +13,7 @@ import io.dropwizard.jersey.params.LongParam;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -39,6 +40,21 @@ public class UserResource {
         }
     }
 
+
+    @Path("/{id}/solutions")
+    @GET
+    @Metered
+    @UnitOfWork
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSolutions(@PathParam("id") LongParam userId) {
+        final Optional<CodingyardUser> searchResult = userManager.findById(userId.get());
+        if (searchResult.isPresent()) {
+            return Response.ok(searchResult.get()).build();
+        }
+        final CodingyardUser author = searchResult.get();
+        return Response.ok().entity(Entity.json(author.getSolutions())).build();
+    }
+
     @POST
     @Metered
     @UnitOfWork
@@ -59,7 +75,6 @@ public class UserResource {
     @POST
     @Metered
     @UnitOfWork
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(@Auth CodingyardUser user) {
 

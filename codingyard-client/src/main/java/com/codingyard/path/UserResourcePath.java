@@ -11,4 +11,8 @@ public class UserResourcePath {
         return PathBuilder.build(ROOT, Long.toString(userId));
     }
 
+    public static String findSolutionsPath(final Long userId) {
+        return PathBuilder.build(ROOT, Long.toString(userId), "solutions");
+    }
+
 }
