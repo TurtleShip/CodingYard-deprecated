@@ -114,7 +114,7 @@ public class CodingyardClient {
             .request(MediaType.APPLICATION_JSON)
             .get();
     }
-    
+
     // =============================== Helper methods ===============================
     private String bearerToken(final String token) {
         return String.format("bearer %s", token);

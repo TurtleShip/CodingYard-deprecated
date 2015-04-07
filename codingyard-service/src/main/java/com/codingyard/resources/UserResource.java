@@ -1,10 +1,9 @@
 package com.codingyard.resources;
 
 import com.codahale.metrics.annotation.Metered;
-import com.codingyard.dao.UserDAO;
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.payload.RoleChangePayload;
-import com.codingyard.api.util.Encryptor;
+import com.codingyard.manager.UserManager;
 import com.codingyard.util.UserRoleApprover;
 import com.google.common.base.Optional;
 import io.dropwizard.auth.Auth;
@@ -20,10 +19,10 @@ import javax.ws.rs.core.Response;
 @Path("/user")
 public class UserResource {
 
-    private final UserDAO userDAO;
+    private final UserManager userManager;
 
-    public UserResource(UserDAO userDAO) {
-        this.userDAO = userDAO;
+    public UserResource(UserManager userManager) {
+        this.userManager = userManager;
     }
 
     @Path("/{id}")
@@ -32,7 +31,7 @@ public class UserResource {
     @UnitOfWork
     @Produces(MediaType.APPLICATION_JSON)
     public Response findUser(@PathParam("id") LongParam id) {
-        Optional<CodingyardUser> searchResult = userDAO.findById(id.get());
+        Optional<CodingyardUser> searchResult = userManager.findById(id.get());
         if (searchResult.isPresent()) {
             return Response.ok(searchResult.get()).build();
         } else {
@@ -53,7 +52,7 @@ public class UserResource {
             .lastName(lastName)
             .build();
 
-        return userDAO.save(codingyardUser);
+        return userManager.save(codingyardUser);
     }
 
     @Path("/login")
@@ -64,7 +63,7 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(@Auth CodingyardUser user) {
 
-        userDAO.refreshToken(user);
+        userManager.refreshToken(user);
         return Response.status(Response.Status.OK)
             .entity(user.getToken().getValue())
             .build();
@@ -81,7 +80,7 @@ public class UserResource {
                                @Valid RoleChangePayload request) {
 
         final Long lowerUserId = request.getUserId();
-        final Optional<CodingyardUser> searchResult = userDAO.findById(lowerUserId);
+        final Optional<CodingyardUser> searchResult = userManager.findById(lowerUserId);
         if (!searchResult.isPresent()) {
             return Response.status(Response.Status.NOT_FOUND)
                 .entity(String.format("User with id %d was not found.\n", lowerUserId))

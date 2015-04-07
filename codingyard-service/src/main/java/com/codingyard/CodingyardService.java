@@ -13,6 +13,7 @@ import com.codingyard.dao.TokenDAO;
 import com.codingyard.dao.TopCoderSolutionDAO;
 import com.codingyard.dao.UserDAO;
 import com.codingyard.manager.TopCoderSolutionManager;
+import com.codingyard.manager.UserManager;
 import com.codingyard.resources.SolutionResource;
 import com.codingyard.resources.UserResource;
 import io.dropwizard.Application;
@@ -50,15 +51,15 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
         final TokenDAO tokenDAO = new TokenDAO(hibernate.getSessionFactory());
         final TopCoderSolutionDAO tcDAO = new TopCoderSolutionDAO(hibernate.getSessionFactory());
 
-        addResources(configuration, environment, userDAO, tcDAO);
+        addResources(configuration, environment, new UserManager(userDAO), tcDAO);
         addAuthentication(environment, userDAO, tokenDAO);
         addGlobalAdmin(configuration.getGlobalAdminConfiguration(), userDAO);
     }
 
     private void addResources(final CodingyardConfiguration configuration, final Environment environment,
-                              final UserDAO userDAO, final TopCoderSolutionDAO tcDAO) {
-        environment.jersey().register(new SolutionResource(userDAO, new TopCoderSolutionManager(tcDAO, configuration.getSolutionDir())));
-        environment.jersey().register(new UserResource(userDAO));
+                              final UserManager userManager, final TopCoderSolutionDAO tcDAO) {
+        environment.jersey().register(new SolutionResource(userManager, new TopCoderSolutionManager(tcDAO, configuration.getSolutionDir())));
+        environment.jersey().register(new UserResource(userManager));
     }
 
     private HibernateBundle<CodingyardConfiguration> buildHibernateBundle() {

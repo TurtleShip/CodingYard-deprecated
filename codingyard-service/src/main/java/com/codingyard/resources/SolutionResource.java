@@ -7,8 +7,8 @@ import com.codingyard.api.entity.contest.topcoder.TopCoderDivision;
 import com.codingyard.api.entity.contest.topcoder.TopCoderSolution;
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.entity.user.Role;
-import com.codingyard.dao.UserDAO;
 import com.codingyard.manager.TopCoderSolutionManager;
+import com.codingyard.manager.UserManager;
 import com.google.common.base.Optional;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -27,11 +27,11 @@ public class SolutionResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(SolutionResource.class);
     private final TopCoderSolutionManager tcManager;
-    private final UserDAO userDAO;
+    private final UserManager userManager;
 
-    public SolutionResource(UserDAO userDAO, TopCoderSolutionManager tcManager) {
-        this.userDAO = userDAO;
+    public SolutionResource(final UserManager userManager, final TopCoderSolutionManager tcManager) {
         this.tcManager = tcManager;
+        this.userManager = userManager;
     }
 
     @Path("/topcoder")
@@ -55,10 +55,7 @@ public class SolutionResource {
         try {
             final String filePath = tcManager.save(author, content, division, difficulty, problemId, language).toString();
             final TopCoderSolution solution = new TopCoderSolution(author, new Date(), filePath, language, difficulty, division, problemId);
-            author.getSolutions().add(solution);
-            solution.setAuthor(author);
-
-            userDAO.save(author);
+            userManager.saveSolution(author, solution);
 
             return Response.status(Response.Status.CREATED)
                 .entity(solution.getProblemId())
@@ -81,7 +78,7 @@ public class SolutionResource {
                                         @QueryParam("language") Language language,
                                         @QueryParam("author_username") String username) {
 
-        final Optional<CodingyardUser> searchResult = userDAO.findByUsername(username);
+        final Optional<CodingyardUser> searchResult = userManager.findByUsername(username);
         if (!searchResult.isPresent()) {
             return Response.status(Response.Status.NOT_FOUND)
                 .entity(String.format("There is no user with username %s.\n", username))
