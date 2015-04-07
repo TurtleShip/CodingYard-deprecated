@@ -90,7 +90,7 @@ public class CodingyardClient {
         final Form form = new Form()
             .param("division", solution.getDivision().name())
             .param("difficulty", solution.getDifficulty().name())
-            .param("problem_id", solution.getProblemId().toString())
+            .param("problem_number", solution.getProblemNumber().toString())
             .param("language", solution.getLanguage().name())
             .param("content", content);
 

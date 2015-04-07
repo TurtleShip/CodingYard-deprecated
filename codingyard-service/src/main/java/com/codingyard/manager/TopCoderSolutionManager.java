@@ -88,7 +88,7 @@ public class TopCoderSolutionManager {
         return load(solution.getAuthor(),
             solution.getDivision(),
             solution.getDifficulty(),
-            solution.getProblemId(),
+            solution.getProblemNumber(),
             solution.getLanguage());
     }
 

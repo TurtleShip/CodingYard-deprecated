@@ -1,9 +1,13 @@
 package com.codingyard.api.entity.contest;
 
 import com.codingyard.api.entity.user.CodingyardUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.MoreObjects;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -39,6 +43,7 @@ public abstract class Solution {
         this.language = language;
     }
 
+    @JsonProperty("solution_id")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "solution_id", unique = true, nullable = false)
@@ -46,27 +51,32 @@ public abstract class Solution {
         return solutionId;
     }
 
+    @JsonProperty("contest")
     @Column(name = "contest", nullable = false)
     public Contest getContest() {
         return contest;
     }
 
+    @JsonProperty("author")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     public CodingyardUser getAuthor() {
         return author;
     }
 
+    @JsonProperty("submitted")
     @Column(name = "submitted", nullable = false)
     public Date getSubmissionDate() {
         return submissionDate;
     }
 
+    @JsonIgnore
     @Column(name = "file_path", nullable = false)
     public String getFilePath() {
         return filePath;
     }
 
+    @JsonProperty("language")
     @Column(name = "language", nullable = false)
     public Language getLanguage() {
         return language;
@@ -94,5 +104,38 @@ public abstract class Solution {
 
     public void setLanguage(Language language) {
         this.language = language;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(solutionId, contest, author, submissionDate, language);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final Solution other = (Solution) obj;
+        return Objects.equals(this.solutionId, other.solutionId)
+            && Objects.equals(this.contest, other.contest)
+            && Objects.equals(this.author, other.author)
+            && Objects.equals(this.submissionDate, other.submissionDate)
+            && Objects.equals(this.language, other.language);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+            .add("solutionId", solutionId)
+            .add("contest", contest)
+            .add("author", author)
+            .add("submissionDate", submissionDate)
+            .add("filePath", filePath)
+            .add("language", language)
+            .toString();
     }
 }

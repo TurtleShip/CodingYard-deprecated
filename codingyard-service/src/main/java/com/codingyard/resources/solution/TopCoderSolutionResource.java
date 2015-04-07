@@ -41,7 +41,7 @@ public class TopCoderSolutionResource {
     public Response uploadSolution(@Auth CodingyardUser author,
                                    @FormParam("division") TopCoderDivision division,
                                    @FormParam("difficulty") TopCoderDifficulty difficulty,
-                                   @FormParam("problem_id") Long problemId,
+                                   @FormParam("problem_number") Long problemNumber,
                                    @FormParam("language") Language language,
                                    @FormParam("content") String content) {
 
@@ -52,16 +52,16 @@ public class TopCoderSolutionResource {
         }
 
         try {
-            final String filePath = tcManager.save(author, content, division, difficulty, problemId, language).toString();
-            final TopCoderSolution solution = new TopCoderSolution(author, new Date(), filePath, language, difficulty, division, problemId);
+            final String filePath = tcManager.save(author, content, division, difficulty, problemNumber, language).toString();
+            final TopCoderSolution solution = new TopCoderSolution(author, new Date(), filePath, language, difficulty, division, problemNumber);
             userManager.saveSolution(author, solution);
 
             return Response.status(Response.Status.CREATED)
-                .entity(solution.getProblemId())
+                .entity(solution.getProblemNumber())
                 .build();
         } catch (IOException e) {
             LOG.warn("Exception thrown while trying to save a topcoder solution for user : {}, division : {], difficulty : {}," +
-                "problem id : {}, language : {}.", author, division, difficulty, problemId, language, e);
+                "problem number : {}, language : {}.", author, division, difficulty, problemNumber, language, e);
             return Response.serverError().entity("Unable to process the request currently... sorry.\n").build();
         }
     }

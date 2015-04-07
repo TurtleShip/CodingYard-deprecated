@@ -1,0 +1,16 @@
+{
+  "solution_id": 999,
+  "contest": "TOP_CODER",
+  "author": {
+    "id": 1,
+    "username": "TurtleShip",
+    "first_name": "Seulgi",
+    "last_name": "Kim",
+    "role": "GLOBAL_ADMIN"
+  },
+  "submitted": 1234,
+  "language": "JAVA",
+  "difficulty": "HARD",
+  "division": "DIV1",
+  "problem_number": 256
+}
