@@ -29,7 +29,7 @@
     </modules>
 
     <properties>
-        <dropwizard.version>0.8.0</dropwizard.version>
+        <dropwizard.version>0.8.1</dropwizard.version>
         <assertj.version>2.0.0</assertj.version>
         <hibernate.version>4.3.8.Final</hibernate.version>
         <jasypt.version>1.9.2</jasypt.version>

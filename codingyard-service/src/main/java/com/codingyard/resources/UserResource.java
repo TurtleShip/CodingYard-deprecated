@@ -48,11 +48,20 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSolutions(@PathParam("id") LongParam userId) {
         final Optional<CodingyardUser> searchResult = userManager.findById(userId.get());
-        if (searchResult.isPresent()) {
-            return Response.ok(searchResult.get()).build();
+        if (!searchResult.isPresent()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
         final CodingyardUser author = searchResult.get();
-        return Response.ok().entity(Entity.json(author.getSolutions())).build();
+        return Response.ok().entity(author.getSolutions()).build();
+    }
+
+    @Path("/id")
+    @GET
+    @Metered
+    @UnitOfWork
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findMyId(@Auth CodingyardUser user) {
+        return Response.ok().entity(user.getUserId()).build();
     }
 
     @POST

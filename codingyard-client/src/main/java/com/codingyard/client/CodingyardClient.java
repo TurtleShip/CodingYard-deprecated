@@ -69,6 +69,21 @@ public class CodingyardClient {
         return login(user.getUsername(), user.getPassword());
     }
 
+    public Response getId(final String username, final String password) {
+        return client.target(root.toString() + UserResourcePath.FIND_MY_ID_PATH)
+            .request(MediaType.APPLICATION_JSON)
+            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, username)
+            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, password)
+            .get();
+    }
+
+    public Response getId(final String token) {
+        return client.target(root.toString() + UserResourcePath.FIND_MY_ID_PATH)
+            .request(MediaType.APPLICATION_JSON)
+            .header("Authorization", bearerToken(token))
+            .get();
+    }
+
     public Response changeRole(final String approverToken,
                                final Long targetUserId,
                                final Role newRole) {
@@ -100,8 +115,16 @@ public class CodingyardClient {
             .post(Entity.form(form));
     }
 
-    public Response getTopCoderSolution(final TopCoderDivision division, final TopCoderDifficulty difficulty,
-                                        final Long problemId, final Language language, final String authorUsername) {
+    public Response getTopCoderSolution(final Long solutionId) {
+        return client.target(root.toString())
+            .path(SolutionResourcePath.TOPCODER_PATH)
+            .path(solutionId.toString())
+            .request(MediaType.APPLICATION_JSON)
+            .get();
+    }
+
+    public Response getTopCoderSolutionContent(final TopCoderDivision division, final TopCoderDifficulty difficulty,
+                                               final Long problemId, final Language language, final String authorUsername) {
         return client.target(root.toString() + SolutionResourcePath.TOPCODER_PATH)
             .queryParam("division", division)
             .queryParam("difficulty", difficulty)
@@ -112,9 +135,11 @@ public class CodingyardClient {
             .get();
     }
 
-    public Response getTopCoderSolution(final Long solutionId) {
+
+    public Response getTopCoderSolutionContent(final Long solutionId) {
         return client.target(root.toString() + SolutionResourcePath.TOPCODER_PATH)
             .path(solutionId.toString())
+            .path("content")
             .request(MediaType.APPLICATION_JSON)
             .get();
     }

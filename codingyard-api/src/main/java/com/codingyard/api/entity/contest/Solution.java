@@ -20,8 +20,8 @@ public abstract class Solution {
     private String filePath;
     private Language language;
 
-    // package private. Needed for Hibernate
-    Solution() {
+    // Needed for Hibernate
+    protected Solution() {
     }
 
     /**

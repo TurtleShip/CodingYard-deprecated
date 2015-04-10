@@ -11,7 +11,6 @@ import com.google.common.base.MoreObjects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Objects;
@@ -24,8 +23,13 @@ public class TopCoderSolution extends Solution {
     private TopCoderDivision division;
     private Long problemNumber;
 
+    // package private. Needed for Hibernate
+    TopCoderSolution() {
+        super();
+    }
+
     @JsonCreator
-    public TopCoderSolution(@Valid @JsonProperty("author") CodingyardUser author,
+    public TopCoderSolution(@JsonProperty("author") CodingyardUser author,
                             @NotNull @JsonProperty("submitted") Date submissionDate,
                             @NotNull @JsonProperty("language") Language language,
                             @NotNull @JsonProperty("difficulty") TopCoderDifficulty difficulty,
@@ -96,17 +100,21 @@ public class TopCoderSolution extends Solution {
             return false;
         }
         final TopCoderSolution other = (TopCoderSolution) obj;
-        return Objects.equals(this.difficulty, other.difficulty)
-            && Objects.equals(this.division, other.division)
-            && Objects.equals(this.problemNumber, other.problemNumber);
+        return
+            super.equals(other)
+                && Objects.equals(this.difficulty, other.difficulty)
+                && Objects.equals(this.division, other.division)
+                && Objects.equals(this.problemNumber, other.problemNumber);
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-            .add("difficulty", difficulty)
-            .add("division", division)
-            .add("problemNumber", problemNumber)
-            .toString();
+        return
+            super.toString() +
+                MoreObjects.toStringHelper(this)
+                    .add("difficulty", difficulty)
+                    .add("division", division)
+                    .add("problemNumber", problemNumber)
+                    .toString();
     }
 }
