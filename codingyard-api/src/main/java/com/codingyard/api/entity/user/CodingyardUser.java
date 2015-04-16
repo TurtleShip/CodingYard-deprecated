@@ -78,13 +78,13 @@ public class CodingyardUser {
     }
 
     @JsonIgnore
-    @OneToOne(optional = false, mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, optional = false, mappedBy = "user", cascade = CascadeType.ALL)
     public CodingyardToken getToken() {
         return token;
     }
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "author", cascade = CascadeType.ALL)
     public Set<Solution> getSolutions() {
         return solutions;
     }

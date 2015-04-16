@@ -15,16 +15,17 @@ import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class SolutionUploadTest {
 
@@ -43,16 +44,14 @@ public class SolutionUploadTest {
         CLIENT = new CodingyardClient(dwClient, localServer);
     }
 
-    // TODO: Implement me
     /*
         Execute the below scenario.
 
-        2. Upload two solutions.
-        3. Get all solutions for the user.
-        4. Verify that I can get the solutions.
+        1. Upload two solutions.
+        2. Get all solutions for the user.
+        3. Verify that I can get the solutions.
      */
     @Test
-    @Ignore("Not passing due to serialization issue...")
     public void uploadAndDownloadSolutions() {
         final String token = loginAsAdmin().readEntity(String.class);
         final Long adminId = CLIENT.getId(token).readEntity(Long.class);
@@ -68,8 +67,11 @@ public class SolutionUploadTest {
         uploadAndDownloadSolution(token, firstSolution, firstSolutionContent);
         uploadAndDownloadSolution(token, secondSolution, secondSolutionContent);
 
-        // TODO: test get all solutions endpoint
+        final Response allSolutionResponse = CLIENT.getAllSolutions(adminId);
+        Set solutions = allSolutionResponse.readEntity(Set.class);
 
+        assertThat(allSolutionResponse.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+        assertThat(solutions.size()).isEqualTo(2);
     }
 
     private void uploadAndDownloadSolution(final String authorToken, final TopCoderSolution solution, final String content) {
@@ -79,10 +81,36 @@ public class SolutionUploadTest {
         final Response downloadResponse = CLIENT.getTopCoderSolution(solutionId);
         final TopCoderSolution downloaded = downloadResponse.readEntity(TopCoderSolution.class);
 
+        final Response downloadContentByIdResponse = CLIENT.getTopCoderSolutionContent(downloaded.getSolutionId());
+        final List downloadedContentById = downloadContentByIdResponse.readEntity(List.class);
+
+        final Response downloadContentByInfoResponse = CLIENT.getTopCoderSolutionContent(
+            solution.getDivision(),
+            solution.getDifficulty(),
+            solution.getProblemNumber(),
+            solution.getLanguage(),
+            solution.getAuthor().getUsername()
+        );
+        final List downloadedContentByInfo = downloadContentByInfoResponse.readEntity(List.class);
+
         assertThat(uploadResponse.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
         assertThat(downloadResponse.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-        System.out.println("!!!!!! Author : " + downloaded.getAuthor());
-        assertThat(downloaded).isEqualTo(solution);
+        /*
+            Note that we are not doing assertThat(downloaded).isEqualTo(solution) because
+            server side generates timestamp and Solution#equals checks for timestamp equality as well.
+
+            Timestamp is generated on server side so that a user cannot temper with timestamp.
+         */
+        assertThat(downloaded.getAuthor()).isEqualTo(solution.getAuthor());
+        assertThat(downloaded.getContest()).isEqualTo(solution.getContest());
+        assertThat(downloaded.getDivision()).isEqualTo(solution.getDivision());
+        assertThat(downloaded.getDifficulty()).isEqualTo(solution.getDifficulty());
+
+        assertThat(downloadContentByIdResponse.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+        assertThat(downloadedContentById.get(0)).isEqualTo(content);
+
+        assertThat(downloadContentByInfoResponse.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+        assertThat(downloadedContentByInfo.get(0)).isEqualTo(content);
     }
 
 

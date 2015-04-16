@@ -58,7 +58,7 @@ public abstract class Solution {
     }
 
     @JsonProperty("author")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     public CodingyardUser getAuthor() {
         return author;
