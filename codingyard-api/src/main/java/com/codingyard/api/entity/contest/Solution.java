@@ -108,7 +108,7 @@ public abstract class Solution {
 
     @Override
     public int hashCode() {
-        return Objects.hash(solutionId, contest, author, submissionDate, language);
+        return Objects.hash(contest, author, submissionDate, language);
     }
 
     @Override
@@ -120,8 +120,7 @@ public abstract class Solution {
             return false;
         }
         final Solution other = (Solution) obj;
-        return Objects.equals(this.solutionId, other.solutionId)
-            && Objects.equals(this.contest, other.contest)
+        return Objects.equals(this.contest, other.contest)
             && Objects.equals(this.author, other.author)
             && Objects.equals(this.submissionDate, other.submissionDate)
             && Objects.equals(this.language, other.language);
