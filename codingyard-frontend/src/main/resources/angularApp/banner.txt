@@ -5,3 +5,6 @@ _/ ___\  /  _ \  / __ | |  | /    \   / ___\ <   |  |\__  \  \_  __ \ / __ |
  \___  > \____/ \____ | |__||___|  / \___  /  / ____|(____  / |__|   \____ | 
      \/              \/          \/ /_____/   \/          \/              \/ 
 
+
+Folders are structured as recommended by
+https://scotch.io/tutorials/angularjs-best-practices-directory-structure

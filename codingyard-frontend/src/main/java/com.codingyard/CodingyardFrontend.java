@@ -13,7 +13,7 @@ public class CodingyardFrontend extends Application<CodingyardFrontendConfigurat
 
     @Override
     public void initialize(final Bootstrap<CodingyardFrontendConfiguration> bootstrap) {
-        bootstrap.addBundle(new AssetsBundle("/assets/app/", "/", "index.html"));
+        bootstrap.addBundle(new AssetsBundle("/angularApp", "/", "angularApp/index.html"));
     }
 
     @Override
