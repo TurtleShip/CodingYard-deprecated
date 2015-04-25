@@ -58,7 +58,7 @@ public class CodingyardClient {
 
     public Response login(final String username, final String password) {
         return client.target(root.toString() + UserResourcePath.LOGIN_PATH)
-            .request(MediaType.APPLICATION_JSON)
+            .request(MediaType.TEXT_PLAIN)
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, username)
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, password)
             .post(Entity.json(""));

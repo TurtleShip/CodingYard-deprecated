@@ -25,7 +25,6 @@
         <module>codingyard-service</module>
         <module>codingyard-client</module>
         <module>codingyard-api</module>
-        <module>codingyard-frontend</module>
     </modules>
 
     <properties>

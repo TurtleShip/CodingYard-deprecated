@@ -13,7 +13,6 @@ import io.dropwizard.jersey.params.LongParam;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -84,9 +83,8 @@ public class UserResource {
     @POST
     @Metered
     @UnitOfWork
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public Response login(@Auth CodingyardUser user) {
-
         userManager.refreshToken(user);
         return Response.status(Response.Status.OK)
             .entity(user.getToken().getValue())
