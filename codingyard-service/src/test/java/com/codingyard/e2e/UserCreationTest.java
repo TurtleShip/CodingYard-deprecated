@@ -3,6 +3,7 @@ package com.codingyard.e2e;
 import com.codingyard.CodingyardService;
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.entity.user.Role;
+import com.codingyard.api.payload.TokenAndUser;
 import com.codingyard.client.CodingyardClient;
 import com.codingyard.config.CodingyardConfiguration;
 import com.codingyard.config.GlobalAdminConfiguration;
@@ -61,8 +62,8 @@ public class UserCreationTest {
         final Response firstResponse = CLIENT.login(user);
         final Response secondResponse = CLIENT.login(user);
 
-        final String firstToken = firstResponse.readEntity(String.class);
-        final String secondToken = secondResponse.readEntity(String.class);
+        final String firstToken = firstResponse.readEntity(TokenAndUser.class).getToken();
+        final String secondToken = secondResponse.readEntity(TokenAndUser.class).getToken();
 
         assertThat(firstResponse.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         assertThat(secondResponse.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
@@ -80,7 +81,7 @@ public class UserCreationTest {
 
     @Test
     public void globalAdminCanPromoteGuest() {
-        final String adminToken = loginAsAdmin().readEntity(String.class);
+        final String adminToken = loginAsAdmin().readEntity(TokenAndUser.class).getToken();
         final Response guestResponse = CLIENT.createUser(generateRandomUser(Role.GUEST));
         final Long guestId = guestResponse.readEntity(Long.class);
         final CodingyardUser guestBeforePromotion = CLIENT.getUser(guestId).readEntity(CodingyardUser.class);

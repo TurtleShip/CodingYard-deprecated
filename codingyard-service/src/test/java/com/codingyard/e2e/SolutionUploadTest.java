@@ -2,11 +2,11 @@ package com.codingyard.e2e;
 
 import com.codingyard.CodingyardService;
 import com.codingyard.api.entity.contest.Language;
-import com.codingyard.api.entity.contest.Solution;
 import com.codingyard.api.entity.contest.topcoder.TopCoderDifficulty;
 import com.codingyard.api.entity.contest.topcoder.TopCoderDivision;
 import com.codingyard.api.entity.contest.topcoder.TopCoderSolution;
 import com.codingyard.api.entity.user.CodingyardUser;
+import com.codingyard.api.payload.TokenAndUser;
 import com.codingyard.client.CodingyardClient;
 import com.codingyard.config.CodingyardConfiguration;
 import com.codingyard.config.GlobalAdminConfiguration;
@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class SolutionUploadTest {
 
@@ -53,7 +52,7 @@ public class SolutionUploadTest {
      */
     @Test
     public void uploadAndDownloadSolutions() {
-        final String token = loginAsAdmin().readEntity(String.class);
+        final String token = loginAsAdmin().readEntity(TokenAndUser.class).getToken();
         final Long adminId = CLIENT.getId(token).readEntity(Long.class);
         final CodingyardUser admin = CLIENT.getUser(adminId).readEntity(CodingyardUser.class);
 

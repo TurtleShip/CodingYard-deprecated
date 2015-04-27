@@ -3,6 +3,7 @@ package com.codingyard.resources;
 import com.codahale.metrics.annotation.Metered;
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.payload.RoleChangePayload;
+import com.codingyard.api.payload.TokenAndUser;
 import com.codingyard.manager.UserManager;
 import com.codingyard.util.UserRoleApprover;
 import com.google.common.base.Optional;
@@ -83,14 +84,14 @@ public class UserResource {
     @POST
     @Metered
     @UnitOfWork
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response login(@Auth CodingyardUser user) {
         userManager.refreshToken(user);
+        final TokenAndUser userInfo = new TokenAndUser(user.getToken().getValue(), user);
         return Response.status(Response.Status.OK)
-            .entity(user.getToken().getValue())
+            .entity(userInfo)
             .build();
     }
-
 
     @Path("/role")
     @PUT

@@ -100,7 +100,7 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
         final CodingyardUser globalAdmin = new CodingyardUser.Builder(config.getUsername(), config.getPassword())
             .firstName(config.getFirstName())
             .lastName(config.getLastName())
-            .role(Role.ADMIN)
+            .role(Role.GLOBAL_ADMIN)
             .build();
         userDAO.save(globalAdmin);
         session.flush();

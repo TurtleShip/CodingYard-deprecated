@@ -1,0 +1,10 @@
+{
+  "token": "very-secure-token",
+  "user": {
+    "id": 1,
+    "username": "TurtleShip",
+    "first_name": "Seulgi",
+    "last_name": "Kim",
+    "role": "GLOBAL_ADMIN"
+  }
+}

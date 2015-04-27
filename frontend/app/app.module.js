@@ -1,42 +1,60 @@
 (function () {
     var app = angular.module('codingyard', ['base64']);
-    app.controller('CodingyardController', function () {
-        this.seulgi = {
-            "firstName": "Seulgi",
-            "lastName": "Kim",
-            "age": 3
+    var sessionKey = 'session';
+
+    app.controller('CodingyardController', function ($scope, $log, USER_ROLES, AuthService, Session, SessionStorage) {
+        $scope.currentUser = null;
+        $scope.token = null;
+        $scope.userRoles = USER_ROLES;
+        $scope.isAuthorized = AuthService.isAuthorized;
+
+        // check if user's has some session
+        var info = SessionStorage.getObject(sessionKey, undefined);
+
+        if (info) {
+            $scope.currentUser = info.user;
+            $scope.token = info.token;
+            Session.create(info.token, info.user);
+        }
+        $scope.setCurrentUser = function (user, token) {
+            $scope.currentUser = user;
+            $scope.token = token;
         };
+
     });
 
-    app.controller('UserController', ['$http', '$log', '$base64', function ($http, $log, $base64) {
-        this.authToken = "don't have it yet";
-        this.createUser = function () {
-            // TODO: Implement me
-            alert("create user not implemented yet.");
+    app.controller('LoginController', function ($scope, $rootScope, $log, AUTH_EVENTS, AuthService) {
+
+        $scope.credentials = {
+            username: '',
+            password: ''
         };
 
-        this.login = function (credential) {
-            //alert("Login not implemented yet. Username : " + credential.username + ", password : " + credential.password);
-            this.authToken = "getting token...";
-            var authData = $base64.encode(credential.username + ":" + credential.password);
-            $log.log(authData);
-            $http.defaults.headers.post = {
-                'Content-Type': 'application/json',
-                'Authorization': 'basic ' + authData
-            };
-            var cur = this;
-            $http.post('/user/login', {})
-                .success(function (data) {
-                    $log.log("authentication success. Got token : " + data);
-                    cur.authToken = data;
+        $scope.login = function (credentials) {
+            AuthService.login(credentials)
+                .then(
+                function (data) { // success call back
+                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                    $scope.setCurrentUser(data.user, data.token);
+                },
+                function () { // error call back
+                    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
                 });
         };
-    }]);
 
-    // shameless copy from a medium blog post : https://medium.com/opinionated-angularjs/techniques-for-authentication-in-angularjs-applications-7bbf0346acec
+        $scope.logout = function() {
+            AuthService.logout();
+            $scope.currentUser = null;
+            $scope.token = null;
+        }
+    });
+
+
     app.constant('USER_ROLES', {
-        globalAdmin: 'global-admin',
-        admin: 'admin'
+        globalAdmin: 'GLOBAL_ADMIN',
+        admin: 'ADMIN',
+        member: 'MEMBER',
+        guest: 'GUEST'
     });
 
     app.constant('AUTH_EVENTS', {
@@ -48,36 +66,77 @@
         notAuthorized: 'auth-not-authorized'
     });
 
-    app.factory('AuthService', function($http, $log, $base64, Session) {
+    app.factory('AuthService', function ($http, $log, $base64, Session, SessionStorage) {
         var authService = {};
 
-        authService.login = function(credentials) {
-            var authData = $base64.encode(credential.username + ":" + credential.password);
+        authService.login = function (credentials) {
+            var authData = $base64.encode(credentials.username + ":" + credentials.password);
             $http.defaults.headers.post = {
                 'Content-Type': 'application/json',
-                'Authorization': authData
+                'Authorization': 'basic ' + authData
             };
 
             return $http
                 .post('/user/login', {})
-                .then(function(token) {
-                    $log.log("received token : " + token);
-                    Session.create(token);
-                    return token;
-                })
+                .then(function (response) {
+                    var data = response.data;
+                    Session.create(data.token, data.user);
+                    SessionStorage.setObject(sessionKey, Session);
+                    return data;
+                });
         };
 
-        authService.isAuthenticated = function() {
-            return !!Session.token;
+        authService.logout = function() {
+            SessionStorage.setObject(sessionKey, null);
+        }
+
+        authService.isAuthenticated = function () {
+            return !!Session.user;
         };
+
+        authService.isAuthorized = function (authorizedRoles) {
+            if (!angular.isArray(authorizedRoles)) {
+                authorizedRoles = [authorizedRoles];
+            }
+            $log.log("Authorizing...");
+            $log.log("Session user : " + Session.user);
+            return (authService.isAuthenticated() && authorizedRoles.indexOf(Session.user.role) != -1);
+        };
+
+
 
         return authService;
     });
 
-    //app.service('Session', function() {
-    //    this.create = function(sessionId, )
-    //})
+    // Provides method to store and load session info to client-side (a.k.a browser )
+    app.factory('SessionStorage', function ($window) {
+        return {
+            set: function (key, value) {
+                $window.localStorage[key] = value;
+            },
+            get: function (key, defaultValue) {
+                return $window.localStorage[key] || defaultValue;
+            },
+            setObject: function (key, value) {
+                $window.localStorage[key] = JSON.stringify(value);
+            },
+            getObject: function (key) {
+                return JSON.parse($window.localStorage[key] || '{}');
+            }
+        }
+    });
 
+    app.service('Session', function ($log) {
+        this.create = function (token, user) {
+            $log.log("token : " + token);
+            $log.log("user  : " + user);
+            this.token = token;
+            this.user = user;
+        };
 
-    // end of shameless copy
+        this.destroy = function () {
+            this.token = null;
+            this.user = null;
+        }
+    });
 })();
