@@ -12,7 +12,7 @@
             };
 
             return $http
-                .post('/user/login', {})
+                .post('api/user/login', {})
                 .then(function (response) {
                     var data = response.data;
                     Session.create(data.token, data.user);

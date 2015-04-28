@@ -39,6 +39,7 @@ globalAdmin:
 solutionDir: "solution"
 
 server:
+  rootPath: /api/*
   applicationConnectors:
     - type: http
       port: 9090
