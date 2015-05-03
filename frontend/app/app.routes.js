@@ -14,6 +14,14 @@
                 templateUrl: '/app/components/users/view-user.html',
                 controller: 'UserController'
             })
+            .when('/solution/topcoder/upload', {
+                templateUrl: '/app/components/solutions/topcoder/upload.html',
+                controller: 'TopCoderUploadController'
+            })
+            .when('/solution/topcoder/view', {
+                templateUrl: '/app/components/solutions/topcoder/view.html',
+                controller: 'TopCoderViewController'
+            })
 
             .otherwise({
                 templateUrl: '/404.html'

@@ -15,7 +15,7 @@
 </head>
 <body ng-controller="CodingyardController">
 
-<h1>Welcome to codingyard where you can share your solutions to coding competitions! :)</h1>
+<h3>Welcome to codingyard where you can share your solutions to coding competitions! :)</h3>
 
 <div ng-show="currentUser">
     Welcome, {{currentUser.username}}!<br/>
@@ -43,24 +43,28 @@
 </div>
 ===============================================<br/>
 <br/>
-Routes:<br/>
+Links:<br/>
 <a href="/">home</a><br/>
-<a href="view-solutions">View solutions</a><br/>
 <a href="/user/1">User one</a><br/>
+<a href="/solution/topcoder/upload">Upload TopCoder solution</a><br/>
+<a href="/solution/topcoder/view">View TopCoder solutions</a><br/>
 ===============================================<br/>
 <br/>
 <pre>$location.path() = {{$location.path()}}</pre>
 
 ===============================================<br/>
-<p>Custom view start</p>
+
 <div ng-view>
 </div>
-<p>Custom view end</p>
 
 <script src="/app/shared/auth_service.js"></script>
 <script src="/app/shared/user_factory.js"></script>
+<script src="/app/shared/topcoder_factory.js"></script>
 <script src="/app/shared/constants.js"></script>
 <script src="/app/shared/session_storage.js"></script>
+<script src="/app/shared/transform_request_factory.js"></script>
 <script src="/app/components/users/user_controller.js"></script>
+<script src="/app/components/solutions/topcoder/topcoder_upload_controller.js"></script>
+<script src="/app/components/solutions/topcoder/topcoder_view_controller.js"></script>
 </body>
 </html>

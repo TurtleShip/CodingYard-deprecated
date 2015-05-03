@@ -1,0 +1,31 @@
+<p>Upload topcoder solutions</p>
+
+<form novalidate>
+    <b>division</b>: <input type="radio" ng-model="solution.division" value="DIV1" checked="checked"/>Div1
+    <input type="radio" ng-model="solution.division" value="DIV2"/>Div2<br/>
+
+    <b>difficulty</b>: <select ng-model="solution.difficulty">
+    <option value="EASY">easy</option>
+    <option value="MEDIUM">medium</option>
+    <option value="HARD">hard</option>
+</select><br/>
+    problem number: <textarea ng-model="solution.problem_number"></textarea><br/>
+    Language: <select ng-model="solution.language">
+    <option value="JAVA">Java</option>
+    <option value="CPP">cpp</option>
+    <option value="C">ANSI C</option>
+    <option value="PYTHON">Python</option>
+    <option value="RUBY">Ruby</option>
+    <option value="OTHER">Other</option>
+</select><br/>
+    content:
+    <textarea ng-model="solution.content">
+        Fill me
+    </textarea><br/>
+
+    <input type="submit" ng-click="uploadSolution(solution)">
+</form>
+
+<pre>form = {{solution | json}}</pre>
+<pre ng-show="uploadSuccess">{{uploadSuccess}}</pre>
+<pre ng-show="uploadError">{{uploadError}}</pre>
