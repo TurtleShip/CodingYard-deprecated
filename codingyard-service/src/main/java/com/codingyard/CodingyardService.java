@@ -97,6 +97,12 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
         session.setFlushMode(FlushMode.ALWAYS);
         ManagedSessionContext.bind(session);
 
+        // TODO: This is a crappy way to handle existing users. Log properly.
+        if(userDAO.findByUsername(config.getUsername()).isPresent()) {
+            session.close();
+            return;
+        }
+
         final CodingyardUser globalAdmin = new CodingyardUser.Builder(config.getUsername(), config.getPassword())
             .firstName(config.getFirstName())
             .lastName(config.getLastName())
