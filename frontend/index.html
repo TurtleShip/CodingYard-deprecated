@@ -17,21 +17,13 @@
 
 <h3>Welcome to codingyard where you can share your solutions to coding competitions! :)</h3>
 
-<div ng-show="currentUser">
-    Welcome, {{currentUser.username}}!<br/>
-
-    <div ng-if="isAuthorized([userRoles.admin, userRoles.globalAdmin])">You're admin</div>
-    User info : {{currentUser}}<br/>
-
-    <div ng-controller="LoginController">
-        <a ng-href="/" ng-click="logout()">Click here to logout</a>
-    </div>
+<div ng-show="currentUser" ng-controller="LoginController">
+    Welcome, {{currentUser.username}}! | <a ng-href="/" ng-click="logout()">logout</a>
 </div>
 
 
-<div ng-hide="currentUser">
-    <form name="loginForm" ng-controller="LoginController"
-          ng-submit="login(credentials)" novalidate>
+<div ng-hide="currentUser" ng-controller="LoginController">
+    <form name="loginForm" ng-submit="login(credentials)" novalidate>
         <label for="username">Username:</label>
         <input type="text" id="username" ng-model="credentials.username">
 
@@ -42,11 +34,9 @@
     </form>
 </div>
 ===============================================<br/>
-<br/>
-Links:<br/>
-<a href="/">home</a><br/>
-<a ng-show="currentUser" href="/user/{{currentUser.id}}">My profile</a><br/>
-<a href="/solution/topcoder/upload">Upload TopCoder solution</a><br/>
+<a href="/">home</a> |
+<a ng-show="currentUser" href="/user/{{currentUser.id}}">My profile</a> |
+<a href="/solution/topcoder/upload">Upload TopCoder solution</a> |
 <a href="/solution/topcoder/view">View TopCoder solutions</a><br/>
 ===============================================<br/>
 <br/>

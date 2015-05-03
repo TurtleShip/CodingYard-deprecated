@@ -1,15 +1,16 @@
 'user strict';
 
 (function () {
-    app.controller('UserController', function ($routeParams, $scope, $log, User) {
+    app.controller('UserController', function ($routeParams, $scope, $log, User, USER_ROLES) {
         var userId = $routeParams.userId;
-        $scope.userData = null;
+        $scope.user = null;
         $scope.errorMessage = null;
+        $scope.userRoles = USER_ROLES;
 
         var success = function (data) {
             $log.log("call success");
             $log.log("Received : " + data);
-            $scope.userData = data;
+            $scope.user = data;
 
         };
         var error = function (data) {
