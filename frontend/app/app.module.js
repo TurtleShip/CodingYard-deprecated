@@ -1,11 +1,11 @@
 'use strict';
 
-var app = angular.module('codingyard', ['ngRoute', 'base64']);
+var app = angular.module('codingyard', ['ngRoute', 'ngResource', 'base64']);
 
 (function () {
 
     app.controller('CodingyardController', function ($scope, $route, $routeParams, $location, $log, USER_ROLES, AuthService, Session, SessionStorage, SESSION_KEYS) {
-        $log.log("locaton : " + $location.$$path);
+
         $scope.$route = $route;
         $scope.$location = $location;
         $scope.$routeParams = $routeParams;

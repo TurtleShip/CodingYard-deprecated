@@ -10,6 +10,10 @@
             .when('/view-solutions', {
                 templateUrl: '/app/components/view-solutions/view-solutions.html'
             })
+            .when('/user/:userId', {
+                templateUrl: '/app/components/users/view-user.html',
+                controller: 'UserController'
+            })
 
             .otherwise({
                 templateUrl: '/404.html'
