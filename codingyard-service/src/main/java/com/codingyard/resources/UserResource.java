@@ -2,7 +2,7 @@ package com.codingyard.resources;
 
 import com.codahale.metrics.annotation.Metered;
 import com.codingyard.api.entity.user.CodingyardUser;
-import com.codingyard.api.payload.RoleChangePayload;
+import com.codingyard.api.payload.RoleChangeRequest;
 import com.codingyard.api.payload.TokenAndUser;
 import com.codingyard.manager.UserManager;
 import com.codingyard.util.UserRoleApprover;
@@ -100,7 +100,7 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response changeRole(@Auth CodingyardUser approver,
-                               @Valid RoleChangePayload request) {
+                               @Valid RoleChangeRequest request) {
 
         final Long lowerUserId = request.getUserId();
         final Optional<CodingyardUser> searchResult = userManager.findById(lowerUserId);

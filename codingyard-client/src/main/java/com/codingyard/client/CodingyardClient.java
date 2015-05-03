@@ -6,7 +6,7 @@ import com.codingyard.api.entity.contest.topcoder.TopCoderDivision;
 import com.codingyard.api.entity.contest.topcoder.TopCoderSolution;
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.entity.user.Role;
-import com.codingyard.api.payload.RoleChangePayload;
+import com.codingyard.api.payload.RoleChangeRequest;
 import com.codingyard.path.SolutionResourcePath;
 import com.codingyard.path.UserResourcePath;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
@@ -87,7 +87,7 @@ public class CodingyardClient {
     public Response changeRole(final String approverToken,
                                final Long targetUserId,
                                final Role newRole) {
-        final RoleChangePayload request = new RoleChangePayload(targetUserId, newRole);
+        final RoleChangeRequest request = new RoleChangeRequest(targetUserId, newRole);
         return client.target(root.toString() + UserResourcePath.CHANGE_ROLE_PATH)
             .request(MediaType.APPLICATION_JSON)
             .header("Authorization", bearerToken(approverToken))

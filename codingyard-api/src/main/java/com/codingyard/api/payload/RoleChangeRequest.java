@@ -8,13 +8,13 @@ import com.google.common.base.MoreObjects;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
-public class RoleChangePayload {
+public class RoleChangeRequest {
 
     private final Long userId;
     private final Role newRole;
 
     @JsonCreator
-    public RoleChangePayload(@NotNull @JsonProperty("user_id") Long userId,
+    public RoleChangeRequest(@NotNull @JsonProperty("user_id") Long userId,
                              @NotNull @JsonProperty("new_role") Role newRole) {
         this.userId = userId;
         this.newRole = newRole;
@@ -45,14 +45,14 @@ public class RoleChangePayload {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        final RoleChangePayload other = (RoleChangePayload) obj;
+        final RoleChangeRequest other = (RoleChangeRequest) obj;
         return Objects.equals(this.userId, other.userId)
             && Objects.equals(this.newRole, other.newRole);
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(RoleChangePayload.class)
+        return MoreObjects.toStringHelper(RoleChangeRequest.class)
             .add("user_id", userId)
             .add("new_role", newRole)
             .toString();

@@ -9,10 +9,10 @@ import org.junit.Test;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.junit.Assert.assertTrue;
 
-public class RoleChangePayloadTest {
+public class RoleChangeRequestTest {
 
     private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
-    private final RoleChangePayload payload = new RoleChangePayload(1L, Role.ADMIN);
+    private final RoleChangeRequest payload = new RoleChangeRequest(1L, Role.ADMIN);
 
     @Test
     public void serializesToJSON() throws Exception {
@@ -23,7 +23,7 @@ public class RoleChangePayloadTest {
 
     @Test
     public void deserializeFromJson() throws Exception {
-        final RoleChangePayload actual = MAPPER.readValue(fixture("fixtures/payload/role_change.json"), RoleChangePayload.class);
+        final RoleChangeRequest actual = MAPPER.readValue(fixture("fixtures/payload/role_change.json"), RoleChangeRequest.class);
         assertTrue(payload.equals(actual));
     }
 }
