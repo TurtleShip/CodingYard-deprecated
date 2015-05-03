@@ -125,7 +125,9 @@ public class CodingyardClient {
 
     public Response getTopCoderSolutionContent(final TopCoderDivision division, final TopCoderDifficulty difficulty,
                                                final Long problemId, final Language language, final String authorUsername) {
-        return client.target(root.toString() + SolutionResourcePath.TOPCODER_PATH)
+        return client.target(root.toString())
+            .path(SolutionResourcePath.TOPCODER_PATH)
+            .path("content")
             .queryParam("division", division)
             .queryParam("difficulty", difficulty)
             .queryParam("problem_id", problemId)
@@ -137,9 +139,10 @@ public class CodingyardClient {
 
 
     public Response getTopCoderSolutionContent(final Long solutionId) {
-        return client.target(root.toString() + SolutionResourcePath.TOPCODER_PATH)
-            .path(solutionId.toString())
+        return client.target(root.toString())
+            .path(SolutionResourcePath.TOPCODER_PATH)
             .path("content")
+            .path(solutionId.toString())
             .request(MediaType.APPLICATION_JSON)
             .get();
     }

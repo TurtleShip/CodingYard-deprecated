@@ -66,6 +66,11 @@ public class TopCoderSolutionResource {
         }
     }
 
+    /**
+     *
+     * @param solutionId A unique if of a solution.
+     * @return The metadata of the solution. 404 if not found.
+     */
     @Path("/{solution_id}")
     @GET
     @Metered
@@ -83,6 +88,10 @@ public class TopCoderSolutionResource {
         return Response.ok().entity(searchResult.get()).build();
     }
 
+    /**
+     * @return The content of the solution. 404 if not found.
+     */
+    @Path("/content")
     @GET
     @Metered
     @UnitOfWork
@@ -113,7 +122,7 @@ public class TopCoderSolutionResource {
         }
     }
 
-    @Path("/{solution_id}/content")
+    @Path("/content/{solution_id}")
     @GET
     @Metered
     @UnitOfWork
