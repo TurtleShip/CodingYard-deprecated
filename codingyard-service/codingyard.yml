@@ -32,11 +32,32 @@ database:
   # whether or not idle connections should be validated
   checkConnectionWhileIdle: false
 
-globalAdmin:
-    username: admin
-    password: admin
-
 solutionDir: "solution"
+
+users:
+  - username: global_admin
+    password: global_admin
+    firstName: global
+    lastName: admin
+    role: GLOBAL_ADMIN
+
+  - username: admin
+    password: admin
+    firstName: admin
+    lastName: admin
+    role: ADMIN
+
+  - username: member
+    password: mebmer
+    firstName: member
+    lastName: member
+    role: MEMBER
+
+  - username: guest
+    password: guest
+    firstName: guest
+    lastName: guest
+    role: GUEST
 
 server:
   rootPath: /api/*
