@@ -2,7 +2,12 @@
 
 // Provides CRUD methods on users.
 (function () {
-    app.factory('User', function UserFactory($resource) {
-        return $resource('/api/user/:id', {}, {});
+    app.factory('User', function UserFactory($resource, TransformRequest) {
+        return $resource('/api/user/:id', {}, {
+            createUser: {
+                method: 'POST',
+                transformRequest: TransformRequest
+            }
+        });
     });
 })();

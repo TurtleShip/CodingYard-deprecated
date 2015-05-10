@@ -1,0 +1,23 @@
+<div ng-hide="signedup">
+    <p>Sign up</p>
+
+
+    <form name="form" novalidate>
+        username : <input type="text" ng-model="request.username"/>
+        password : <input type="password" ng-model="request.password"/>
+        first name : <input type="text" ng-model="request.firstName"/>
+        last name : <input type="text" ng-model="request.lastName"/>
+        <input type="submit" ng-click="createUser(request)"/>
+    </form>
+
+    <pre ng-show="message">{{message}}</pre>
+
+    <pre ng-show="error">{{error}}</pre>
+
+    request :
+    <pre>{{request | json}}</pre>
+</div>
+
+<div ng-show="signedup">
+    You have successfully signed up! :)
+</div>

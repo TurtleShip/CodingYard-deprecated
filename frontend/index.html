@@ -37,7 +37,8 @@
 <a href="/">home</a> |
 <a ng-show="currentUser" href="/user/{{currentUser.id}}">My profile</a> |
 <a href="/solution/topcoder/upload">Upload TopCoder solution</a> |
-<a href="/solution/topcoder/view">View TopCoder solutions</a><br/>
+<a href="/solution/topcoder/view">View TopCoder solutions</a> |
+<a ng-hide="currentUser" href="/signup">Signup</a> <br/>
 ===============================================<br/>
 <br/>
 <pre>$location.path() = {{$location.path()}}</pre>
@@ -56,5 +57,6 @@
 <script src="/app/components/users/user_controller.js"></script>
 <script src="/app/components/solutions/topcoder/topcoder_upload_controller.js"></script>
 <script src="/app/components/solutions/topcoder/topcoder_view_controller.js"></script>
+<script src="/app/components/signup/signup_controller.js"></script>
 </body>
 </html>
