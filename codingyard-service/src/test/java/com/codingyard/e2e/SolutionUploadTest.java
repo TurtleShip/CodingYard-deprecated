@@ -9,7 +9,6 @@ import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.payload.TokenAndUser;
 import com.codingyard.client.CodingyardClient;
 import com.codingyard.config.CodingyardConfiguration;
-import com.codingyard.config.GlobalAdminConfiguration;
 import com.google.common.io.Resources;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.testing.junit.DropwizardAppRule;
@@ -100,9 +99,6 @@ public class SolutionUploadTest {
 
 
     private Response loginAsAdmin() {
-        final GlobalAdminConfiguration globalAdmin = RULE.getConfiguration().getGlobalAdminConfiguration();
-        final String username = globalAdmin.getUsername();
-        final String password = globalAdmin.getPassword();
-        return CLIENT.login(username, password);
+        return CLIENT.login("admin", "admin");
     }
 }

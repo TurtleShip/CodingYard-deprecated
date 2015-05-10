@@ -4,18 +4,17 @@ import com.codingyard.api.entity.auth.CodingyardToken;
 import com.codingyard.api.entity.contest.Solution;
 import com.codingyard.api.entity.contest.topcoder.TopCoderSolution;
 import com.codingyard.api.entity.user.CodingyardUser;
-import com.codingyard.api.entity.user.Role;
 import com.codingyard.auth.TokenAuthenticator;
 import com.codingyard.auth.UserCredentialAuthenticator;
 import com.codingyard.config.CodingyardConfiguration;
-import com.codingyard.config.GlobalAdminConfiguration;
+import com.codingyard.config.UserConfiguration;
 import com.codingyard.dao.TokenDAO;
 import com.codingyard.dao.TopCoderSolutionDAO;
 import com.codingyard.dao.UserDAO;
 import com.codingyard.manager.TopCoderSolutionManager;
 import com.codingyard.manager.UserManager;
-import com.codingyard.resources.solution.TopCoderSolutionResource;
 import com.codingyard.resources.UserResource;
+import com.codingyard.resources.solution.TopCoderSolutionResource;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthFactory;
 import io.dropwizard.auth.ChainedAuthFactory;
@@ -29,9 +28,14 @@ import org.hibernate.CacheMode;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.context.internal.ManagedSessionContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 public class CodingyardService extends Application<CodingyardConfiguration> {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CodingyardService.class);
     private final HibernateBundle<CodingyardConfiguration> hibernate = buildHibernateBundle();
 
     public static void main(String[] args) throws Exception {
@@ -53,7 +57,8 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
 
         addResources(configuration, environment, new UserManager(userDAO), tcDAO);
         addAuthentication(environment, userDAO, tokenDAO);
-        addGlobalAdmin(configuration.getGlobalAdminConfiguration(), userDAO);
+        prePopulateUsers(configuration.getUsers(), userDAO);
+//        addGlobalAdmin(configuration.getGlobalAdminConfiguration(), userDAO);
     }
 
     private void addResources(final CodingyardConfiguration configuration, final Environment environment,
@@ -88,8 +93,7 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
         );
     }
 
-    // Can't annotate this with @UnitOfWork since the annotation is meant for only resource endpoints :(
-    private void addGlobalAdmin(final GlobalAdminConfiguration config, final UserDAO userDAO) {
+    private void prePopulateUsers(final List<UserConfiguration> usersToPopulate, final UserDAO userDAO) {
 
         Session session = hibernate.getSessionFactory().openSession();
         session.setDefaultReadOnly(false);
@@ -97,19 +101,26 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
         session.setFlushMode(FlushMode.ALWAYS);
         ManagedSessionContext.bind(session);
 
-        // TODO: This is a crappy way to handle existing users. Log properly.
-        if(userDAO.findByUsername(config.getUsername()).isPresent()) {
-            session.close();
-            return;
+        for (final UserConfiguration config : usersToPopulate) {
+            addUser(config, userDAO);
         }
 
-        final CodingyardUser globalAdmin = new CodingyardUser.Builder(config.getUsername(), config.getPassword())
-            .firstName(config.getFirstName())
-            .lastName(config.getLastName())
-            .role(Role.GLOBAL_ADMIN)
-            .build();
-        userDAO.save(globalAdmin);
         session.flush();
         session.close();
+    }
+
+    private void addUser(final UserConfiguration config, final UserDAO userDAO) {
+        final String username = config.getUsername();
+        if (userDAO.findByUsername(username).isPresent()) {
+            LOG.info("User {} already exists. Not adding the user.", username);
+        } else {
+            final CodingyardUser user = new CodingyardUser.Builder(username, config.getPassword())
+                .firstName(config.getFirstName())
+                .lastName(config.getLastName())
+                .role(config.getRole())
+                .build();
+            userDAO.save(user);
+            LOG.info("Added user {} to database.", username);
+        }
     }
 }

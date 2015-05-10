@@ -32,8 +32,11 @@ database:
   # whether or not idle connections should be validated
   checkConnectionWhileIdle: false
 
-globalAdmin:
-    username: admin
+users:
+  - username: admin
     password: admin
+    firstName: admin
+    lastName: admin
+    role: ADMIN
 
 solutionDir: "solution"

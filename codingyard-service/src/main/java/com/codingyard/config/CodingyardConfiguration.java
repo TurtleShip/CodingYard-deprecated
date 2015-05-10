@@ -1,12 +1,14 @@
 package com.codingyard.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.Lists;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.nio.file.Path;
+import java.util.List;
 
 public class CodingyardConfiguration extends Configuration {
 
@@ -16,17 +18,16 @@ public class CodingyardConfiguration extends Configuration {
 
     @Valid
     @NotNull
-    private GlobalAdminConfiguration globalAdminConfiguration;
-
-    @Valid
-    @NotNull
     private Path solutionDir;
 
+    @Valid
+    private List<UserConfiguration> users = Lists.newArrayList();
+
     public CodingyardConfiguration(@JsonProperty("database") DataSourceFactory database,
-                                   @JsonProperty("globalAdmin") GlobalAdminConfiguration globalAdminConfiguration,
+                                   @JsonProperty("users") List<UserConfiguration> users,
                                    @JsonProperty("solutionDir") Path solutionDir) {
         this.database = database;
-        this.globalAdminConfiguration = globalAdminConfiguration;
+        this.users = users;
         this.solutionDir = solutionDir;
     }
 
@@ -34,8 +35,8 @@ public class CodingyardConfiguration extends Configuration {
         return database;
     }
 
-    public GlobalAdminConfiguration getGlobalAdminConfiguration() {
-        return globalAdminConfiguration;
+    public List<UserConfiguration> getUsers() {
+        return users;
     }
 
     public Path getSolutionDir() {

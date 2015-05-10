@@ -1,8 +1,11 @@
 package com.codingyard.config;
 
+import com.codingyard.api.entity.user.Role;
+
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-public class GlobalAdminConfiguration {
+public class UserConfiguration {
 
     @NotNull
     private String username;
@@ -10,9 +13,15 @@ public class GlobalAdminConfiguration {
     @NotNull
     private String password;
 
-    private String firstName = "admin";
+    @NotNull
+    private String firstName;
 
-    private String lastName = "admin";
+    @NotNull
+    private String lastName;
+
+    @NotNull
+    @Valid
+    private Role role;
 
     public String getUsername() {
         return username;
@@ -28,5 +37,9 @@ public class GlobalAdminConfiguration {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public Role getRole() {
+        return role;
     }
 }
