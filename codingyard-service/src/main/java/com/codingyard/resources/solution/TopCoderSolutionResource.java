@@ -15,6 +15,7 @@ import io.dropwizard.hibernate.UnitOfWork;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -66,68 +67,12 @@ public class TopCoderSolutionResource {
         }
     }
 
-    /**
-     *
-     * @param solutionId A unique if of a solution.
-     * @return The metadata of the solution. 404 if not found.
-     */
     @Path("/{solution_id}")
     @GET
     @Metered
     @UnitOfWork
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSolution(@PathParam("solution_id") Long solutionId) {
-
-        final Optional<TopCoderSolution> searchResult = tcManager.findById(solutionId);
-        if (!searchResult.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND)
-                .entity(String.format("There is no solution with id %d.\n", solutionId))
-                .build();
-        }
-
-        return Response.ok().entity(searchResult.get()).build();
-    }
-
-    /**
-     * @return The content of the solution. 404 if not found.
-     */
-    @Path("/content")
-    @GET
-    @Metered
-    @UnitOfWork
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getSolutionContent(@QueryParam("division") TopCoderDivision division,
-                                       @QueryParam("difficulty") TopCoderDifficulty difficulty,
-                                       @QueryParam("problem_id") Long problemId,
-                                       @QueryParam("language") Language language,
-                                       @QueryParam("author_username") String username) {
-
-        final Optional<CodingyardUser> searchResult = userManager.findByUsername(username);
-        if (!searchResult.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND)
-                .entity(String.format("There is no user with username %s.\n", username))
-                .build();
-        }
-
-        final CodingyardUser author = searchResult.get();
-
-        try {
-            final List<String> content = tcManager.load(author, division, difficulty, problemId, language);
-            return Response.ok().entity(content).build();
-
-        } catch (IOException e) {
-            return Response.status(Response.Status.NOT_FOUND)
-                .entity(String.format("User %s doesn't have the requested solution.\n", username))
-                .build();
-        }
-    }
-
-    @Path("/content/{solution_id}")
-    @GET
-    @Metered
-    @UnitOfWork
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getSolutionContentById(@PathParam("solution_id") Long solutionId) {
+    public Response getSolution(@PathParam("solution_id") @NotNull Long solutionId) {
 
         final Optional<TopCoderSolution> searchResult = tcManager.findById(solutionId);
         if (!searchResult.isPresent()) {
@@ -137,17 +82,53 @@ public class TopCoderSolutionResource {
         }
 
         final TopCoderSolution solution = searchResult.get();
+        return Response.ok().entity(solution).build();
+    }
 
-        try {
-            final List<String> content = tcManager.load(solution);
-            return Response.ok().entity(content).build();
-
-        } catch (IOException e) {
-            LOG.warn("Couldn't find content for the solution with {}.", solutionId, e);
-            return Response.serverError()
-                .entity(String.format("Oops... We are having trouble finding content for solution with id %d.\n", solutionId))
+    @Path("/{solution_id}/content")
+    @GET
+    @Metered
+    @UnitOfWork
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getContent(@PathParam("solution_id") @NotNull Long solutionId) {
+        final Optional<TopCoderSolution> searchResult = tcManager.findById(solutionId);
+        if (!searchResult.isPresent()) {
+            return Response.status(Response.Status.NOT_FOUND)
+                .entity(String.format("There is no solution with id %d.\n", solutionId))
                 .build();
         }
+        try {
+            List<String> content = tcManager.load(searchResult.get());
+            return Response.ok().entity(content).build();
+        } catch (IOException e) {
+            return Response.serverError().entity("Couldn't find content.").build();
+        }
+    }
+
+    @GET
+    @Metered
+    @UnitOfWork
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSolution(@QueryParam("division") Optional<TopCoderDivision> division,
+                                @QueryParam("difficulty") Optional<TopCoderDifficulty> difficulty,
+                                @QueryParam("problem_number") Optional<Long> problemNumber,
+                                @QueryParam("language") Optional<Language> language,
+                                @QueryParam("author_username") Optional<String> username) {
+
+        Optional<Long> userId = Optional.absent();
+        if (username.isPresent()) {
+            final Optional<CodingyardUser> searchResult = userManager.findByUsername(username.get());
+            if (!searchResult.isPresent()) {
+                return Response.status(Response.Status.NOT_FOUND)
+                    .entity(String.format("There is no user with username %s.\n", username))
+                    .build();
+            }
+            userId = Optional.of(searchResult.get().getUserId());
+        }
+
+        List<TopCoderSolution> solutions = tcManager.findAll(division, difficulty, problemNumber, language, userId);
+
+        return Response.ok().entity(solutions).build();
     }
 
 }

@@ -34,10 +34,9 @@ public class TopCoderSolutionTest {
     }
 
     @Test
-    public void serializesToJSON() throws Exception {
+    public void serializesToJson() throws Exception {
         final String actual = MAPPER.writeValueAsString(solution);
         final String expected = fixture("fixtures/solution/topcoder_solution.json");
-        System.out.println(actual);
         assertTrue(EntityTestUtil.isSameInJson(actual, expected));
     }
 

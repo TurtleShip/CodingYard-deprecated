@@ -9,10 +9,12 @@ import com.codingyard.api.entity.user.Role;
 import com.codingyard.api.payload.RoleChangeRequest;
 import com.codingyard.path.SolutionResourcePath;
 import com.codingyard.path.UserResourcePath;
+import com.google.common.base.Optional;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -123,26 +125,28 @@ public class CodingyardClient {
             .get();
     }
 
-    public Response getTopCoderSolutionContent(final TopCoderDivision division, final TopCoderDifficulty difficulty,
-                                               final Long problemId, final Language language, final String authorUsername) {
-        return client.target(root.toString())
-            .path(SolutionResourcePath.TOPCODER_PATH)
-            .path("content")
-            .queryParam("division", division)
-            .queryParam("difficulty", difficulty)
-            .queryParam("problem_id", problemId)
-            .queryParam("language", language)
-            .queryParam("author_username", authorUsername)
-            .request(MediaType.APPLICATION_JSON)
-            .get();
-    }
+    public Response getTopCoderSolutions(final Optional<TopCoderDivision> division,
+                                         final Optional<TopCoderDifficulty> difficulty,
+                                         final Optional<Long> problemId,
+                                         final Optional<Language> language,
+                                         final Optional<String> authorUsername) {
+        WebTarget target = client.target(root.toString())
+            .path(SolutionResourcePath.TOPCODER_PATH);
 
+        if (division.isPresent()) target = target.queryParam("division", division.get());
+        if (difficulty.isPresent()) target = target.queryParam("difficulty", difficulty.get());
+        if (problemId.isPresent()) target = target.queryParam("problem_id", problemId.get());
+        if (language.isPresent()) target = target.queryParam("language", language.get());
+        if (authorUsername.isPresent()) target = target.queryParam("author_username", authorUsername.get());
+
+        return target.request(MediaType.APPLICATION_JSON).get();
+    }
 
     public Response getTopCoderSolutionContent(final Long solutionId) {
         return client.target(root.toString())
             .path(SolutionResourcePath.TOPCODER_PATH)
-            .path("content")
             .path(solutionId.toString())
+            .path("content")
             .request(MediaType.APPLICATION_JSON)
             .get();
     }

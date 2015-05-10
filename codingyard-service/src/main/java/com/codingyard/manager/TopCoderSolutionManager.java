@@ -97,6 +97,14 @@ public class TopCoderSolutionManager {
 
     }
 
+    public List<TopCoderSolution> findAll(Optional<TopCoderDivision> division,
+                                          Optional<TopCoderDifficulty> difficulty,
+                                          Optional<Long> problemNumber,
+                                          Optional<Language> language,
+                                          Optional<Long> userId) {
+        return tcDAO.findAll(division, difficulty, problemNumber, language, userId);
+    }
+
     /**
      * Given info on a solution, creates a path under which the solution should be saved.
      *

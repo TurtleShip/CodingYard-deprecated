@@ -80,17 +80,8 @@ public class SolutionUploadTest {
         final Response downloadResponse = CLIENT.getTopCoderSolution(solutionId);
         final TopCoderSolution downloaded = downloadResponse.readEntity(TopCoderSolution.class);
 
-        final Response downloadContentByIdResponse = CLIENT.getTopCoderSolutionContent(downloaded.getSolutionId());
-        final List downloadedContentById = downloadContentByIdResponse.readEntity(List.class);
-
-        final Response downloadContentByInfoResponse = CLIENT.getTopCoderSolutionContent(
-            solution.getDivision(),
-            solution.getDifficulty(),
-            solution.getProblemNumber(),
-            solution.getLanguage(),
-            solution.getAuthor().getUsername()
-        );
-        final List downloadedContentByInfo = downloadContentByInfoResponse.readEntity(List.class);
+        final Response downloadContentResponse = CLIENT.getTopCoderSolutionContent(solutionId);
+        final List<String> downloadedContent = downloadContentResponse.readEntity(List.class);
 
         assertThat(uploadResponse.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
         assertThat(downloadResponse.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
@@ -104,12 +95,7 @@ public class SolutionUploadTest {
         assertThat(downloaded.getContest()).isEqualTo(solution.getContest());
         assertThat(downloaded.getDivision()).isEqualTo(solution.getDivision());
         assertThat(downloaded.getDifficulty()).isEqualTo(solution.getDifficulty());
-
-        assertThat(downloadContentByIdResponse.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-        assertThat(downloadedContentById.get(0)).isEqualTo(content);
-
-        assertThat(downloadContentByInfoResponse.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-        assertThat(downloadedContentByInfo.get(0)).isEqualTo(content);
+        assertThat(downloadedContent.get(0)).isEqualTo(content);
     }
 
 

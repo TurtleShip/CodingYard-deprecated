@@ -1,6 +1,34 @@
-<input ng-model="solutionId"></input>
-solution id: {{solutionId}}<br/>
+Criteria :
 
-<pre ng-show="solution">{{solution}}</pre>
+<select ng-model="criteria.division" ng-options="division for division in available.divisions"
+        ng-change="getSolutions()">
+    <option value="">Any</option>
+</select>
+
+
+<select ng-model="criteria.difficulty" ng-options="difficulty for difficulty in available.difficulties"
+        ng-change="getSolutions()">
+    <option value="">Any</option>
+</select>
+
+<select ng-model="criteria.problem_number" ng-options="problem_number for problem_number in available.problem_numbers"
+        ng-change="getSolutions()">
+    <option value="">Any</option>
+</select>
+
+<select ng-model="criteria.language" ng-options="language for language in available.languages"
+        ng-change="getSolutions()">
+    <option value="">Any</option>
+</select>
+
+<select ng-model="criteria.author_username"
+        ng-options="author_username for author_username in available.author_usernames" ng-change="getSolutions()">
+    <option value="">Any</option>
+</select>
+
+<pre>Criteria : {{criteria | json}}</pre>
+
+<pre ng-show="message">{{message}}</pre>
+
+
 <pre ng-show="content">{{content}}</pre>
-<button ng-click="getSolution(solutionId)">Click Me</button>
