@@ -10,10 +10,7 @@
             },
             getContent: {
                 method: 'GET',
-                url: '/api/solution/topcoder/:id',
-                params: {
-                    include_content: true
-                },
+                url: '/api/solution/topcoder/:id/content',
                 isArray: true
             },
             findAll: {

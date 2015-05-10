@@ -67,18 +67,22 @@
                                 $scope.content = null;
                                 break;
                             case 1:
-                                $scope.message = null;
-                                $scope.content = "Implement me to get content";
+                                TopCoder.getContent({id: response[0]["solution_id"]},
+                                    function (response) {
+                                        $scope.message = "This is the solution matching your criteria.";
+                                        $scope.content = response;
+                                    },
+                                    function () {
+                                        $scope.message = "Found a solution matching your criteria, but had trouble loading it :(.";
+                                        $scope.content = null;
+                                    }
+                                );
 
                                 break;
                             default:
                                 $scope.message = "There are " + $scope.solutions.length + " solutions matching the given solution.";
                                 $scope.content = null;
                                 $scope.populateAvailable(response);
-                        }
-
-                        if ($scope.solutions.length == 1) {
-                            $scope.content = "Implement me to get content";
                         }
                     },
                     function (response) { // error
