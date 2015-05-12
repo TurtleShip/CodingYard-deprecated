@@ -1,33 +1,41 @@
 Criteria :
 
-<select ng-model="criteria.division" ng-options="division for division in available.divisions"
-        ng-change="getSolutions()">
+<select ng-model="criteria.division" ng-options="division for division in available.divisions">
     <option value="">Any</option>
 </select>
 
 
-<select ng-model="criteria.difficulty" ng-options="difficulty for difficulty in available.difficulties"
-        ng-change="getSolutions(); modeChanged()">
+<select ng-model="criteria.difficulty" ng-options="difficulty for difficulty in available.difficulties">
     <option value="">Any</option>
 </select>
 
-<select ng-model="criteria.problem_number" ng-options="problem_number for problem_number in available.problem_numbers"
-        ng-change="getSolutions()">
+<select ng-model="criteria.problem_number" ng-options="problem_number for problem_number in available.problem_numbers">
     <option value="">Any</option>
 </select>
 
-<select ng-model="criteria.language" ng-options="language for language in available.languages"
-        ng-change="getSolutions()">
+<select ng-model="criteria.language" ng-options="language for language in available.languages">
     <option value="">Any</option>
 </select>
 
 <select ng-model="criteria.author_username"
-        ng-options="author_username for author_username in available.author_usernames" ng-change="getSolutions()">
+        ng-options="author_username for author_username in available.author_usernames">
     <option value="">Any</option>
 </select>
 
 <pre>Criteria : {{criteria | json}}</pre>
 
 <pre ng-show="message">{{message}}</pre>
+<pre ng-show="error">{{error}}</pre>
 
-<div ui-ace readonly ng-model="content" ng-change="modeChanged()"></div>
+<!-- TODO: Display this better with ui.bootstrap.tabs -->
+<div ng-repeat="solution in solutions">
+    <button ng-click="pickSolution(solution)">
+        Division : {{solution.division}} |
+        Difficulty : {{solution.difficulty}} |
+        Problem number : {{solution.problem_number}} |
+        language : {{solution.language}} |
+        author : {{solution.author.username}}
+    </button>
+</div>
+
+<div ui-ace="aceOption" readonly ng-model="pickedSolution.content"></div>

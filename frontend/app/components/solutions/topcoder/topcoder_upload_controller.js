@@ -40,7 +40,7 @@
 
                 $scope.modeChanged = function () {
                     $log.info("################# Changing mode");
-                    _ace.getSession().setMode("ace/mode/" + getMode($scope.solution.language));
+                    _ace.getSession().setMode("ace/mode/" + AceEditor.getMode($scope.solution.language));
                 };
 
             }

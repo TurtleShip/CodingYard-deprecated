@@ -1,8 +1,10 @@
 (function () {
     app.controller('TopCoderViewController', function ($scope, $log, TopCoder, AceEditor) {
             $scope.solutions = null;
-            $scope.content = null;
+            $scope.pickedSolution = null;
             $scope.message = null;
+            $scope.error = null;
+
             $scope.criteria = {
                 division: null,
                 difficulty: null,
@@ -20,16 +22,6 @@
             };
 
             $scope.populateAvailable = function (solutions) {
-
-                // initialize available
-
-                $scope.available = {
-                    divisions: {},
-                    difficulties: {},
-                    problem_numbers: {},
-                    languages: {},
-                    author_usernames: {}
-                };
 
                 solutions.forEach(function (solution) {
                     if (!(solution.division in $scope.available.divisions)) {
@@ -58,13 +50,16 @@
             };
 
             $scope.aceOption = {
+                mode: "text",
                 useWrapMode: true,
                 showGutter: true,
                 theme: 'twilight',
                 onLoad: function (_ace) {
                     $scope.modeChanged = function () {
-                        $log.info("################# Changing mode");
-                        _ace.getSession().setMode("ace/mode/" + AceEditor.getMode($scope.language));
+                        if ($scope.pickedSolution) {
+                            _ace.getSession().setMode("ace/mode/" + AceEditor.getMode($scope.pickedSolution.language));
+                        }
+
                     };
                 }
             };
@@ -75,36 +70,37 @@
                         $scope.solutions = response;
                         switch ($scope.solutions.length) {
                             case 0:
-                                $scope.message = "There is no solution matching the given criteria.";
-                                $scope.content = null;
-                                break;
-                            case 1:
-                                var solution = response[0];
-                                TopCoder.getContent({id: solution["solution_id"]},
-                                    function (response) {
-                                        $scope.message = "This is the solution matching your criteria.";
-                                        $scope.content = AceEditor.parseLines(response);
-                                    },
-                                    function () {
-                                        $scope.message = "Found a solution matching your criteria, but had trouble loading it :(.";
-                                        $scope.content = null;
-                                    }
-                                );
-
+                                $scope.message = "Sorry. We don't have any content for TopCoder yet.";
                                 break;
                             default:
                                 $scope.message = "There are " + $scope.solutions.length + " solutions matching the given solution.";
-                                $scope.content = null;
                                 $scope.populateAvailable(response);
                         }
                     },
-                    function (response) { // error
-                        $scope.message = response;
+                    function () { // error
+                        $scope.error = "The site is having trouble loading solutions for TopCoder. Please try again later :p";
                     });
+            };
+
+            $scope.pickSolution = function (solution) {
+                $log.log("picked a solution");
+                TopCoder.getContent({id: solution["solution_id"]},
+                    function (response) {
+                        $scope.pickedSolution = {
+                            language: solution.language,
+                            content: AceEditor.parseLines(response)
+                        };
+                        $scope.error = null;
+                        $scope.modeChanged();
+                    },
+                    function () {
+                        $scope.error = "Oops... we had trouble loading the content for the chosen solution. Please try later.";
+                        $scope.pickedSolution = null;
+                    }
+                );
             };
 
             $scope.getSolutions();
         }
-    )
-    ;
+    );
 })();
