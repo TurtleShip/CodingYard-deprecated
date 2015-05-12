@@ -33,6 +33,14 @@ public class TopCoderSolutionManager {
         this.root = root;
     }
 
+    public boolean deleteById(final Long id) {
+        return tcDAO.deleteById(id);
+    }
+
+    public boolean delete(final TopCoderSolution solution) {
+        return tcDAO.delete(solution);
+    }
+
     /**
      * Given a solution and its related information, this method saves the solution
      * and returns the path to which it is saved.

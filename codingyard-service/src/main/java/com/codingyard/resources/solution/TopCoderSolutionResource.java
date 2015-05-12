@@ -131,4 +131,24 @@ public class TopCoderSolutionResource {
         return Response.ok().entity(solutions).build();
     }
 
+    @Path("/{solution_id}")
+    @DELETE
+    @Metered
+    @UnitOfWork
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteSolution(@PathParam("solution_id") @NotNull Long solutionId) {
+        final Optional<TopCoderSolution> searchResult = tcManager.findById(solutionId);
+        if (searchResult.isPresent()) {
+            final boolean isDeleted = tcManager.delete(searchResult.get());
+            if (isDeleted) {
+                return Response.ok().build();
+            } else {
+                return Response.serverError().entity("Couldn't delete the solution. Please try again later.").build();
+            }
+        } else {
+            return Response.status(Response.Status.NOT_FOUND)
+                .entity("Couldn't find solution with id " + solutionId)
+                .build();
+        }
+    }
 }
