@@ -33,7 +33,7 @@ public class UserCreationTest {
     public static void setupOnce() throws Exception {
         final Client dwClient = new JerseyClientBuilder(RULE.getEnvironment()).build("test client");
         final URL localServer = new URL(String.format("http://localhost:%d/", RULE.getLocalPort()));
-        CLIENT = new CodingyardClient(dwClient, localServer);
+        CLIENT = new CodingyardClient(dwClient, localServer.toURI());
     }
 
     @Test

@@ -7,8 +7,6 @@ import com.codingyard.api.entity.contest.topcoder.TopCoderSolution;
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.entity.user.Role;
 import com.codingyard.api.payload.RoleChangeRequest;
-import com.codingyard.path.SolutionResourcePath;
-import com.codingyard.path.UserResourcePath;
 import com.google.common.base.Optional;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
@@ -18,23 +16,27 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.net.URL;
+import java.net.URI;
 
 public class CodingyardClient {
 
+    private static final String USER = "user";
+    private static final String TOPCODER = "solution/topcoder";
     private final Client client;
-    private final URL root;
+    private final URI root;
 
-    public CodingyardClient(final Client client, final URL root) {
+    public CodingyardClient(final Client client, final URI root) {
         this.client = client;
         this.root = root;
         client.register(HttpAuthenticationFeature.basicBuilder().credentials("", "").build());
     }
 
     // =============================== UserResource methods ===============================
+    // TODO: Change this method name to findUser
     public Response getUser(final Long userId) {
-
-        return client.target(root.toString() + UserResourcePath.findUserPath(userId))
+        return client.target(root)
+            .path(USER)
+            .path(userId.toString())
             .request(MediaType.APPLICATION_JSON)
             .get();
     }
@@ -49,7 +51,8 @@ public class CodingyardClient {
             .param("firstName", firstName)
             .param("lastName", lastName);
 
-        return client.target(root.toString() + UserResourcePath.CREATE_USER_PATH)
+        return client.target(root)
+            .path(USER)
             .request(MediaType.APPLICATION_JSON)
             .post(Entity.form(form));
     }
@@ -59,7 +62,9 @@ public class CodingyardClient {
     }
 
     public Response login(final String username, final String password) {
-        return client.target(root.toString() + UserResourcePath.LOGIN_PATH)
+        return client.target(root)
+            .path(USER)
+            .path("login")
             .request(MediaType.APPLICATION_JSON)
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, username)
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, password)
@@ -72,7 +77,9 @@ public class CodingyardClient {
     }
 
     public Response getId(final String username, final String password) {
-        return client.target(root.toString() + UserResourcePath.FIND_MY_ID_PATH)
+        return client.target(root)
+            .path(USER)
+            .path("id")
             .request(MediaType.APPLICATION_JSON)
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, username)
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, password)
@@ -80,7 +87,9 @@ public class CodingyardClient {
     }
 
     public Response getId(final String token) {
-        return client.target(root.toString() + UserResourcePath.FIND_MY_ID_PATH)
+        return client.target(root)
+            .path(USER)
+            .path("id")
             .request(MediaType.APPLICATION_JSON)
             .header("Authorization", bearerToken(token))
             .get();
@@ -90,14 +99,19 @@ public class CodingyardClient {
                                final Long targetUserId,
                                final Role newRole) {
         final RoleChangeRequest request = new RoleChangeRequest(targetUserId, newRole);
-        return client.target(root.toString() + UserResourcePath.CHANGE_ROLE_PATH)
+        return client.target(root)
+            .path(USER)
+            .path("role")
             .request(MediaType.APPLICATION_JSON)
             .header("Authorization", bearerToken(approverToken))
             .put(Entity.json(request));
     }
 
     public Response getAllSolutions(final Long userId) {
-        return client.target(root.toString() + UserResourcePath.findSolutionsPath(userId))
+        return client.target(root)
+            .path(USER)
+            .path(userId.toString())
+            .path("solutions")
             .request(MediaType.APPLICATION_JSON)
             .get();
     }
@@ -111,15 +125,16 @@ public class CodingyardClient {
             .param("language", solution.getLanguage().name())
             .param("content", content);
 
-        return client.target(root.toString() + SolutionResourcePath.TOPCODER_PATH)
+        return client.target(root)
+            .path(TOPCODER)
             .request(MediaType.APPLICATION_JSON)
             .header("Authorization", bearerToken(authorToken))
             .post(Entity.form(form));
     }
 
     public Response getTopCoderSolution(final Long solutionId) {
-        return client.target(root.toString())
-            .path(SolutionResourcePath.TOPCODER_PATH)
+        return client.target(root)
+            .path(TOPCODER)
             .path(solutionId.toString())
             .request(MediaType.APPLICATION_JSON)
             .get();
@@ -130,8 +145,7 @@ public class CodingyardClient {
                                          final Optional<Long> problemId,
                                          final Optional<Language> language,
                                          final Optional<String> authorUsername) {
-        WebTarget target = client.target(root.toString())
-            .path(SolutionResourcePath.TOPCODER_PATH);
+        WebTarget target = client.target(root).path(TOPCODER);
 
         if (division.isPresent()) target = target.queryParam("division", division.get());
         if (difficulty.isPresent()) target = target.queryParam("difficulty", difficulty.get());
@@ -143,8 +157,8 @@ public class CodingyardClient {
     }
 
     public Response getTopCoderSolutionContent(final Long solutionId) {
-        return client.target(root.toString())
-            .path(SolutionResourcePath.TOPCODER_PATH)
+        return client.target(root)
+            .path(TOPCODER)
             .path(solutionId.toString())
             .path("content")
             .request(MediaType.APPLICATION_JSON)
