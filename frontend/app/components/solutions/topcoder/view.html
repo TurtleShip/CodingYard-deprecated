@@ -7,7 +7,7 @@ Criteria :
 
 
 <select ng-model="criteria.difficulty" ng-options="difficulty for difficulty in available.difficulties"
-        ng-change="getSolutions()">
+        ng-change="getSolutions(); modeChanged()">
     <option value="">Any</option>
 </select>
 
@@ -30,5 +30,4 @@ Criteria :
 
 <pre ng-show="message">{{message}}</pre>
 
-
-<pre ng-show="content">{{content}}</pre>
+<div ui-ace readonly ng-model="content" ng-change="modeChanged()"></div>

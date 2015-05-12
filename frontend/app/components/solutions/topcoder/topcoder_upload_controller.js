@@ -1,5 +1,7 @@
+'use strict';
+
 (function () {
-    app.controller('TopCoderUploadController', function ($scope, $log, TopCoder) {
+    app.controller('TopCoderUploadController', function ($scope, $log, TopCoder, AceEditor) {
         $scope.solution = {
             division: "DIV2",
             difficulty: "EASY",
@@ -10,6 +12,14 @@
         $scope.uploadSuccess = null;
         $scope.uploadError = null;
 
+        $scope.languages = {
+            "JAVA": "Java",
+            "C": "ANSI C",
+            "CPP": "cpp",
+            "PYTHON": "Python",
+            "RUBY": "Ruby",
+            "OTHER": "Other"
+        };
 
         $scope.uploadSolution = function (solutionToUpload) {
 
@@ -19,6 +29,21 @@
                 function (response) {
                     $scope.uploadError = response.data;
                 })
+        };
+
+        $scope.aceOption = {
+            mode: AceEditor.getMode($scope.solution.language),
+            useWrapMode: true,
+            showGutter: true,
+            theme: 'twilight',
+            onLoad: function (_ace) {
+
+                $scope.modeChanged = function () {
+                    $log.info("################# Changing mode");
+                    _ace.getSession().setMode("ace/mode/" + getMode($scope.solution.language));
+                };
+
+            }
         };
     });
 })();

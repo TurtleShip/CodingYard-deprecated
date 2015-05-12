@@ -1,5 +1,5 @@
 (function () {
-    app.controller('TopCoderViewController', function ($scope, $log, TopCoder) {
+    app.controller('TopCoderViewController', function ($scope, $log, TopCoder, AceEditor) {
             $scope.solutions = null;
             $scope.content = null;
             $scope.message = null;
@@ -57,6 +57,18 @@
                 $scope.available.author_usernames = Object.keys($scope.available.author_usernames);
             };
 
+            $scope.aceOption = {
+                useWrapMode: true,
+                showGutter: true,
+                theme: 'twilight',
+                onLoad: function (_ace) {
+                    $scope.modeChanged = function () {
+                        $log.info("################# Changing mode");
+                        _ace.getSession().setMode("ace/mode/" + AceEditor.getMode($scope.language));
+                    };
+                }
+            };
+
             $scope.getSolutions = function () {
                 TopCoder.findAll($scope.criteria,
                     function (response) { // success
@@ -67,10 +79,11 @@
                                 $scope.content = null;
                                 break;
                             case 1:
-                                TopCoder.getContent({id: response[0]["solution_id"]},
+                                var solution = response[0];
+                                TopCoder.getContent({id: solution["solution_id"]},
                                     function (response) {
                                         $scope.message = "This is the solution matching your criteria.";
-                                        $scope.content = response;
+                                        $scope.content = AceEditor.parseLines(response);
                                     },
                                     function () {
                                         $scope.message = "Found a solution matching your criteria, but had trouble loading it :(.";

@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('codingyard', ['ngRoute', 'ngResource', 'base64']);
+var app = angular.module('codingyard', ['ngRoute', 'ngResource', 'base64', 'ui.ace']);
 
 (function () {
 

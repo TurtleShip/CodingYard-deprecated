@@ -9,19 +9,13 @@
     <option value="MEDIUM">medium</option>
     <option value="HARD">hard</option>
 </select><br/>
-    problem number: <textarea ng-model="solution.problem_number"></textarea><br/>
-    Language: <select ng-model="solution.language">
-    <option value="JAVA">Java</option>
-    <option value="CPP">cpp</option>
-    <option value="C">ANSI C</option>
-    <option value="PYTHON">Python</option>
-    <option value="RUBY">Ruby</option>
-    <option value="OTHER">Other</option>
+    problem number: <input type="number" ng-model="solution.problem_number"></textarea><br/>
+    Language: <select ng-model="solution.language" ng-options="key as value for (key, value) in languages"
+                      ng-change="modeChanged()">
 </select><br/>
-    content:
-    <textarea ng-model="solution.content">
-        Fill me
-    </textarea><br/>
+
+    <div ui-ace="aceOption" ng-model="solution.content">
+    </div>
 
     <input type="submit" ng-click="uploadSolution(solution)">
 </form>
@@ -29,3 +23,4 @@
 <pre>form = {{solution | json}}</pre>
 <pre ng-show="uploadSuccess">{{uploadSuccess}}</pre>
 <pre ng-show="uploadError">{{uploadError}}</pre>
+

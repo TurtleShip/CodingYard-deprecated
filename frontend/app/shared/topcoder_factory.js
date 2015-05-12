@@ -1,4 +1,4 @@
-'user strict';
+'use strict';
 
 (function () {
     app.factory('TopCoder', function TopCoderFactory($resource, TransformRequest) {
