@@ -56,9 +56,9 @@ public class TopCoderSolutionResource {
             final String filePath = tcManager.save(author, content, division, difficulty, problemNumber, language).toString();
             final TopCoderSolution solution = new TopCoderSolution(author, new Date(), filePath, language, difficulty, division, problemNumber);
             userManager.saveSolution(author, solution);
-
+            userManager.flush();
             return Response.status(Response.Status.CREATED)
-                .entity(solution.getSolutionId())
+                .entity(solution.getId())
                 .build();
         } catch (IOException e) {
             LOG.warn("Exception thrown while trying to save a topcoder solution for user : {}, division : {], difficulty : {}," +
@@ -123,7 +123,7 @@ public class TopCoderSolutionResource {
                     .entity(String.format("There is no user with username %s.\n", username))
                     .build();
             }
-            userId = Optional.of(searchResult.get().getUserId());
+            userId = Optional.of(searchResult.get().getId());
         }
 
         List<TopCoderSolution> solutions = tcManager.findAll(division, difficulty, problemNumber, language, userId);

@@ -1,5 +1,6 @@
 package com.codingyard.api.entity.auth;
 
+import com.codingyard.api.entity.BasicEntity;
 import com.codingyard.api.entity.user.CodingyardUser;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -11,9 +12,9 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "codingyard_token")
-public class CodingyardToken {
+public class CodingyardToken implements BasicEntity {
 
-    private Long userId;
+    private Long id;
     private CodingyardUser user;
     private String value;
     private Date createdAt;
@@ -28,17 +29,17 @@ public class CodingyardToken {
     }
 
     @Id
-    @Column(name = "user_id", unique = true, nullable = false)
+    @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(generator = "codingyardUserIdGenerator")
     @GenericGenerator(name = "codingyardUserIdGenerator",
         strategy = "foreign",
         parameters = {@Parameter(value = "user", name = "property")})
-    public Long getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
     @OneToOne
-    @PrimaryKeyJoinColumn(name = "user_id")
+    @PrimaryKeyJoinColumn(name = "id")
     public CodingyardUser getUser() {
         return user;
     }
@@ -53,8 +54,8 @@ public class CodingyardToken {
         return createdAt;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setUser(CodingyardUser user) {

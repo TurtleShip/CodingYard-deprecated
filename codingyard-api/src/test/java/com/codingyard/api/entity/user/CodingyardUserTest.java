@@ -21,7 +21,7 @@ public class CodingyardUserTest {
 
     @Before
     public void setUp() {
-        user.setUserId(1L);
+        user.setId(1L);
     }
 
     @Test

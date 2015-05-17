@@ -23,7 +23,7 @@ public class TokenAndUserTest {
 
     @Before
     public void setup() {
-        user.setUserId(1L);
+        user.setId(1L);
     }
 
     @Test

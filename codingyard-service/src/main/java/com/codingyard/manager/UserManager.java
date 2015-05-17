@@ -49,5 +49,7 @@ public class UserManager {
         userDAO.save(author);
     }
 
-
+    public void flush() {
+        userDAO.flush();
+    }
 }

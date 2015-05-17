@@ -23,6 +23,7 @@ public class UserDAOTest extends H2Test {
         final String username = "TurtleShip";
         final CodingyardUser user = new CodingyardUser.Builder(username, "secure_password").build();
         final Long id = userDAO.save(user);
+        userDAO.flush();
         final Optional<CodingyardUser> searchResultById = userDAO.findById(id);
         final Optional<CodingyardUser> searchResultByUsername = userDAO.findByUsername(username);
 

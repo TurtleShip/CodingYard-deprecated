@@ -2,18 +2,13 @@ package com.codingyard.dao;
 
 import com.codingyard.api.entity.auth.CodingyardToken;
 import com.google.common.base.Optional;
-import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
-public class TokenDAO extends AbstractDAO<CodingyardToken> {
+public class TokenDAO extends BasicDAO<CodingyardToken> {
 
     public TokenDAO(final SessionFactory factory) {
-        super(factory);
-    }
-
-    public long save(final CodingyardToken token) {
-        return persist(token).getUserId();
+        super(factory, CodingyardToken.class);
     }
 
     public Optional<CodingyardToken> findByTokenValue(final String value) {

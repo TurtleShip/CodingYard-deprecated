@@ -1,5 +1,6 @@
 package com.codingyard.api.entity.user;
 
+import com.codingyard.api.entity.BasicEntity;
 import com.codingyard.api.entity.auth.CodingyardToken;
 import com.codingyard.api.entity.contest.Solution;
 import com.codingyard.api.util.Encryptor;
@@ -15,9 +16,9 @@ import java.util.Set;
 // Note that table name cannot be 'user' since it is reserved table name for postgresql
 @Entity
 @Table(name = "codingyard_user")
-public class CodingyardUser {
+public class CodingyardUser implements BasicEntity {
 
-    private Long userId;
+    private Long id;
     private String username;
     private String password;
     private String firstName;
@@ -40,10 +41,10 @@ public class CodingyardUser {
 
     @JsonProperty("id")
     @Id
-    @Column(name = "user_id", nullable = false, unique = true)
+    @Column(name = "id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    public Long getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
     @JsonProperty("username")
@@ -89,8 +90,8 @@ public class CodingyardUser {
         return solutions;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setUsername(String username) {
@@ -144,7 +145,7 @@ public class CodingyardUser {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(CodingyardUser.class)
-            .add("userId", userId)
+            .add("id", id)
             .add("userName", username)
             .add("firstName", firstName)
             .add("lastName", lastName)

@@ -51,7 +51,7 @@ public class UserResourceTest {
 
     @Before
     public void setup() throws Exception {
-        globalAdmin.setUserId(1L);
+        globalAdmin.setId(1L);
         when(userManager.findById(1L)).thenReturn(Optional.of(globalAdmin));
         when(userManager.refreshToken(globalAdmin)).thenReturn(new CodingyardToken("ssup", new Date()));
         BasicCredentials credentials = new BasicCredentials(globalAdmin.getUsername(), globalAdmin.getPassword());
@@ -64,11 +64,11 @@ public class UserResourceTest {
     public void existingUserShouldBeFound() {
         final CodingyardUser actual = resources.getJerseyTest()
             .target("/user")
-            .path(globalAdmin.getUserId().toString())
+            .path(globalAdmin.getId().toString())
             .request(MediaType.APPLICATION_JSON)
             .get(CodingyardUser.class);
         assertThat(actual).isEqualTo(globalAdmin);
-        verify(userManager).findById(globalAdmin.getUserId());
+        verify(userManager).findById(globalAdmin.getId());
     }
 
     // TODO: Finish this

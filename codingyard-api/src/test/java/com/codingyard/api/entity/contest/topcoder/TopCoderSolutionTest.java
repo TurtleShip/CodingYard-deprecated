@@ -29,8 +29,8 @@ public class TopCoderSolutionTest {
 
     @Before
     public void setUp() {
-        author.setUserId(1L);
-        solution.setSolutionId(999L);
+        author.setId(1L);
+        solution.setId(999L);
     }
 
     @Test

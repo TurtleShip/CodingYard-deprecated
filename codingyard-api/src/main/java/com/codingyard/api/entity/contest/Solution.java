@@ -1,5 +1,6 @@
 package com.codingyard.api.entity.contest;
 
+import com.codingyard.api.entity.BasicEntity;
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,9 +12,9 @@ import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Solution {
+public abstract class Solution implements BasicEntity {
 
-    private Long solutionId;
+    private Long id;
     private Contest contest;
     private CodingyardUser author;
     private Date submissionDate;
@@ -43,12 +44,12 @@ public abstract class Solution {
         this.language = language;
     }
 
-    @JsonProperty("solution_id")
+    @JsonProperty("id")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "solution_id", unique = true, nullable = false)
-    public Long getSolutionId() {
-        return solutionId;
+    @Column(name = "id", unique = true, nullable = false)
+    public Long getId() {
+        return id;
     }
 
     @JsonProperty("contest")
@@ -59,7 +60,7 @@ public abstract class Solution {
 
     @JsonProperty("author")
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "author", nullable = false)
     public CodingyardUser getAuthor() {
         return author;
     }
@@ -82,8 +83,8 @@ public abstract class Solution {
         return language;
     }
 
-    public void setSolutionId(Long solutionId) {
-        this.solutionId = solutionId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setContest(Contest contest) {
@@ -129,7 +130,7 @@ public abstract class Solution {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-            .add("solutionId", solutionId)
+            .add("id", id)
             .add("contest", contest)
             .add("author", author)
             .add("submissionDate", submissionDate)
