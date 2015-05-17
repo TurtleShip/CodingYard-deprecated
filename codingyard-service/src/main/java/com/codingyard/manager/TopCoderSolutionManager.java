@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 
-public class TopCoderSolutionManager {
+public class TopCoderSolutionManager extends BasicEntityManager<TopCoderSolution> {
 
     private final TopCoderSolutionDAO tcDAO;
     private final Path root;
@@ -29,16 +29,9 @@ public class TopCoderSolutionManager {
      */
     public TopCoderSolutionManager(final TopCoderSolutionDAO tcDAO,
                                    final Path root) {
+        super(tcDAO);
         this.tcDAO = tcDAO;
         this.root = root;
-    }
-
-    public boolean deleteById(final Long id) {
-        return tcDAO.deleteById(id);
-    }
-
-    public boolean delete(final TopCoderSolution solution) {
-        return tcDAO.delete(solution);
     }
 
     /**
@@ -98,11 +91,6 @@ public class TopCoderSolutionManager {
             solution.getDifficulty(),
             solution.getProblemNumber(),
             solution.getLanguage());
-    }
-
-    public Optional<TopCoderSolution> findById(Long id) {
-        return tcDAO.findById(id);
-
     }
 
     public List<TopCoderSolution> findAll(Optional<TopCoderDivision> division,
