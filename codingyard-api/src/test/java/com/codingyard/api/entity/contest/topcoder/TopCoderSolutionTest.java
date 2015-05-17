@@ -1,22 +1,14 @@
 package com.codingyard.api.entity.contest.topcoder;
 
-import com.codingyard.api.entity.EntityTestUtil;
+import com.codingyard.api.BasicJsonTest;
 import com.codingyard.api.entity.contest.Language;
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.entity.user.Role;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.dropwizard.jackson.Jackson;
 import org.junit.Before;
-import org.junit.Test;
 
 import java.util.Date;
 
-import static io.dropwizard.testing.FixtureHelpers.fixture;
-import static org.junit.Assert.assertTrue;
-
-public class TopCoderSolutionTest {
-
-    private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
+public class TopCoderSolutionTest extends BasicJsonTest<TopCoderSolution> {
 
     final CodingyardUser author = new CodingyardUser.Builder("TurtleShip", "safe_password")
         .firstName("Seulgi")
@@ -33,16 +25,18 @@ public class TopCoderSolutionTest {
         solution.setId(999L);
     }
 
-    @Test
-    public void serializesToJson() throws Exception {
-        final String actual = MAPPER.writeValueAsString(solution);
-        final String expected = fixture("fixtures/solution/topcoder_solution.json");
-        assertTrue(EntityTestUtil.isSameInJson(actual, expected));
+    @Override
+    public String getJsonFilePath() {
+        return "fixtures/solution/topcoder_solution.json";
     }
 
-    @Test
-    public void deserializeFromJson() throws Exception {
-        final TopCoderSolution actual = MAPPER.readValue(fixture("fixtures/solution/topcoder_solution.json"), TopCoderSolution.class);
-        assertTrue(solution.equals(actual));
+    @Override
+    public TopCoderSolution getValidPojo() {
+        return solution;
+    }
+
+    @Override
+    public Class<? extends TopCoderSolution> getEntityClass() {
+        return TopCoderSolution.class;
     }
 }

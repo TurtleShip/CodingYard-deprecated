@@ -1,29 +1,25 @@
 package com.codingyard.api.payload;
 
-import com.codingyard.api.entity.EntityTestUtil;
+import com.codingyard.api.BasicJsonTest;
 import com.codingyard.api.entity.user.Role;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.dropwizard.jackson.Jackson;
-import org.junit.Test;
 
-import static io.dropwizard.testing.FixtureHelpers.fixture;
-import static org.junit.Assert.assertTrue;
+public class RoleChangeRequestTest extends BasicJsonTest<RoleChangeRequest> {
 
-public class RoleChangeRequestTest {
-
-    private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
     private final RoleChangeRequest payload = new RoleChangeRequest(1L, Role.ADMIN);
 
-    @Test
-    public void serializesToJSON() throws Exception {
-        final String actual = MAPPER.writeValueAsString(payload);
-        final String expected = fixture("fixtures/payload/role_change.json");
-        assertTrue(EntityTestUtil.isSameInJson(actual, expected));
+    @Override
+    public String getJsonFilePath() {
+        return "fixtures/payload/role_change.json";
     }
 
-    @Test
-    public void deserializeFromJson() throws Exception {
-        final RoleChangeRequest actual = MAPPER.readValue(fixture("fixtures/payload/role_change.json"), RoleChangeRequest.class);
-        assertTrue(payload.equals(actual));
+    @Override
+    public RoleChangeRequest getValidPojo() {
+        return payload;
+    }
+
+    @Override
+    public Class<? extends RoleChangeRequest> getEntityClass() {
+        return RoleChangeRequest.class;
     }
 }
+
