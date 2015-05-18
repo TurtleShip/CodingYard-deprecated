@@ -7,18 +7,12 @@ import com.codingyard.auth.TokenAuthenticator;
 import com.codingyard.auth.UserCredentialAuthenticator;
 import com.codingyard.manager.UserManager;
 import com.google.common.base.Optional;
-import io.dropwizard.auth.AuthFactory;
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.ChainedAuthFactory;
 import io.dropwizard.auth.basic.BasicAuthFactory;
 import io.dropwizard.auth.basic.BasicCredentials;
 import io.dropwizard.auth.oauth.OAuthFactory;
-import io.dropwizard.testing.junit.ResourceTestRule;
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
-import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -41,18 +35,6 @@ public class ResourceTest {
     protected CodingyardUser nonExistingUser;
     protected long id = 1;
 
-    @ClassRule
-    public static final ResourceTestRule resources = ResourceTestRule.builder()
-        .addProvider(AuthFactory.binder(chainedAuthFactory))
-        .setTestContainerFactory(new GrizzlyWebTestContainerFactory())
-        .addResource(new UserResource(userManager))
-        .build();
-
-    @BeforeClass
-    public static void setupOnce() {
-        resources.getJerseyTest().client().register(HttpAuthenticationFeature.basic("", ""));
-    }
-
     @Before
     public void setup() throws Exception {
         globalAdmin = new CodingyardUser.Builder("turtleship", "safe_password").role(Role.GLOBAL_ADMIN).build();
@@ -67,6 +49,10 @@ public class ResourceTest {
         setupUser(guest);
 
         setupNonExistingUser(nonExistingUser);
+    }
+
+    protected String bearerToken(final String token) {
+        return String.format("bearer %s", token);
     }
 
     private void setupUser(final CodingyardUser user) throws AuthenticationException {

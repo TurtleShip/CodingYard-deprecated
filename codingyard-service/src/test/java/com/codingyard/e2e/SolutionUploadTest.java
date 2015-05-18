@@ -14,6 +14,7 @@ import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.client.Client;
@@ -50,6 +51,7 @@ public class SolutionUploadTest {
         3. Verify that I can get the solutions.
      */
     @Test
+    @Ignore
     public void uploadAndDownloadSolutions() {
         final String token = loginAsAdmin().readEntity(TokenAndUser.class).getToken();
         final Long adminId = CLIENT.getId(token).readEntity(Long.class);

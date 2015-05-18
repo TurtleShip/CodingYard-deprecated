@@ -8,7 +8,12 @@ import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.entity.user.Role;
 import com.codingyard.api.payload.RoleChangeRequest;
 import com.google.common.collect.Sets;
+import io.dropwizard.auth.AuthFactory;
+import io.dropwizard.testing.junit.ResourceTestRule;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 import javax.ws.rs.client.Entity;
@@ -26,6 +31,18 @@ import static org.mockito.Mockito.when;
 public class UserResourceTest extends ResourceTest {
 
     private static final String ROOT = "/user";
+
+    @ClassRule
+    public static final ResourceTestRule resources = ResourceTestRule.builder()
+        .addProvider(AuthFactory.binder(chainedAuthFactory))
+        .setTestContainerFactory(new GrizzlyWebTestContainerFactory())
+        .addResource(new UserResource(userManager))
+        .build();
+
+    @BeforeClass
+    public static void setupOnce() {
+        resources.getJerseyTest().client().register(HttpAuthenticationFeature.basic("", ""));
+    }
 
     @Test
     public void findUserShouldReturnExistingUsers() {
@@ -163,9 +180,5 @@ public class UserResourceTest extends ResourceTest {
             .put(Entity.json(new RoleChangeRequest(guest.getId(), Role.MEMBER)));
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.UNAUTHORIZED.getStatusCode());
-    }
-
-    private String bearerToken(final String token) {
-        return String.format("bearer %s", token);
     }
 }

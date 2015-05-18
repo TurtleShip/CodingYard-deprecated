@@ -9,6 +9,7 @@ import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.entity.user.Role;
 import com.codingyard.manager.TopCoderSolutionManager;
 import com.codingyard.manager.UserManager;
+import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -98,7 +99,7 @@ public class TopCoderSolutionResource {
                 .build();
         }
         try {
-            List<String> content = tcManager.load(searchResult.get());
+            final String content = Joiner.on("\n").join(tcManager.load(searchResult.get()));
             return Response.ok().entity(content).build();
         } catch (IOException e) {
             return Response.serverError().entity("Couldn't find content.").build();
