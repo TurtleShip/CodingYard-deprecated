@@ -55,13 +55,13 @@ public class UserResource {
         return Response.ok().entity(author.getSolutions()).build();
     }
 
-    @Path("/id")
+    @Path("/me")
     @GET
     @Metered
     @UnitOfWork
     @Produces(MediaType.APPLICATION_JSON)
-    public Response findMyId(@Auth CodingyardUser user) {
-        return Response.ok().entity(user.getId()).build();
+    public Response getMyInfo(@Auth CodingyardUser user) {
+        return Response.ok().entity(user).build();
     }
 
     @POST

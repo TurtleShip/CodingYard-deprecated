@@ -96,21 +96,21 @@ public class UserResourceTest extends ResourceTest {
     }
 
     @Test
-    public void findMyIdShouldReturnExistingUserId() {
-        final Long id = resources.getJerseyTest().target(ROOT)
-            .path("id")
+    public void findMyInfoShouldReturnExistingUser() {
+        final CodingyardUser actual = resources.getJerseyTest().target(ROOT)
+            .path("me")
             .request(MediaType.APPLICATION_JSON)
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, member.getUsername())
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, member.getPassword())
-            .get(Long.class);
+            .get(CodingyardUser.class);
 
-        assertThat(id).isEqualTo(member.getId());
+        assertThat(actual).isEqualTo(member);
     }
 
     @Test
-    public void findMyIdShouldReturnUnauthorizedForNonExistingUsers() {
+    public void findMyInfoShouldReturnUnauthorizedForNonExistingUsers() {
         final Response response = resources.getJerseyTest().target(ROOT)
-            .path("id")
+            .path("me")
             .request(MediaType.APPLICATION_JSON)
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, nonExistingUser.getUsername())
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, nonExistingUser.getPassword())
