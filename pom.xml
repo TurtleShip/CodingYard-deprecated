@@ -23,7 +23,6 @@
 
     <modules>
         <module>codingyard-service</module>
-        <module>codingyard-client</module>
         <module>codingyard-api</module>
     </modules>
 
