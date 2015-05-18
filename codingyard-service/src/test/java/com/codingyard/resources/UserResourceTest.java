@@ -142,7 +142,42 @@ public class UserResourceTest extends ResourceTest {
         verify(userManager).save(newUser);
     }
 
-    // TODO: Create a test to test login AFTER making fixes for login endpoint
+    @Test
+    public void loginShouldReturnTokenForExistingUsers() {
+        final String actual = resources.getJerseyTest()
+            .target(ROOT)
+            .path("login")
+            .request()
+            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, member.getUsername())
+            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, member.getPassword())
+            .get(String.class);
+
+        assertThat(actual).isEqualTo(member.getToken().getValue());
+    }
+
+    @Test
+    public void loginShouldReturnUnauthorizedForNonExistingUsers() {
+        final Response response = resources.getJerseyTest()
+            .target(ROOT)
+            .path("login")
+            .request()
+            .get();
+
+        assertThat(response.getStatus()).isEqualTo(Response.Status.UNAUTHORIZED.getStatusCode());
+    }
+
+    @Test
+    public void refreshTokenShouldRefreshToken() {
+        final String originalToken = member.getToken().getValue();
+        final String newToken = resources.getJerseyTest()
+            .target(ROOT)
+            .path("token/refresh")
+            .request()
+            .post(Entity.json(""))
+            .readEntity(String.class);
+
+        assertThat(newToken).isNotEqualTo(originalToken);
+    }
 
     @Test
     public void adminCanPromoteGuestToMember() {
