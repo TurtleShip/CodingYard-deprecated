@@ -156,7 +156,6 @@ public class UserResource {
 
         if (isApproved) {
             return Response.ok()
-                
                 .entity(String.format("User %s's role change to %s was successfully approved by user %s.\n", lowerUser.getUsername(), lowerUser.getRole(), approver.getUsername()))
                 .build();
         } else {
