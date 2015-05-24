@@ -4,7 +4,10 @@ var app = angular.module('codingyard', ['ngRoute', 'ngResource', 'base64', 'ui.a
 
 (function () {
 
-    app.controller('CodingyardController', function ($scope, $route, $routeParams, $location, $log, USER_ROLES, AuthService, Session, SessionStorage, SESSION_KEYS) {
+    /**
+     * This is the root controller of www.codingyard.com
+     */
+    app.controller('CodingyardController', function ($scope, $route, $routeParams, $location, $log, USER_ROLES, AuthService, Session, SessionStorage, SESSION_KEYS, AUTH_EVENTS, User) {
 
         $scope.$route = $route;
         $scope.$location = $location;
@@ -15,45 +18,46 @@ var app = angular.module('codingyard', ['ngRoute', 'ngResource', 'base64', 'ui.a
         $scope.userRoles = USER_ROLES;
         $scope.isAuthorized = AuthService.isAuthorized;
 
-        // check if user's has some session
-        var info = SessionStorage.getObject(SESSION_KEYS.authSession, undefined);
-
-        if (info) {
-            $scope.currentUser = info.user;
-            $scope.token = info.token;
-            Session.create(info.token, info.user);
-        }
-        $scope.setCurrentUser = function (user, token) {
-            $scope.currentUser = user;
-            $scope.token = token;
+        var getUserInfo = function () {
+            User.getMyInfo({},
+                function success(user) {
+                    $scope.currentUser = user;
+                    $log.info("Successfully retrieved user information.");
+                },
+                function error(response) {
+                    $log.info("Failed to retrieve user information. Response : " + response);
+                }
+            );
         };
 
+        // check if the current user has been authenticated before
+        var oauthToken = SessionStorage.get(SESSION_KEYS.token, undefined);
+
+        if (!(angular.isUndefined(oauthToken) || oauthToken == null)) {
+            $log.info("Found oauth token in session : " + oauthToken);
+            AuthService.setBearerOauthHeader(oauthToken);
+            getUserInfo();
+        }
+
+        // Get the current user's information when he is successfully authenticated
+        $scope.$on(AUTH_EVENTS.loginSuccess, getUserInfo);
+
+        // Reset the current user's information when user logs out
+        $scope.$on(AUTH_EVENTS.logout, function () {
+            $scope.currentUser = null;
+            $scope.token = null;
+        });
     });
 
-    app.controller('LoginController', function ($scope, $rootScope, $log, AUTH_EVENTS, AuthService) {
+    app.controller('LoginController', function ($scope, AuthService) {
 
         $scope.credentials = {
             username: '',
             password: ''
         };
 
-        $scope.login = function (credentials) {
-            AuthService.login(credentials)
-                .then(
-                function (data) { // success call back
-                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-                    $scope.setCurrentUser(data.user, data.token);
-                },
-                function () { // error call back
-                    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-                });
-        };
-
-        $scope.logout = function () {
-            AuthService.logout();
-            $scope.currentUser = null;
-            $scope.token = null;
-        }
+        $scope.login = AuthService.login;
+        $scope.logout = AuthService.logout;
     });
 
 })();

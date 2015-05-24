@@ -83,7 +83,7 @@ public class UserResource {
     @GET
     @Metered
     @UnitOfWork
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public Response login(@Auth CodingyardUser user) {
         return Response.status(Response.Status.OK).entity(user.getToken().getValue()).build();
     }
