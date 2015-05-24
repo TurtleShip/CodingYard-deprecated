@@ -42,13 +42,36 @@ public class UserResource {
         }
     }
 
-    @Path("/edit")
+    @Path("/{id}/solutions")
+    @GET
+    @Metered
+    @UnitOfWork
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSolutions(@PathParam("id") LongParam userId) {
+        final Optional<CodingyardUser> searchResult = userManager.findById(userId.get());
+        if (!searchResult.isPresent()) {
+            return Response.status(NOT_FOUND).build();
+        }
+        final CodingyardUser author = searchResult.get();
+        return Response.ok().entity(author.getSolutions()).build();
+    }
+
+    @Path("/me")
+    @GET
+    @Metered
+    @UnitOfWork
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMyInfo(@Auth CodingyardUser user) {
+        return Response.ok().entity(user).build();
+    }
+
+    @Path("/me/edit")
     @PUT
     @Metered
     @UnitOfWork
     @Produces(MediaType.APPLICATION_JSON)
-    public Response editUser(@Auth CodingyardUser currentUser,
-                             @Valid CodingyardUser newUser) {
+    public Response editMyInfo(@Auth CodingyardUser currentUser,
+                               @Valid CodingyardUser newUser) {
         // A user can only edit his/her own info
         if (currentUser.getId().longValue() != newUser.getId().longValue()) {
             return Response.status(FORBIDDEN).entity("You are not allowed to edit user " + newUser).build();
@@ -73,30 +96,6 @@ public class UserResource {
 
         userManager.save(newUser);
         return Response.ok().entity(newUser).build();
-    }
-
-
-    @Path("/{id}/solutions")
-    @GET
-    @Metered
-    @UnitOfWork
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getSolutions(@PathParam("id") LongParam userId) {
-        final Optional<CodingyardUser> searchResult = userManager.findById(userId.get());
-        if (!searchResult.isPresent()) {
-            return Response.status(NOT_FOUND).build();
-        }
-        final CodingyardUser author = searchResult.get();
-        return Response.ok().entity(author.getSolutions()).build();
-    }
-
-    @Path("/me")
-    @GET
-    @Metered
-    @UnitOfWork
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getMyInfo(@Auth CodingyardUser user) {
-        return Response.ok().entity(user).build();
     }
 
     @POST

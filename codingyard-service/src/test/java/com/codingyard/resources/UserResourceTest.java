@@ -70,7 +70,7 @@ public class UserResourceTest extends ResourceTest {
     public void userCannotChangeOtherUserInfo() {
         final Response response = resources.getJerseyTest()
             .target(ROOT)
-            .path("edit")
+            .path("me/edit")
             .request(MediaType.APPLICATION_JSON)
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, admin.getUsername())
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, admin.getPassword())
@@ -84,7 +84,7 @@ public class UserResourceTest extends ResourceTest {
         newAdmin.setUsername("Cool new name");
         final Response response = resources.getJerseyTest()
             .target(ROOT)
-            .path("edit")
+            .path("me/edit")
             .request(MediaType.APPLICATION_JSON)
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, admin.getUsername())
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, admin.getPassword())
@@ -100,7 +100,7 @@ public class UserResourceTest extends ResourceTest {
         newAdmin.setRole(Role.GLOBAL_ADMIN);
         final Response response = resources.getJerseyTest()
             .target(ROOT)
-            .path("edit")
+            .path("me/edit")
             .request(MediaType.APPLICATION_JSON)
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, admin.getUsername())
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, admin.getPassword())
@@ -117,14 +117,13 @@ public class UserResourceTest extends ResourceTest {
 
         final Response response = resources.getJerseyTest()
             .target(ROOT)
-            .path("edit")
+            .path("me/edit")
             .request(MediaType.APPLICATION_JSON)
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, admin.getUsername())
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, admin.getPassword())
             .put(Entity.json(newAdmin));
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
     }
-
 
     @Test
     public void getSolutionsShouldReturnExistingSolutions() {
