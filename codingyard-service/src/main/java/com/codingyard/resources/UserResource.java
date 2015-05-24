@@ -16,6 +16,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static javax.ws.rs.core.Response.Status.FORBIDDEN;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+
 @Path("/user")
 public class UserResource {
 
@@ -35,8 +38,41 @@ public class UserResource {
         if (searchResult.isPresent()) {
             return Response.ok(searchResult.get()).build();
         } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(NOT_FOUND).build();
         }
+    }
+
+    @Path("/edit")
+    @PUT
+    @Metered
+    @UnitOfWork
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editUser(@Auth CodingyardUser currentUser,
+                             @Valid CodingyardUser newUser) {
+        // A user can only edit his/her own info
+        if (currentUser.getId().longValue() != newUser.getId().longValue()) {
+            return Response.status(FORBIDDEN).entity("You are not allowed to edit user " + newUser).build();
+        }
+
+        /*
+         Allowed changes:
+            firstName
+            lastName
+            password
+
+         Not allowed changes:
+            username
+            role
+          */
+        if (!currentUser.getUsername().equals(newUser.getUsername())) {
+            return Response.status(FORBIDDEN).entity("You can't change your username").build();
+        }
+        if (!currentUser.getRole().equals(newUser.getRole())) {
+            return Response.status(FORBIDDEN).entity("You can't change your role").build();
+        }
+
+        userManager.save(newUser);
+        return Response.ok().entity(newUser).build();
     }
 
 
@@ -48,7 +84,7 @@ public class UserResource {
     public Response getSolutions(@PathParam("id") LongParam userId) {
         final Optional<CodingyardUser> searchResult = userManager.findById(userId.get());
         if (!searchResult.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(NOT_FOUND).build();
         }
         final CodingyardUser author = searchResult.get();
         return Response.ok().entity(author.getSolutions()).build();
@@ -85,7 +121,7 @@ public class UserResource {
     @UnitOfWork
     @Produces(MediaType.TEXT_PLAIN)
     public Response login(@Auth CodingyardUser user) {
-        return Response.status(Response.Status.OK).entity(user.getToken().getValue()).build();
+        return Response.ok().entity(user.getToken().getValue()).build();
     }
 
     @Path("/token/refresh")
@@ -95,7 +131,7 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response refreshToken(@Auth final CodingyardUser user) {
         userManager.refreshToken(user);
-        return Response.status(Response.Status.OK).entity(user.getToken()).build();
+        return Response.ok().entity(user.getToken()).build();
     }
 
     @Path("/role")
@@ -110,7 +146,7 @@ public class UserResource {
         final Long lowerUserId = request.getUserId();
         final Optional<CodingyardUser> searchResult = userManager.findById(lowerUserId);
         if (!searchResult.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND)
+            return Response.status(NOT_FOUND)
                 .entity(String.format("User with id %d was not found.\n", lowerUserId))
                 .build();
         }
@@ -120,10 +156,11 @@ public class UserResource {
 
         if (isApproved) {
             return Response.ok()
+                
                 .entity(String.format("User %s's role change to %s was successfully approved by user %s.\n", lowerUser.getUsername(), lowerUser.getRole(), approver.getUsername()))
                 .build();
         } else {
-            return Response.status(Response.Status.FORBIDDEN)
+            return Response.status(FORBIDDEN)
                 .entity(String.format("User %s does not have permission to change user %s's role to %s.\n", approver.getUsername(), lowerUser.getUsername(), request.getNewRole()))
                 .build();
         }

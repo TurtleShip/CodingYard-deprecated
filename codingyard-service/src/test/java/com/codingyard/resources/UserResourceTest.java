@@ -24,6 +24,7 @@ import javax.ws.rs.core.Response;
 import java.util.Date;
 import java.util.Set;
 
+import static javax.ws.rs.core.Response.Status.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -62,8 +63,68 @@ public class UserResourceTest extends ResourceTest {
             .path(nonExistingUser.getId().toString())
             .request(MediaType.APPLICATION_JSON)
             .get();
-        assertThat(response.getStatus()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
+        assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
     }
+
+    @Test
+    public void userCannotChangeOtherUserInfo() {
+        final Response response = resources.getJerseyTest()
+            .target(ROOT)
+            .path("edit")
+            .request(MediaType.APPLICATION_JSON)
+            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, admin.getUsername())
+            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, admin.getPassword())
+            .put(Entity.json(member));
+        assertThat(response.getStatus()).isEqualTo(FORBIDDEN.getStatusCode());
+    }
+
+    @Test
+    public void userCannotChangeUsername() {
+        final CodingyardUser newAdmin = new CodingyardUser(admin);
+        newAdmin.setUsername("Cool new name");
+        final Response response = resources.getJerseyTest()
+            .target(ROOT)
+            .path("edit")
+            .request(MediaType.APPLICATION_JSON)
+            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, admin.getUsername())
+            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, admin.getPassword())
+            .put(Entity.json(newAdmin));
+        assertThat(response.getStatus()).isEqualTo(FORBIDDEN.getStatusCode());
+    }
+
+
+    // Note the careful test naming. Users **can** change their roles through different endpoint : /user/role
+    @Test
+    public void userCannotChangeRoleThroughUserEdit() {
+        final CodingyardUser newAdmin = new CodingyardUser(admin);
+        newAdmin.setRole(Role.GLOBAL_ADMIN);
+        final Response response = resources.getJerseyTest()
+            .target(ROOT)
+            .path("edit")
+            .request(MediaType.APPLICATION_JSON)
+            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, admin.getUsername())
+            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, admin.getPassword())
+            .put(Entity.json(newAdmin));
+        assertThat(response.getStatus()).isEqualTo(FORBIDDEN.getStatusCode());
+    }
+
+    @Test
+    public void userCanEditNamesAndPassword() {
+        final CodingyardUser newAdmin = new CodingyardUser(admin);
+        newAdmin.setFirstName("new first name");
+        newAdmin.setLastName("new last name");
+        newAdmin.setPassword("new and secure password");
+
+        final Response response = resources.getJerseyTest()
+            .target(ROOT)
+            .path("edit")
+            .request(MediaType.APPLICATION_JSON)
+            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, admin.getUsername())
+            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, admin.getPassword())
+            .put(Entity.json(newAdmin));
+        assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
+    }
+
 
     @Test
     public void getSolutionsShouldReturnExistingSolutions() {
@@ -92,7 +153,7 @@ public class UserResourceTest extends ResourceTest {
             .request(MediaType.APPLICATION_JSON)
             .get();
 
-        assertThat(response.getStatus()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
+        assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -116,7 +177,7 @@ public class UserResourceTest extends ResourceTest {
             .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, nonExistingUser.getPassword())
             .get();
 
-        assertThat(response.getStatus()).isEqualTo(Response.Status.UNAUTHORIZED.getStatusCode());
+        assertThat(response.getStatus()).isEqualTo(UNAUTHORIZED.getStatusCode());
     }
 
     @Test
@@ -163,7 +224,7 @@ public class UserResourceTest extends ResourceTest {
             .request()
             .get();
 
-        assertThat(response.getStatus()).isEqualTo(Response.Status.UNAUTHORIZED.getStatusCode());
+        assertThat(response.getStatus()).isEqualTo(UNAUTHORIZED.getStatusCode());
     }
 
     @Test
@@ -188,7 +249,7 @@ public class UserResourceTest extends ResourceTest {
             .header(AUTHORIZATION_HEADER, bearerToken(admin.getToken().getValue()))
             .put(Entity.json(new RoleChangeRequest(guest.getId(), Role.MEMBER)));
 
-        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+        assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         assertThat(guest.getRole()).isEqualTo(Role.MEMBER);
     }
 
@@ -201,7 +262,7 @@ public class UserResourceTest extends ResourceTest {
             .header(AUTHORIZATION_HEADER, bearerToken(member.getToken().getValue()))
             .put(Entity.json(new RoleChangeRequest(guest.getId(), Role.ADMIN)));
 
-        assertThat(response.getStatus()).isEqualTo(Response.Status.FORBIDDEN.getStatusCode());
+        assertThat(response.getStatus()).isEqualTo(FORBIDDEN.getStatusCode());
         assertThat(guest.getRole()).isEqualTo(Role.GUEST);
     }
 
@@ -214,6 +275,6 @@ public class UserResourceTest extends ResourceTest {
             .header(AUTHORIZATION_HEADER, bearerToken(nonExistingUser.getToken().getValue()))
             .put(Entity.json(new RoleChangeRequest(guest.getId(), Role.MEMBER)));
 
-        assertThat(response.getStatus()).isEqualTo(Response.Status.UNAUTHORIZED.getStatusCode());
+        assertThat(response.getStatus()).isEqualTo(UNAUTHORIZED.getStatusCode());
     }
 }

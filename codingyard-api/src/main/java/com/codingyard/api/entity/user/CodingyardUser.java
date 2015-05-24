@@ -39,6 +39,17 @@ public class CodingyardUser implements BasicEntity {
         this.role = role;
     }
 
+    public CodingyardUser(final CodingyardUser other) {
+        this.id = other.id;
+        this.username = other.username;
+        this.password = other.password;
+        this.firstName = other.firstName;
+        this.lastName = other.lastName;
+        this.role = other.role;
+        this.token = other.token;
+        this.solutions = other.solutions;
+    }
+
     @JsonProperty("id")
     @Id
     @Column(name = "id", nullable = false, unique = true)
