@@ -13,6 +13,10 @@
                 url: '/api/user/me',
                 method: 'GET'
             },
+            changeMyInfo: {
+                url: '/api/user/me/edit',
+                method: 'PUT'
+            },
             createUser: {
                 method: 'POST',
                 transformRequest: TransformRequest

@@ -11,7 +11,7 @@
                 templateUrl: '/app/components/view-solutions/view-solutions.html'
             })
             .when('/user/:userId', {
-                templateUrl: '/app/components/users/view-user.html',
+                templateUrl: '/app/components/users/index.html',
                 controller: 'UserController'
             })
             .when('/signup', {

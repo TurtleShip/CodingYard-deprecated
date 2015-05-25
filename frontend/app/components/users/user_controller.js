@@ -1,24 +1,26 @@
 'user strict';
 
 (function () {
-    app.controller('UserController', function ($routeParams, $scope, $log, User, USER_ROLES) {
-        var userId = $routeParams.userId;
+    app.controller('UserController', function ($routeParams, $scope, $rootScope, $log, User, USER_ROLES, SharedData) {
+        var userId = parseInt($routeParams.userId);
         $scope.user = null;
-        $scope.errorMessage = null;
         $scope.userRoles = USER_ROLES;
+        $scope.canEdit = false;
+        $scope.errorMessage = null;
 
-        var success = function (data) {
-            $log.log("call success");
-            $log.log("Received : " + data);
-            $scope.user = data;
-
-        };
-        var error = function (data) {
-            $log.log("Call failed");
-            $log.log("status : " + data.status);
-            $scope.errorMessage = "There is no user with id " + userId;
-        };
-
-        User.get({id: userId}, success, error);
+        $scope.user = SharedData.getCurrentUser();
+        $log.info("user id : " + userId);
+        if (!!$scope.user && $scope.user.id === userId) {
+            $scope.canEdit = true;
+        } else {
+            User.get({id: userId},
+                function (data) {
+                    $scope.user = data;
+                },
+                function () {
+                    $scope.errorMessage = "Sorry, we are having trouble loading user " + userId;
+                }
+            );
+        }
     })
 })();

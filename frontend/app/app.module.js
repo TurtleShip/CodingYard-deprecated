@@ -7,21 +7,22 @@ var app = angular.module('codingyard', ['ngRoute', 'ngResource', 'base64', 'ui.a
     /**
      * This is the root controller of www.codingyard.com
      */
-    app.controller('CodingyardController', function ($scope, $route, $routeParams, $location, $log, USER_ROLES, AuthService, Session, SessionStorage, SESSION_KEYS, AUTH_EVENTS, User) {
+    app.controller('CodingyardController', function ($scope, $route, $routeParams, $location, $log, USER_ROLES, AuthService, Session, SessionStorage, SESSION_KEYS, AUTH_EVENTS, User, SharedData) {
 
         $scope.$route = $route;
         $scope.$location = $location;
         $scope.$routeParams = $routeParams;
 
-        $scope.currentUser = null;
+        $scope.currentUser = SharedData.getCurrentUser();
         $scope.token = null;
         $scope.userRoles = USER_ROLES;
         $scope.isAuthorized = AuthService.isAuthorized;
 
-        var getUserInfo = function () {
+        var getMyInfo = function () {
             User.getMyInfo({},
                 function success(user) {
                     $scope.currentUser = user;
+                    SharedData.setCurrentUser(user);
                     $log.info("Successfully retrieved user information.");
                 },
                 function error(response) {
@@ -36,11 +37,11 @@ var app = angular.module('codingyard', ['ngRoute', 'ngResource', 'base64', 'ui.a
         if (!(angular.isUndefined(oauthToken) || oauthToken == null)) {
             $log.info("Found oauth token in session : " + oauthToken);
             AuthService.setBearerOauthHeader(oauthToken);
-            getUserInfo();
+            getMyInfo();
         }
 
         // Get the current user's information when he is successfully authenticated
-        $scope.$on(AUTH_EVENTS.loginSuccess, getUserInfo);
+        $scope.$on(AUTH_EVENTS.loginSuccess, getMyInfo);
 
         // Reset the current user's information when user logs out
         $scope.$on(AUTH_EVENTS.logout, function () {
