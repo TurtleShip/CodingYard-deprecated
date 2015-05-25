@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" ng-app="codingyard">
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" name=viewport" content="width=device-width, initial-scale=1">
     <title>Codingyard</title>
     <base href="/">
     <link rel="stylesheet" type="text/css" href="/assets/libs/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -19,50 +19,59 @@
 </head>
 <body ng-controller="CodingyardController">
 
-<h3>Welcome to codingyard where you can share your solutions to coding competitions! :)</h3>
+<!-- fixed navigation bar -->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Codingyard</a>
+        </div>
 
-<div ng-show="currentUser" ng-controller="LoginController">
-    Welcome, {{currentUser.username}}! | <a ng-href="/" ng-click="logout()">logout</a>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/">home</a></li>
+                <li><a href="/solution/topcoder/upload">Upload TopCoder solution</a></li>
+                <li><a href="/solution/topcoder/view">View TopCoder solutions</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right" ng-controller="LoginController">
+                <li ng-hide="currentUser"><a ng-href="#" ng-click="openLogin()">Login</a></li>
+                <li ng-hide="currentUser"><a href="/signup">Signup</a></li>
+                <li ng-show="currentUser"><a href="/user/{{currentUser.id}}">Welcome, {{currentUser.username}}!</a></li>
+                <li ng-show="currentUser"><a ng-href="/" ng-click="logout()">logout</a>
+            </ul>
+        </div>
+
+    </div>
+</nav>
+
+<!-- main components -->
+<div class="container">
+    <div ng-view>
+    </div>
+
+    <pre>$location.path() = {{$location.path()}}</pre>
+
+    <script src="/app/shared/auth_service.js"></script>
+    <script src="/app/shared/user_factory.js"></script>
+    <script src="/app/shared/topcoder_factory.js"></script>
+    <script src="/app/shared/constants.js"></script>
+    <script src="/app/shared/session_storage.js"></script>
+    <script src="/app/shared/transform_request_factory.js"></script>
+    <script src="/app/shared/ace_editor_factory.js"></script>
+    <script src="/app/shared/shared_data_factory.js"></script>
+    <script src="/app/components/users/user_controller.js"></script>
+    <script src="/app/components/solutions/topcoder/topcoder_upload_controller.js"></script>
+    <script src="/app/components/solutions/topcoder/topcoder_view_controller.js"></script>
+    <script src="/app/components/signup/signup_controller.js"></script>
+    <script src="/app/components/login/login_controller.js"></script>
+    <script src="/app/components/login/login_modal_controller.js"></script>
 </div>
-
-
-<div ng-hide="currentUser" ng-controller="LoginController">
-    <form name="loginForm" ng-submit="login(credentials)" novalidate>
-        <label for="username">Username:</label>
-        <input type="text" id="username" ng-model="credentials.username">
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" ng-model="credentials.password">
-
-        <button type="submit">Login</button>
-    </form>
-</div>
-===============================================<br/>
-<a href="/">home</a> |
-<a ng-show="currentUser" href="/user/{{currentUser.id}}">My profile</a> |
-<a href="/solution/topcoder/upload">Upload TopCoder solution</a> |
-<a href="/solution/topcoder/view">View TopCoder solutions</a> |
-<a ng-hide="currentUser" href="/signup">Signup</a> <br/>
-===============================================<br/>
-<br/>
-<pre>$location.path() = {{$location.path()}}</pre>
-
-===============================================<br/>
-
-<div ng-view>
-</div>
-
-<script src="/app/shared/auth_service.js"></script>
-<script src="/app/shared/user_factory.js"></script>
-<script src="/app/shared/topcoder_factory.js"></script>
-<script src="/app/shared/constants.js"></script>
-<script src="/app/shared/session_storage.js"></script>
-<script src="/app/shared/transform_request_factory.js"></script>
-<script src="/app/shared/ace_editor_factory.js"></script>
-<script src="/app/shared/shared_data_factory.js"></script>
-<script src="/app/components/users/user_controller.js"></script>
-<script src="/app/components/solutions/topcoder/topcoder_upload_controller.js"></script>
-<script src="/app/components/solutions/topcoder/topcoder_view_controller.js"></script>
-<script src="/app/components/signup/signup_controller.js"></script>
 </body>
 </html>

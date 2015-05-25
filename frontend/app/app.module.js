@@ -49,16 +49,4 @@ var app = angular.module('codingyard', ['ngRoute', 'ngResource', 'base64', 'ui.a
             $scope.token = null;
         });
     });
-
-    app.controller('LoginController', function ($scope, AuthService) {
-
-        $scope.credentials = {
-            username: '',
-            password: ''
-        };
-
-        $scope.login = AuthService.login;
-        $scope.logout = AuthService.logout;
-    });
-
 })();
