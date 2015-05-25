@@ -1,0 +1,17 @@
+.login-modal-input {
+    margin-bottom: 2%;
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 80%;
+}
+
+.login-modal-button {
+    margin-top: 3%;
+    margin-left: 35%;
+    margin-right: 35%;
+    width: 30%;
+}
+
+.modal-title {
+    text-align: center;
+}
