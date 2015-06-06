@@ -1,13 +1,15 @@
 'use strict';
 
-var app = angular.module('codingyard', ['ngRoute', 'ngResource', 'base64', 'ui.ace', 'ui.bootstrap']);
+var app = angular.module('codingyard', ['ngRoute', 'ngResource', 'base64', 'ui.ace', 'ui.bootstrap', 'ui.router']);
 
 (function () {
 
     /**
      * This is the root controller of www.codingyard.com
      */
-    app.controller('CodingyardController', function ($scope, $route, $routeParams, $location, $log, USER_ROLES, AuthService, Session, SessionStorage, SESSION_KEYS, AUTH_EVENTS, User, SharedData) {
+    app.controller('CodingyardController', function ($scope, $route, $routeParams, $location, $log,
+                                                     USER_ROLES, AuthService, Session, SessionStorage,
+                                                     SESSION_KEYS, AUTH_EVENTS, User, SharedData) {
 
         $scope.$route = $route;
         $scope.$location = $location;

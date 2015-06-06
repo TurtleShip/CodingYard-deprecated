@@ -1,3 +1,4 @@
 <p ng-show="errorMessage">{{errorMessage}}</p>
 <div ng-if="isAuthorized([userRoles.admin, userRoles.globalAdmin])">You're admin</div>
+<p>User id : {{userId}}</p>
 <pre ng-show="user">{{user | json}}</pre>

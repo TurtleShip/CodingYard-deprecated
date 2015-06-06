@@ -1,14 +1,15 @@
-'user strict';
+'use strict';
 
 (function () {
-    app.controller('UserController', function ($routeParams, $scope, $rootScope, $log, User, USER_ROLES, SharedData) {
-        var userId = parseInt($routeParams.userId);
+    app.controller('UserController', function ($stateParams, $scope, $rootScope, $log, User, USER_ROLES, SharedData) {
+        var userId = parseInt($stateParams.userId);
         $scope.user = null;
         $scope.userRoles = USER_ROLES;
         $scope.canEdit = false;
         $scope.errorMessage = null;
 
         $scope.user = SharedData.getCurrentUser();
+        $scope.userId = userId;
         $log.info("user id : " + userId);
         if (!!$scope.user && $scope.user.id === userId) {
             $scope.canEdit = true;
