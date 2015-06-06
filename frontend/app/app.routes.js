@@ -1,3 +1,5 @@
+'use strict';
+
 (function () {
     app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
         $locationProvider.html5Mode(true);
@@ -23,8 +25,11 @@
                 templateUrl: '/app/components/topcoder/view.html',
                 controller: 'TopCoderViewController'
             })
-        ;
-
+            .state('topcoderUpload', {
+                url: '/topcoder/upload',
+                templateUrl: '/app/components/topcoder/upload.html',
+                controller: 'TopCoderUploadController'
+            });
 
         $urlRouterProvider.when('', '/')
             .otherwise('/');
