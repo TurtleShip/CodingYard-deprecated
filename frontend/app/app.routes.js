@@ -17,7 +17,13 @@
                 url: '/user/:userId',
                 templateUrl: '/app/components/users/index.html',
                 controller: 'UserController'
-            });
+            })
+            .state('topcoderView', {
+                url: '/topcoder/view',
+                templateUrl: '/app/components/topcoder/view.html',
+                controller: 'TopCoderViewController'
+            })
+        ;
 
 
         $urlRouterProvider.when('', '/')

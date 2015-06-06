@@ -38,8 +38,14 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a ui-sref="home">home</a></li>
-                <!--<li><a href="/solution/topcoder/upload">Upload TopCoder solution</a></li>-->
-                <!--<li><a href="/solution/topcoder/view">View TopCoder solutions</a></li>-->
+                <li class="dropdown" dropdown>
+                    <a href class="dropdown-toggle" dropdown-toggle>
+                        View
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a ui-sref="topcoderView">TopCoder</a></li>
+                    </ul>
+                </li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right" ng-controller="LoginController">
@@ -70,8 +76,8 @@
     <script src="/app/shared/ace_editor_factory.js"></script>
     <script src="/app/shared/shared_data_factory.js"></script>
     <script src="/app/components/users/user_controller.js"></script>
-    <script src="/app/components/solutions/topcoder/topcoder_upload_controller.js"></script>
-    <script src="/app/components/solutions/topcoder/topcoder_view_controller.js"></script>
+    <script src="/app/components/topcoder/topcoder_upload_controller.js"></script>
+    <script src="/app/components/topcoder/topcoder_view_controller.js"></script>
     <script src="/app/components/signup/signup_controller.js"></script>
     <script src="/app/components/login/login_controller.js"></script>
     <script src="/app/components/login/login_modal_controller.js"></script>

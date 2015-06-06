@@ -3,6 +3,10 @@ body {
     padding-top: 70px;
 }
 
+.dropdown:hover>.dropdown-menu {
+    display: block;
+}
+
 .ace_editor {
     height: 200px;
 }
