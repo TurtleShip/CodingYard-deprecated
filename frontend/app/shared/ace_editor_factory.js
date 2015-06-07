@@ -23,10 +23,6 @@
             }
         };
 
-        aceEditor.parseLines = function(content) {
-            return content.join("\n");
-        };
-
         return aceEditor;
     });
 })();

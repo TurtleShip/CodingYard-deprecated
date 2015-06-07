@@ -84,11 +84,11 @@
 
             $scope.pickSolution = function (solution) {
                 $log.log("picked a solution");
-                TopCoder.getContent({id: solution["solution_id"]},
+                TopCoder.getContent({id: solution.id},
                     function (response) {
                         $scope.pickedSolution = {
                             language: solution.language,
-                            content: AceEditor.parseLines(response)
+                            content: response.content
                         };
                         $scope.error = null;
                         $scope.modeChanged();

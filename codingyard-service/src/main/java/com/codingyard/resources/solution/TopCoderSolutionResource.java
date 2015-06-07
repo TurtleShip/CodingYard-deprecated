@@ -90,7 +90,7 @@ public class TopCoderSolutionResource {
     @GET
     @Metered
     @UnitOfWork
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public Response getContent(@PathParam("solution_id") @NotNull Long solutionId) {
         final Optional<TopCoderSolution> searchResult = tcManager.findById(solutionId);
         if (!searchResult.isPresent()) {
