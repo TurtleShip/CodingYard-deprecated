@@ -28,14 +28,35 @@ Criteria :
 <pre ng-show="error">{{error}}</pre>
 
 <!-- TODO: Display this better with ui.bootstrap.tabs -->
-<div ng-repeat="solution in solutions">
-    <button ng-click="pickSolution(solution)">
-        Division : {{solution.division}} |
-        Difficulty : {{solution.difficulty}} |
-        Problem number : {{solution.problem_number}} |
-        language : {{solution.language}} |
-        author : {{solution.author.username}}
-    </button>
-</div>
+
+<!-- Note that each row can be marked as
+active, success, info, waring, danger.
+Refer to http://getbootstrap.com/css/#tables-contextual-classes
+-->
+<!--
+Look at this for demo : http://samu.github.io/angular-table/examples/examples.html
+-->
+<table class="table table-hover table-condensed">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Division</th>
+        <th>Difficulty</th>
+        <th>Number</th>
+        <th>Language</th>
+        <th>Author</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="solution in solutions">
+        <th scope="row">1</th>
+        <td>{{solution.division}}</td>
+        <td>{{solution.difficulty}}</td>
+        <td>{{solution.problem_number}}</td>
+        <td>{{solution.language}}</td>
+        <td>{{solution.author.username}}</td>
+    </tr>
+    </tbody>
+</table>
 
 <div ui-ace="aceOption" readonly ng-model="pickedSolution.content"></div>
