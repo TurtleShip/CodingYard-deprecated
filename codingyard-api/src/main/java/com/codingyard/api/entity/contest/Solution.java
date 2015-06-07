@@ -46,7 +46,7 @@ public abstract class Solution implements BasicEntity {
 
     @JsonProperty("id")
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     public Long getId() {
         return id;
@@ -60,7 +60,7 @@ public abstract class Solution implements BasicEntity {
 
     @JsonProperty("author")
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "author", nullable = false)
+    @JoinColumn(name = "author_id", nullable = false)
     public CodingyardUser getAuthor() {
         return author;
     }

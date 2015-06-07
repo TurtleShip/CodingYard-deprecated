@@ -53,7 +53,7 @@ public class CodingyardUser implements BasicEntity {
     @JsonProperty("id")
     @Id
     @Column(name = "id", nullable = false, unique = true)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Long getId() {
         return id;
     }
