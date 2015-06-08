@@ -30,3 +30,7 @@ body {
     content: ' ⬇ ';
     color: black;
 }
+
+.st-selected {
+    background-color: #C8EFB4 !important;
+}
