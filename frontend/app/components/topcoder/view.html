@@ -40,17 +40,17 @@ github : https://github.com/lorenzofox3/Smart-Table
 <table st-table="displayedSolutions" st-safe-src="solutions" class="table table-hover table-condensed table-striped">
     <thead>
     <tr>
-        <th st-sort="id">#</th>
-        <th st-sort="division">Division</th>
-        <th st-sort="difficulty">Difficulty</th>
-        <th st-sort="problem_number">Number</th>
-        <th st-sort="language">Language</th>
-        <th st-sort="author.name">Author</th>
+        <th st-sort="id" class="st-sort-noorder" st-sort-default="true">#</th>
+        <th st-sort="division" class="st-sort-noorder">Division</th>
+        <th st-sort="difficulty" class="st-sort-noorder">Difficulty</th>
+        <th st-sort="problem_number" class="st-sort-noorder">Number</th>
+        <th st-sort="language" class="st-sort-noorder">Language</th>
+        <th st-sort="author.name" class="st-sort-noorder">Author</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="solution in displayedSolutions">
-        <td>{{solution.id}}</td>
+        <td >{{solution.id}}</td>
         <td>{{solution.division}}</td>
         <td>{{solution.difficulty}}</td>
         <td>{{solution.problem_number}}</td>
@@ -58,6 +58,14 @@ github : https://github.com/lorenzofox3/Smart-Table
         <td>{{solution.author.username}}</td>
     </tr>
     </tbody>
+
+    <tfoot>
+    <tr>
+        <td colspan="6" class="text-center">
+            <div st-pagination="" st-items-by-page="5" st-displayed-pages="7"></div>
+        </td>
+    </tr>
+    </tfoot>
 </table>
 
 <div ui-ace="aceOption" readonly ng-model="pickedSolution.content"></div>

@@ -3,7 +3,7 @@ body {
     padding-top: 70px;
 }
 
-.dropdown:hover>.dropdown-menu {
+.dropdown:hover > .dropdown-menu {
     display: block;
 }
 
@@ -15,10 +15,18 @@ body {
     color: gray;
 }
 
-.st-sort-ascent:before{
-     content: '\25B2';
- }
+/*Arrows are available here : http://xahlee.info/comp/unicode_arrows.html*/
+.st-sort-noorder:after {
+    content: ' ⇵ ';
+    color: gray;
+}
 
-.st-sort-descent:before{
-    content: '\25BC';
+.st-sort-ascent:after {
+    content: ' ⬆ ';
+    color: black;
+}
+
+.st-sort-descent:after {
+    content: ' ⬇ ';
+    color: black;
 }
