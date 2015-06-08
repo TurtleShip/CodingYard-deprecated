@@ -1,6 +1,7 @@
 (function () {
     app.controller('TopCoderViewController', function ($scope, $log, TopCoder, AceEditor) {
             $scope.solutions = null;
+            $scope.displayedSolutions = null;
             $scope.pickedSolution = null;
             $scope.message = null;
             $scope.error = null;

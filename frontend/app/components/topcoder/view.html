@@ -34,22 +34,23 @@ active, success, info, waring, danger.
 Refer to http://getbootstrap.com/css/#tables-contextual-classes
 -->
 <!--
-Look at this for demo : http://samu.github.io/angular-table/examples/examples.html
+Look at this for demo : http://lorenzofox3.github.io/smart-table-website/
+github : https://github.com/lorenzofox3/Smart-Table
 -->
-<table class="table table-hover table-condensed">
+<table st-table="displayedSolutions" st-safe-src="solutions" class="table table-hover table-condensed table-striped">
     <thead>
     <tr>
-        <th>#</th>
-        <th>Division</th>
-        <th>Difficulty</th>
-        <th>Number</th>
-        <th>Language</th>
-        <th>Author</th>
+        <th st-sort="id">#</th>
+        <th st-sort="division">Division</th>
+        <th st-sort="difficulty">Difficulty</th>
+        <th st-sort="problem_number">Number</th>
+        <th st-sort="language">Language</th>
+        <th st-sort="author.name">Author</th>
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="solution in solutions">
-        <th scope="row">1</th>
+    <tr ng-repeat="solution in displayedSolutions">
+        <td>{{solution.id}}</td>
         <td>{{solution.division}}</td>
         <td>{{solution.difficulty}}</td>
         <td>{{solution.problem_number}}</td>
