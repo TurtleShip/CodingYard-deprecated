@@ -8,9 +8,9 @@ public class UserRoleApprover {
 
     /**
      * Returns true if {@code approver} successfully approved {@code targetUser}'s role change to {@code newRole}.
-     * {@code approver} can approve {@code targetUser}'s role change only if the below conditions are met
-     * 1) {@code approver} has strictly higher role level that {@code targetUser}
-     * 2) {@code approver} has higher or equal role level compared to {@code newRole}
+     * {@code approver} can approve {@code targetUser}'s role change only if the below conditions are met<br/>
+     * 1) {@code approver} has strictly higher role level that {@code targetUser}<br/>
+     * 2) {@code approver} has higher or equal role level compared to {@code newRole}<br/>
      *
      * @param approver   The user who is trying to approve.
      * @param targetCodingyardUser The user whose role is being changed.
