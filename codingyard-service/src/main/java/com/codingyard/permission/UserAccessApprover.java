@@ -35,4 +35,22 @@ public class UserAccessApprover {
     public static boolean hasHighPermission(final CodingyardUser higher, final CodingyardUser lower) {
         return higher.getRole().getLevel() > lower.getRole().getLevel();
     }
+
+    /**
+     * Returns true if {@code user} can delete {@code targetUser}.
+     * <p/>
+     * User X can delete User Y when any of the following conditions are met.
+     * 1) User X is a global admin.
+     * 2) User X is an admin, and User Y is either a member or a guest.
+     *
+     * @param user       user who is deleting {@code targetUser}
+     * @param targetUser user to be deleted
+     * @return {@code true} if {@code user} can delete {@code targetUser}. {@code false} otherwise.
+     */
+    public static boolean canDelete(final CodingyardUser user, final CodingyardUser targetUser) {
+        final Role userRole = user.getRole();
+        final Role targetUserRole = targetUser.getRole();
+        return userRole.equals(Role.GLOBAL_ADMIN)
+            || (userRole.equals(Role.ADMIN) && (targetUserRole.equals(Role.MEMBER) || targetUserRole.equals(Role.GUEST)));
+    }
 }

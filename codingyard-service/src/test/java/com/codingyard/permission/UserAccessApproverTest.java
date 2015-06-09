@@ -10,11 +10,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static com.codingyard.api.entity.user.Role.*;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CodingyardUserAccessApproverTest {
+public class UserAccessApproverTest {
 
     @Mock
     private CodingyardUser globalAdmin;
@@ -137,5 +138,37 @@ public class CodingyardUserAccessApproverTest {
         assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, guest, ADMIN));
         assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, guest, MEMBER));
         assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, guest, GUEST));
+    }
+
+    @Test
+    public void globalAdminCanDeleteAnyone() {
+        assertTrue(UserAccessApprover.canDelete(globalAdmin, globalAdmin));
+        assertTrue(UserAccessApprover.canDelete(globalAdmin, admin));
+        assertTrue(UserAccessApprover.canDelete(globalAdmin, member));
+        assertTrue(UserAccessApprover.canDelete(globalAdmin, guest));
+    }
+
+    @Test
+    public void adminCanDeleteMemberAndGuest() {
+        assertFalse(UserAccessApprover.canDelete(admin, globalAdmin));
+        assertFalse(UserAccessApprover.canDelete(admin, admin));
+        assertTrue(UserAccessApprover.canDelete(admin, member));
+        assertTrue(UserAccessApprover.canDelete(admin, guest));
+    }
+
+    @Test
+    public void memberCannotDeleteAnyone() {
+        assertFalse(UserAccessApprover.canDelete(member, globalAdmin));
+        assertFalse(UserAccessApprover.canDelete(member, admin));
+        assertFalse(UserAccessApprover.canDelete(member, member));
+        assertFalse(UserAccessApprover.canDelete(member, guest));
+    }
+
+    @Test
+    public void guestCannotDeleteAnyone() {
+        assertFalse(UserAccessApprover.canDelete(guest, globalAdmin));
+        assertFalse(UserAccessApprover.canDelete(guest, admin));
+        assertFalse(UserAccessApprover.canDelete(guest, member));
+        assertFalse(UserAccessApprover.canDelete(guest, guest));
     }
 }
