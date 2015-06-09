@@ -3,7 +3,6 @@ package com.codingyard.permission;
 import com.codingyard.api.entity.contest.Solution;
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.entity.user.Role;
-import com.codingyard.util.UserRoleApprover;
 
 /**
  * Utility class that provides a set of method that returns true/false

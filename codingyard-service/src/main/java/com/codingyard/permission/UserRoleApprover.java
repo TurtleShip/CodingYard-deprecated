@@ -1,4 +1,4 @@
-package com.codingyard.util;
+package com.codingyard.permission;
 
 import com.codingyard.api.entity.user.Role;
 import com.codingyard.api.entity.user.CodingyardUser;

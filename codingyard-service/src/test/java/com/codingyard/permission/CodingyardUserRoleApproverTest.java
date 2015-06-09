@@ -1,7 +1,8 @@
-package com.codingyard.util;
+package com.codingyard.permission;
 
 
 import com.codingyard.api.entity.user.CodingyardUser;
+import com.codingyard.permission.UserRoleApprover;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -4,7 +4,7 @@ import com.codahale.metrics.annotation.Metered;
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.payload.RoleChangeRequest;
 import com.codingyard.manager.UserManager;
-import com.codingyard.util.UserRoleApprover;
+import com.codingyard.permission.UserRoleApprover;
 import com.google.common.base.Optional;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
