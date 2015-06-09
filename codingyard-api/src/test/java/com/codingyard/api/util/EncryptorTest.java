@@ -1,4 +1,4 @@
-package com.codingyard.util;
+package com.codingyard.api.util;
 
 import com.codingyard.api.util.Encryptor;
 import org.junit.Test;
