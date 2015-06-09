@@ -1,28 +1,27 @@
 package com.codingyard.permission;
 
-import com.codingyard.api.entity.user.Role;
 import com.codingyard.api.entity.user.CodingyardUser;
+import com.codingyard.api.entity.user.Role;
 
-public class UserRoleApprover {
-
+/**
+ * Utility class that provides a set of method that returns true/false
+ * if a user can do a CRUD operation on another user.
+ */
+public class UserAccessApprover {
 
     /**
-     * Returns true if {@code approver} successfully approved {@code targetUser}'s role change to {@code newRole}.
+     * Returns true if {@code approver} can approve {@code targetUser}'s role change to {@code newRole}.
      * {@code approver} can approve {@code targetUser}'s role change only if the below conditions are met<br/>
      * 1) {@code approver} has strictly higher role level that {@code targetUser}<br/>
      * 2) {@code approver} has higher or equal role level compared to {@code newRole}<br/>
      *
-     * @param approver   The user who is trying to approve.
-     * @param targetCodingyardUser The user whose role is being changed.
+     * @param approver   The user who is trying to canApprove.
+     * @param targetUser The user whose role is being changed.
      * @param newRole    The new role to which the targetUser will be changed.
-     * @return true if {@code approver} successfully approved {@code targetUser}'s role change to {@code newRole}.
+     * @return true if {@code approver} can approve {@code targetUser}'s role change to {@code newRole}.
      */
-    public static boolean approve(final CodingyardUser approver, final CodingyardUser targetCodingyardUser, final Role newRole) {
-        if (hasHighPermission(approver, targetCodingyardUser) && approver.getRole().getLevel() >= newRole.getLevel()) {
-            targetCodingyardUser.setRole(newRole);
-            return true;
-        }
-        return false;
+    public static boolean canApprove(final CodingyardUser approver, final CodingyardUser targetUser, final Role newRole) {
+        return hasHighPermission(approver, targetUser) && approver.getRole().getLevel() >= newRole.getLevel();
     }
 
     /**
@@ -36,5 +35,4 @@ public class UserRoleApprover {
     public static boolean hasHighPermission(final CodingyardUser higher, final CodingyardUser lower) {
         return higher.getRole().getLevel() > lower.getRole().getLevel();
     }
-
 }

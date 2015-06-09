@@ -4,7 +4,7 @@ import com.codahale.metrics.annotation.Metered;
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.payload.RoleChangeRequest;
 import com.codingyard.manager.UserManager;
-import com.codingyard.permission.UserRoleApprover;
+import com.codingyard.permission.UserAccessApprover;
 import com.google.common.base.Optional;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -151,9 +151,8 @@ public class UserResource {
         }
         final CodingyardUser lowerUser = searchResult.get();
 
-        final boolean isApproved = UserRoleApprover.approve(approver, lowerUser, request.getNewRole());
-
-        if (isApproved) {
+        if (UserAccessApprover.canApprove(approver, lowerUser, request.getNewRole())) {
+            lowerUser.setRole(request.getNewRole());
             return Response.ok()
                 .entity(String.format("User %s's role change to %s was successfully approved by user %s.\n", lowerUser.getUsername(), lowerUser.getRole(), approver.getUsername()))
                 .build();

@@ -22,7 +22,7 @@ public class SolutionAccessApprover {
      */
     public static boolean canDelete(final CodingyardUser user, final Solution solution) {
         return user.equals(solution.getAuthor())
-            || (user.getRole().equals(Role.ADMIN) && UserRoleApprover.hasHighPermission(user, solution.getAuthor()))
+            || (user.getRole().equals(Role.ADMIN) && UserAccessApprover.hasHighPermission(user, solution.getAuthor()))
             || user.getRole().equals(Role.GLOBAL_ADMIN);
     }
 
