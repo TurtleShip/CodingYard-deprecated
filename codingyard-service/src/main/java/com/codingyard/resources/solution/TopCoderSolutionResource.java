@@ -6,7 +6,6 @@ import com.codingyard.api.entity.contest.topcoder.TopCoderDifficulty;
 import com.codingyard.api.entity.contest.topcoder.TopCoderDivision;
 import com.codingyard.api.entity.contest.topcoder.TopCoderSolution;
 import com.codingyard.api.entity.user.CodingyardUser;
-import com.codingyard.api.entity.user.Role;
 import com.codingyard.manager.TopCoderSolutionManager;
 import com.codingyard.manager.UserManager;
 import com.codingyard.permission.SolutionAccessApprover;
@@ -48,9 +47,9 @@ public class TopCoderSolutionResource {
                                    @FormParam("language") Language language,
                                    @FormParam("content") String content) {
 
-        if (author.getRole().getLevel() == Role.GUEST.getLevel()) {
+        if (!SolutionAccessApprover.canCreate(author)) {
             return Response.status(Response.Status.FORBIDDEN)
-                .entity("Guest cannot upload a solution.\n")
+                .entity(String.format("%s is not authorized to upload a solution.\n", author))
                 .build();
         }
 
