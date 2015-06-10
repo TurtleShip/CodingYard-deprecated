@@ -9,6 +9,7 @@ import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.entity.user.Role;
 import com.codingyard.manager.TopCoderSolutionManager;
 import com.codingyard.manager.UserManager;
+import com.codingyard.permission.SolutionAccessApprover;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import io.dropwizard.auth.Auth;
@@ -137,9 +138,15 @@ public class TopCoderSolutionResource {
     @Metered
     @UnitOfWork
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteSolution(@PathParam("solution_id") @NotNull Long solutionId) {
+    public Response deleteSolution(@Auth CodingyardUser user,
+                                   @PathParam("solution_id") @NotNull Long solutionId) {
         final Optional<TopCoderSolution> searchResult = tcManager.findById(solutionId);
-        if (searchResult.isPresent()) {
+        /*
+        Note that I am deliberately returning 404 NOT_FOUND even when a solution exists
+        but the user is not authorized to delete the solution. This is to not give out
+        the existence of a solution to a user who is not authorized to delete it.
+         */
+        if (searchResult.isPresent() && SolutionAccessApprover.canDelete(user, searchResult.get())) {
             final boolean isDeleted = tcManager.delete(searchResult.get());
             if (isDeleted) {
                 return Response.ok().build();
