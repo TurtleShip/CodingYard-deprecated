@@ -151,7 +151,7 @@ public class UserResource {
         }
         final CodingyardUser lowerUser = searchResult.get();
 
-        if (UserAccessApprover.canApprove(approver, lowerUser, request.getNewRole())) {
+        if (UserAccessApprover.canEditRole(approver, lowerUser, request.getNewRole())) {
             lowerUser.setRole(request.getNewRole());
             return Response.ok()
                 .entity(String.format("User %s's role change to %s was successfully approved by user %s.\n", lowerUser.getUsername(), lowerUser.getRole(), approver.getUsername()))

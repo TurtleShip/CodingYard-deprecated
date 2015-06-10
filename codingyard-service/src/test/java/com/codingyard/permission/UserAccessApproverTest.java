@@ -10,7 +10,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static com.codingyard.api.entity.user.Role.*;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -44,100 +43,100 @@ public class UserAccessApproverTest {
     public void testGlobalAdminApproval() {
         when(currentCodingyardUser.getRole()).thenReturn(GLOBAL_ADMIN);
 
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, globalAdmin, GLOBAL_ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, globalAdmin, ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, globalAdmin, MEMBER));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, globalAdmin, GUEST));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, GLOBAL_ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, MEMBER));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, GUEST));
 
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, admin, GLOBAL_ADMIN));
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, admin, ADMIN));
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, admin, MEMBER));
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, admin, GUEST));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, admin, GLOBAL_ADMIN));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, admin, ADMIN));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, admin, MEMBER));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, admin, GUEST));
 
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, member, GLOBAL_ADMIN));
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, member, ADMIN));
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, member, MEMBER));
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, member, GUEST));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, member, GLOBAL_ADMIN));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, member, ADMIN));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, member, MEMBER));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, member, GUEST));
 
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, guest, GLOBAL_ADMIN));
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, guest, ADMIN));
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, guest, MEMBER));
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, guest, GUEST));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, guest, GLOBAL_ADMIN));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, guest, ADMIN));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, guest, MEMBER));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, guest, GUEST));
     }
 
     @Test
     public void testAdminApproval() {
         when(currentCodingyardUser.getRole()).thenReturn(ADMIN);
 
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, globalAdmin, GLOBAL_ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, globalAdmin, ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, globalAdmin, MEMBER));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, globalAdmin, GUEST));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, GLOBAL_ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, MEMBER));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, GUEST));
 
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, admin, GLOBAL_ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, admin, ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, admin, MEMBER));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, admin, GUEST));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, admin, GLOBAL_ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, admin, ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, admin, MEMBER));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, admin, GUEST));
 
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, member, GLOBAL_ADMIN));
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, member, ADMIN));
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, member, MEMBER));
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, member, GUEST));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, member, GLOBAL_ADMIN));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, member, ADMIN));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, member, MEMBER));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, member, GUEST));
 
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, guest, GLOBAL_ADMIN));
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, guest, ADMIN));
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, guest, MEMBER));
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, guest, GUEST));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, guest, GLOBAL_ADMIN));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, guest, ADMIN));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, guest, MEMBER));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, guest, GUEST));
     }
 
     @Test
     public void testMemberApproval() {
         when(currentCodingyardUser.getRole()).thenReturn(MEMBER);
 
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, globalAdmin, GLOBAL_ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, globalAdmin, ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, globalAdmin, MEMBER));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, globalAdmin, GUEST));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, GLOBAL_ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, MEMBER));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, GUEST));
 
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, admin, GLOBAL_ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, admin, ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, admin, MEMBER));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, admin, GUEST));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, admin, GLOBAL_ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, admin, ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, admin, MEMBER));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, admin, GUEST));
 
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, member, GLOBAL_ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, member, ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, member, MEMBER));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, member, GUEST));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, member, GLOBAL_ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, member, ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, member, MEMBER));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, member, GUEST));
 
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, guest, GLOBAL_ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, guest, ADMIN));
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, guest, MEMBER));
-        assertTrue(UserAccessApprover.canApprove(currentCodingyardUser, guest, GUEST));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, guest, GLOBAL_ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, guest, ADMIN));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, guest, MEMBER));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, guest, GUEST));
     }
 
     @Test
     public void testGuestApproval() {
         when(currentCodingyardUser.getRole()).thenReturn(GUEST);
 
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, globalAdmin, GLOBAL_ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, globalAdmin, ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, globalAdmin, MEMBER));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, globalAdmin, GUEST));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, GLOBAL_ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, MEMBER));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, GUEST));
 
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, admin, GLOBAL_ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, admin, ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, admin, MEMBER));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, admin, GUEST));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, admin, GLOBAL_ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, admin, ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, admin, MEMBER));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, admin, GUEST));
 
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, member, GLOBAL_ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, member, ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, member, MEMBER));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, member, GUEST));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, member, GLOBAL_ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, member, ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, member, MEMBER));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, member, GUEST));
 
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, guest, GLOBAL_ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, guest, ADMIN));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, guest, MEMBER));
-        assertFalse(UserAccessApprover.canApprove(currentCodingyardUser, guest, GUEST));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, guest, GLOBAL_ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, guest, ADMIN));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, guest, MEMBER));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, guest, GUEST));
     }
 
     @Test
@@ -170,5 +169,53 @@ public class UserAccessApproverTest {
         assertFalse(UserAccessApprover.canDelete(guest, admin));
         assertFalse(UserAccessApprover.canDelete(guest, member));
         assertFalse(UserAccessApprover.canDelete(guest, guest));
+    }
+
+    @Test
+    public void globalAdminCanEditAnyPassword() {
+        assertTrue(UserAccessApprover.canEditPassword(globalAdmin, globalAdmin));
+        assertTrue(UserAccessApprover.canEditPassword(globalAdmin, admin));
+        assertTrue(UserAccessApprover.canEditPassword(globalAdmin, member));
+        assertTrue(UserAccessApprover.canEditPassword(globalAdmin, guest));
+    }
+
+    @Test
+    public void anyoneCanEditItsOwnPassword() {
+        assertTrue(UserAccessApprover.canEditPassword(globalAdmin, globalAdmin));
+        assertTrue(UserAccessApprover.canEditPassword(admin, admin));
+        assertTrue(UserAccessApprover.canEditPassword(member, member));
+        assertTrue(UserAccessApprover.canEditPassword(guest, guest));
+    }
+
+    @Test
+    public void globalAdminCanEditAnyFirstName() {
+        assertTrue(UserAccessApprover.canEditFirstName(globalAdmin, globalAdmin));
+        assertTrue(UserAccessApprover.canEditFirstName(globalAdmin, admin));
+        assertTrue(UserAccessApprover.canEditFirstName(globalAdmin, member));
+        assertTrue(UserAccessApprover.canEditFirstName(globalAdmin, guest));
+    }
+
+    @Test
+    public void anyoneCanEditItsOwnFirstName() {
+        assertTrue(UserAccessApprover.canEditFirstName(globalAdmin, globalAdmin));
+        assertTrue(UserAccessApprover.canEditFirstName(admin, admin));
+        assertTrue(UserAccessApprover.canEditFirstName(member, member));
+        assertTrue(UserAccessApprover.canEditFirstName(guest, guest));
+    }
+
+    @Test
+    public void globalAdminCanEditAnyLastName() {
+        assertTrue(UserAccessApprover.canEditLastName(globalAdmin, globalAdmin));
+        assertTrue(UserAccessApprover.canEditLastName(globalAdmin, admin));
+        assertTrue(UserAccessApprover.canEditLastName(globalAdmin, member));
+        assertTrue(UserAccessApprover.canEditLastName(globalAdmin, guest));
+    }
+
+    @Test
+    public void anyoneCanEditItsOwnLastName() {
+        assertTrue(UserAccessApprover.canEditLastName(globalAdmin, globalAdmin));
+        assertTrue(UserAccessApprover.canEditLastName(admin, admin));
+        assertTrue(UserAccessApprover.canEditLastName(member, member));
+        assertTrue(UserAccessApprover.canEditLastName(guest, guest));
     }
 }

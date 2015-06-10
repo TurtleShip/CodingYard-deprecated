@@ -10,21 +10,6 @@ import com.codingyard.api.entity.user.Role;
 public class UserAccessApprover {
 
     /**
-     * Returns true if {@code approver} can approve {@code targetUser}'s role change to {@code newRole}.
-     * {@code approver} can approve {@code targetUser}'s role change only if the below conditions are met<br/>
-     * 1) {@code approver} has strictly higher role level that {@code targetUser}<br/>
-     * 2) {@code approver} has higher or equal role level compared to {@code newRole}<br/>
-     *
-     * @param approver   The user who is trying to canApprove.
-     * @param targetUser The user whose role is being changed.
-     * @param newRole    The new role to which the targetUser will be changed.
-     * @return true if {@code approver} can approve {@code targetUser}'s role change to {@code newRole}.
-     */
-    public static boolean canApprove(final CodingyardUser approver, final CodingyardUser targetUser, final Role newRole) {
-        return hasHighPermission(approver, targetUser) && approver.getRole().getLevel() >= newRole.getLevel();
-    }
-
-    /**
      * Returns true if user {@code higher} has strictly higher permission than user {@code lower}.
      * Note that the method will return {@code false} if lower users have the same permission.
      *
@@ -34,6 +19,21 @@ public class UserAccessApprover {
      */
     public static boolean hasHighPermission(final CodingyardUser higher, final CodingyardUser lower) {
         return higher.getRole().getLevel() > lower.getRole().getLevel();
+    }
+
+    /**
+     * Returns true if {@code approver} can approve {@code targetUser}'s role change to {@code newRole}.
+     * {@code approver} can approve {@code targetUser}'s role change only if the below conditions are met<br/>
+     * 1) {@code approver} has strictly higher role level that {@code targetUser}<br/>
+     * 2) {@code approver} has higher or equal role level compared to {@code newRole}<br/>
+     *
+     * @param approver   The user who is trying to approve.
+     * @param targetUser The user whose role is being changed.
+     * @param newRole    The new role to which the targetUser will be changed.
+     * @return true if {@code approver} can approve {@code targetUser}'s role change to {@code newRole}.
+     */
+    public static boolean canEditRole(final CodingyardUser approver, final CodingyardUser targetUser, final Role newRole) {
+        return hasHighPermission(approver, targetUser) && approver.getRole().getLevel() >= newRole.getLevel();
     }
 
     /**
@@ -52,5 +52,26 @@ public class UserAccessApprover {
         final Role targetUserRole = targetUser.getRole();
         return userRole.equals(Role.GLOBAL_ADMIN)
             || (userRole.equals(Role.ADMIN) && (targetUserRole.equals(Role.MEMBER) || targetUserRole.equals(Role.GUEST)));
+    }
+
+    /**
+     * Returns true if {@code user} can edit {@code targetUser}'s password.
+     */
+    public static boolean canEditPassword(final CodingyardUser user, final CodingyardUser targetUser) {
+        return user.getRole().equals(Role.GLOBAL_ADMIN) || user.equals(targetUser);
+    }
+
+    /**
+     * Returns true if {@code user} can edit {@code targetUser}'s firstname.
+     */
+    public static boolean canEditFirstName(final CodingyardUser user, final CodingyardUser targetUser) {
+        return user.getRole().equals(Role.GLOBAL_ADMIN) || user.equals(targetUser);
+    }
+
+    /**
+     * Returns true if {@code user} can edit {@code targetUser}'s lastname.
+     */
+    public static boolean canEditLastName(final CodingyardUser user, final CodingyardUser targetUser) {
+        return user.getRole().equals(Role.GLOBAL_ADMIN) || user.equals(targetUser);
     }
 }
