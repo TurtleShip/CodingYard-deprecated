@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Date;
 import java.util.List;
 
 public class TopCoderSolutionManager extends BasicEntityManager<TopCoderSolution> {
@@ -44,6 +45,7 @@ public class TopCoderSolutionManager extends BasicEntityManager<TopCoderSolution
      * @param difficulty The difficulty of this solution.
      * @param problemId  The problem id of this solution.
      * @param language   The language in which this solution is written.
+     * @param date       The date when this solution was submitted.
      * @return The path under which the this solution is saved.
      * @throws IOException
      */
@@ -52,9 +54,10 @@ public class TopCoderSolutionManager extends BasicEntityManager<TopCoderSolution
                      final TopCoderDivision division,
                      final TopCoderDifficulty difficulty,
                      final long problemId,
-                     final Language language) throws IOException {
+                     final Language language,
+                     final Date date) throws IOException {
 
-        final Path path = createPath(division, difficulty, problemId, author, language);
+        final Path path = createPath(division, difficulty, problemId, author, language, date);
         Files.createDirectories(path.getParent());
         Files.deleteIfExists(path);
         Files.createFile(path);
@@ -74,6 +77,7 @@ public class TopCoderSolutionManager extends BasicEntityManager<TopCoderSolution
      * @param difficulty The difficulty of this solution.
      * @param problemId  The problem id of this solution.
      * @param language   The language in which this solution is written.
+     * @param date       The date when this solution was submitted.
      * @return The content of the solution.
      * @throws IOException
      */
@@ -81,8 +85,9 @@ public class TopCoderSolutionManager extends BasicEntityManager<TopCoderSolution
                              final TopCoderDivision division,
                              final TopCoderDifficulty difficulty,
                              final long problemId,
-                             final Language language) throws IOException {
-        return Files.readAllLines(createPath(division, difficulty, problemId, author, language));
+                             final Language language,
+                             final Date date) throws IOException {
+        return Files.readAllLines(createPath(division, difficulty, problemId, author, language, date));
     }
 
     public List<String> load(final TopCoderSolution solution) throws IOException {
@@ -90,7 +95,8 @@ public class TopCoderSolutionManager extends BasicEntityManager<TopCoderSolution
             solution.getDivision(),
             solution.getDifficulty(),
             solution.getProblemNumber(),
-            solution.getLanguage());
+            solution.getLanguage(),
+            solution.getSubmissionDate());
     }
 
     public List<TopCoderSolution> findAll(Optional<TopCoderDivision> division,
@@ -116,12 +122,13 @@ public class TopCoderSolutionManager extends BasicEntityManager<TopCoderSolution
                             final TopCoderDifficulty difficulty,
                             final long problemId,
                             final CodingyardUser author,
-                            final Language language) throws IOException {
+                            final Language language,
+                            final Date createdDate) throws IOException {
         return Paths.get(root.toString(),
             division.name(),
             difficulty.name(),
             Long.toString(problemId),
-            String.format("%s.%s", author.getUsername(), language.getExtension()));
+            String.format("%s-%d.%s", author.getUsername(), createdDate.getTime(), language.getExtension()));
     }
 
 }

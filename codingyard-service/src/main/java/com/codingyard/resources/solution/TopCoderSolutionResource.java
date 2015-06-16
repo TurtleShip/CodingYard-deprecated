@@ -54,8 +54,9 @@ public class TopCoderSolutionResource {
         }
 
         try {
-            final String filePath = tcManager.save(author, content, division, difficulty, problemNumber, language).toString();
-            final TopCoderSolution solution = new TopCoderSolution(author, new Date(), filePath, language, difficulty, division, problemNumber);
+            final Date submissionDate = new Date();
+            final String filePath = tcManager.save(author, content, division, difficulty, problemNumber, language, submissionDate).toString();
+            final TopCoderSolution solution = new TopCoderSolution(author, submissionDate, filePath, language, difficulty, division, problemNumber);
             userManager.saveSolution(author, solution);
             userManager.flush();
             return Response.status(Response.Status.CREATED)
