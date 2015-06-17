@@ -1,12 +1,12 @@
 package com.codingyard.resources.permission;
 
-import com.codahale.metrics.annotation.Timed;
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.entity.user.Role;
 import com.codingyard.manager.UserManager;
 import com.codingyard.permission.UserAccessApprover;
 import com.google.common.base.Optional;
 import io.dropwizard.auth.Auth;
+import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -19,7 +19,7 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 /**
  * Resource endpoint for checking if a user has permission do a certain operation
- * on another use.
+ * on another user.
  */
 @Path("/permission/user/{user_id}")
 public class UserPermissionResource {
@@ -32,7 +32,7 @@ public class UserPermissionResource {
 
     @Path("/role")
     @GET
-    @Timed
+    @UnitOfWork
     public Response canEditRole(@Auth final CodingyardUser approver,
                                 @PathParam("user_id") final long targetUserId,
                                 @QueryParam("role") final Role role) {
@@ -47,7 +47,7 @@ public class UserPermissionResource {
 
     @Path("/delete")
     @GET
-    @Timed
+    @UnitOfWork
     public Response canDelete(@Auth final CodingyardUser me,
                               @PathParam("user_id") final long targetUserId) {
         final Optional<CodingyardUser> searchResult = userManager.findById(targetUserId);
@@ -60,6 +60,8 @@ public class UserPermissionResource {
     }
 
     @Path("/edit/password")
+    @GET
+    @UnitOfWork
     public Response canEditPassword(@Auth final CodingyardUser me,
                                     @PathParam("user_id") final long targetUserId) {
         final Optional<CodingyardUser> searchResult = userManager.findById(targetUserId);
@@ -72,6 +74,8 @@ public class UserPermissionResource {
     }
 
     @Path("/edit/firstname")
+    @GET
+    @UnitOfWork
     public Response canFirstName(@Auth final CodingyardUser me,
                                  @PathParam("user_id") final long targetUserId) {
         final Optional<CodingyardUser> searchResult = userManager.findById(targetUserId);
@@ -83,7 +87,9 @@ public class UserPermissionResource {
         return createAccessResponse(UserAccessApprover.canEditFirstName(me, searchResult.get()));
     }
 
-    @Path("/edit/firstname")
+    @Path("/edit/lastname")
+    @GET
+    @UnitOfWork
     public Response canEditLastName(@Auth final CodingyardUser me,
                                     @PathParam("user_id") final long targetUserId) {
         final Optional<CodingyardUser> searchResult = userManager.findById(targetUserId);
