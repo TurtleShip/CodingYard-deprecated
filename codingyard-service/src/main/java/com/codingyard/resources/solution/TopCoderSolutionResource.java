@@ -147,7 +147,11 @@ public class TopCoderSolutionResource {
         the existence of a solution to a user who is not authorized to delete it.
          */
         if (searchResult.isPresent() && SolutionAccessApprover.canDelete(user, searchResult.get())) {
-            final boolean isDeleted = tcManager.delete(searchResult.get());
+
+            final TopCoderSolution solution = searchResult.get();
+            final CodingyardUser author = solution.getAuthor();
+            final boolean isDeleted = author.getSolutions().remove(solution) && tcManager.deleteById(solutionId);
+
             if (isDeleted) {
                 return Response.ok().build();
             } else {

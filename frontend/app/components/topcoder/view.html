@@ -37,7 +37,8 @@ Refer to http://getbootstrap.com/css/#tables-contextual-classes
 Look at this for demo : http://lorenzofox3.github.io/smart-table-website/
 github : https://github.com/lorenzofox3/Smart-Table
 -->
-<table st-table="displayedSolutions" st-safe-src="solutions" class="table table-hover table-condensed table-striped table-responsive">
+<table st-table="displayedSolutions" st-safe-src="solutions"
+       class="table table-hover table-condensed table-striped table-responsive">
     <thead>
     <tr>
         <th st-sort="id" class="st-sort-noorder" st-sort-default="true">#</th>
@@ -56,6 +57,14 @@ github : https://github.com/lorenzofox3/Smart-Table
         <td>{{solution.problem_number}}</td>
         <td>{{solution.language}}</td>
         <td>{{solution.author.username}}</td>
+        <td>
+            <!--<button type="button" ng-show="solution.canDelete" ng-click="deleteSolution(solution)"-->
+            <button type="button" ng-show="solution.canDelete" ng-click="openConfirm(solution)"
+                    class="btn btn-sm btn-danger">
+                <i class="glyphicon glyphicon-remove-circle">
+                </i>
+            </button>
+        </td>
     </tr>
     </tbody>
 

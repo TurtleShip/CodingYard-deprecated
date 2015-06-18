@@ -39,7 +39,6 @@
             onLoad: function (_ace) {
 
                 $scope.modeChanged = function () {
-                    $log.info("################# Changing mode");
                     _ace.getSession().setMode("ace/mode/" + AceEditor.getMode($scope.solution.language));
                 };
 

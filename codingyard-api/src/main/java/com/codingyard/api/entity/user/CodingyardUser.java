@@ -90,13 +90,13 @@ public class CodingyardUser implements BasicEntity {
     }
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.EAGER, optional = false, mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, optional = false, mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     public CodingyardToken getToken() {
         return token;
     }
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "author", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "author", cascade = {CascadeType.ALL})
     public Set<Solution> getSolutions() {
         return solutions;
     }

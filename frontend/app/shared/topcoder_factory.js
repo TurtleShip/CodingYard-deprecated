@@ -25,6 +25,10 @@
                 method: 'GET',
                 url: '/api/solution/topcoder',
                 isArray: true
+            },
+            deleteSolution: {
+                method: 'DELETE',
+                url: '/api/solution/topcoder/:id'
             }
         });
     });

@@ -1,5 +1,7 @@
+'use strict';
+
 (function () {
-    app.controller('TopCoderViewController', function ($scope, $log, TopCoder, AceEditor) {
+    app.controller('TopCoderViewController', function ($scope, $log, $modal, TopCoder, AceEditor, SolutionPermission) {
             $scope.solutions = null;
             $scope.displayedSolutions = null;
             $scope.pickedSolution = null;
@@ -21,6 +23,38 @@
                 languages: {},
                 author_usernames: {}
             };
+
+            $scope.solutionToDelete = null;
+
+            $scope.deleteSolution = function (solution) {
+                TopCoder.deleteSolution({id: solution.id},
+                    function () {
+                        var index = $scope.solutions.indexOf(solution);
+                        if (index !== -1) {
+                            $scope.solutions.splice(index, 1);
+                        }
+                    });
+            };
+
+            $scope.openConfirm = function (solution) {
+                $scope.solutionToDelete = solution;
+
+                var modalInstance = $modal.open({
+                    animation: true,
+                    templateUrl: '/app/components/topcoder/delete_confirm.html?bust=' + Math.random().toString(36).slice(2),
+                    controller: 'TopCoderDeleteConfirmController',
+                    size: 'sm',
+                    resolve: {
+                        solutionToDelete: function () {
+                            return $scope.solutionToDelete;
+                        }
+                    }
+                });
+
+                modalInstance.result.then($scope.deleteSolution);
+            };
+
+
 
             $scope.populateAvailable = function (solutions) {
 
@@ -69,6 +103,16 @@
                 TopCoder.findAll($scope.criteria,
                     function (response) { // success
                         $scope.solutions = response;
+                        $scope.solutions.forEach(function (solution) {
+                            solution.canDelete = false;
+                            SolutionPermission.canDelete({
+                                    id: solution.id,
+                                    contest: 'TOP_CODER'
+                                }, function () {
+                                    solution.canDelete = true;
+                                }
+                            );
+                        });
                         switch ($scope.solutions.length) {
                             case 0:
                                 $scope.message = "Sorry. We don't have any content for TopCoder yet.";
