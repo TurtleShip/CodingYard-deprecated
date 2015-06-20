@@ -80,6 +80,8 @@
                             _ace.getSession().setMode("ace/mode/" + AceEditor.getMode($scope.pickedSolution.language));
                         }
                     };
+
+                    _ace.$blockScrolling = Infinity;
                 }
             };
 
