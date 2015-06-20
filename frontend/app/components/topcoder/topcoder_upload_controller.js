@@ -3,7 +3,7 @@
 (function () {
     app.controller('TopCoderUploadController', function ($scope, $log, TopCoder, AceEditor) {
         $scope.solution = {
-            division: "DIV2",
+            division: "DIV1",
             difficulty: "EASY",
             problem_number: 1,
             language: "JAVA",
@@ -42,6 +42,7 @@
                     _ace.getSession().setMode("ace/mode/" + AceEditor.getMode($scope.solution.language));
                 };
 
+                _ace.$blockScrolling = Infinity;
             }
         };
     });

@@ -1,26 +1,63 @@
-<p>Upload topcoder solutions</p>
-
-<form novalidate>
-    <b>division</b>: <input type="radio" ng-model="solution.division" value="DIV1" checked="checked"/>Div1
-    <input type="radio" ng-model="solution.division" value="DIV2"/>Div2<br/>
-
-    <b>difficulty</b>: <select ng-model="solution.difficulty">
-    <option value="EASY">easy</option>
-    <option value="MEDIUM">medium</option>
-    <option value="HARD">hard</option>
-</select><br/>
-    problem number: <input type="number" ng-model="solution.problem_number"></textarea><br/>
-    Language: <select ng-model="solution.language" ng-options="key as value for (key, value) in languages"
-                      ng-change="modeChanged()">
-</select><br/>
-
-    <div ui-ace="aceOption" ng-model="solution.content">
-    </div>
-
-    <input type="submit" ng-click="uploadSolution(solution)">
-</form>
-
-<pre>form = {{solution | json}}</pre>
 <pre ng-show="uploadSuccess">{{uploadSuccess}}</pre>
 <pre ng-show="uploadError">{{uploadError}}</pre>
+
+<form novalidate class="form-horizontal" ng-submit="uploadSolution(solution)">
+    <div class="form-group">
+        <label for="division-form" class="col-sm-2 control-label">Division</label>
+
+        <div class="col-sm-4">
+            <div id="division-form" class="btn-group">
+                <label class="btn btn-primary btn-sm" ng-model="solution.division" btn-radio="'DIV1'">Div 1</label>
+                <label class="btn btn-primary btn-sm" ng-model="solution.division" btn-radio="'DIV2'">Div 2</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="difficulty-form" class="col-sm-2 control-label">Difficulty</label>
+
+        <div class="col-sm-4">
+            <div id="difficulty-form" class="btn-group">
+                <label class="btn btn-primary btn-sm" ng-model="solution.difficulty" btn-radio="'EASY'">Easy</label>
+                <label class="btn btn-primary btn-sm" ng-model="solution.difficulty" btn-radio="'MEDIUM'">Medium</label>
+                <label class="btn btn-primary btn-sm" ng-model="solution.difficulty" btn-radio="'HARD'">Hard</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="problem-number-form" class="col-sm-2 control-label">problem number</label>
+
+        <div class="col-sm-3">
+            <input type="number" class="form-control" ng-model="solution.problem_number" id="problem-number-form"
+                   placeholder="problem number"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="language-form" class="col-sm-2 control-label">Language</label>
+
+        <div class="col-sm-3">
+
+            <select id="language-form" class="form-control input-sm" ng-model="solution.language"
+                    ng-change="modeChanged()">
+                <option value="JAVA">Java</option>
+                <option value="CPP">cpp</option>
+                <option value="C">ANSI C</option>
+                <option value="PYTHON">Python</option>
+                <option value="RUBY">Ruby</option>
+                <option value="OTHER">Other</option>
+            </select>
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default">Submit</button>
+        </div>
+    </div>
+    <div ui-ace="aceOption" ng-model="solution.content">
+    </div>
+</form>
 
