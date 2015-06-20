@@ -2,11 +2,23 @@
 
 (function () {
     app.controller('TopCoderViewController', function ($scope, $log, $modal, TopCoder, AceEditor, SolutionPermission) {
+
+            $scope.alerts = [];
+
+            $scope.addAlert = function (isWarning, msg) {
+                $scope.alerts.push({
+                    type: isWarning ? 'danger' : 'success',
+                    msg: msg
+                });
+            };
+
+            $scope.closeAlert = function (index) {
+                $scope.alerts.splice(index, 1);
+            };
+
             $scope.solutions = null;
             $scope.displayedSolutions = null;
             $scope.pickedSolution = null;
-            $scope.message = null;
-            $scope.error = null;
 
             $scope.supported = {
                 divisions: {
@@ -100,21 +112,16 @@
                                 }
                             );
                         });
-                        switch ($scope.solutions.length) {
-                            case 0:
-                                $scope.message = "Sorry. We don't have any content for TopCoder yet.";
-                                break;
-                            default:
-                                $scope.message = "There are " + $scope.solutions.length + " solutions matching the given solution.";
+                        if ($scope.solutions.length == 0) {
+                            $scope.addAlert(false, "Sorry. We don't have any content for TopCoder yet.");
                         }
                     },
                     function () { // error
-                        $scope.error = "The site is having trouble loading solutions for TopCoder. Please try again later :p";
+                        $scope.addAlert(true, "The site is having trouble loading solutions for TopCoder. Please try again later :p");
                     });
             };
 
             $scope.pickSolution = function (solution) {
-                $log.log("picked a solution");
                 TopCoder.getContent({id: solution.id},
                     function (response) {
                         $scope.pickedSolution = {

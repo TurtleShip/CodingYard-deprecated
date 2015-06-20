@@ -2,6 +2,20 @@
 
 (function () {
     app.controller('TopCoderUploadController', function ($scope, $log, TopCoder, AceEditor) {
+
+        $scope.alerts = [];
+
+        $scope.addAlert = function (isWarning, msg) {
+            $scope.alerts.push({
+                type: isWarning ? 'danger' : 'success',
+                msg: msg
+            });
+        };
+
+        $scope.closeAlert = function (index) {
+            $scope.alerts.splice(index, 1);
+        };
+
         $scope.solution = {
             division: "DIV1",
             difficulty: "EASY",
@@ -9,8 +23,6 @@
             language: "JAVA",
             content: "Hello world! :)"
         };
-        $scope.uploadSuccess = null;
-        $scope.uploadError = null;
 
         $scope.languages = {
             "JAVA": "Java",
@@ -24,10 +36,10 @@
         $scope.uploadSolution = function (solutionToUpload) {
 
             TopCoder.upload({}, solutionToUpload, function () {
-                    $scope.uploadSuccess = "Upload was successful :)";
+                    $scope.addAlert(false, "Upload was successful :)");
                 },
-                function (response) {
-                    $scope.uploadError = response.data;
+                function () {
+                    $scope.addAlert(true, "Sorry, we couldn't upload your solution.");
                 })
         };
 

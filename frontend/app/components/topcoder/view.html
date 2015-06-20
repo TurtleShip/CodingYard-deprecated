@@ -1,6 +1,8 @@
 <pre ng-show="message">{{message}}</pre>
 <pre ng-show="error">{{error}}</pre>
 
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+
 <!-- Note that each row can be marked as
 active, success, info, waring, danger.
 Refer to http://getbootstrap.com/css/#tables-contextual-classes

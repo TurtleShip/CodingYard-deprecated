@@ -1,5 +1,4 @@
-<pre ng-show="uploadSuccess">{{uploadSuccess}}</pre>
-<pre ng-show="uploadError">{{uploadError}}</pre>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 
 <form novalidate class="form-horizontal" ng-submit="uploadSolution(solution)">
     <div class="form-group">
