@@ -1,33 +1,5 @@
-Criteria :
-
-<select ng-model="criteria.division" ng-options="division for division in available.divisions">
-    <option value="">Any</option>
-</select>
-
-
-<select ng-model="criteria.difficulty" ng-options="difficulty for difficulty in available.difficulties">
-    <option value="">Any</option>
-</select>
-
-<select ng-model="criteria.problem_number" ng-options="problem_number for problem_number in available.problem_numbers">
-    <option value="">Any</option>
-</select>
-
-<select ng-model="criteria.language" ng-options="language for language in available.languages">
-    <option value="">Any</option>
-</select>
-
-<select ng-model="criteria.author_username"
-        ng-options="author_username for author_username in available.author_usernames">
-    <option value="">Any</option>
-</select>
-
-<pre>Criteria : {{criteria | json}}</pre>
-
 <pre ng-show="message">{{message}}</pre>
 <pre ng-show="error">{{error}}</pre>
-
-<!-- TODO: Display this better with ui.bootstrap.tabs -->
 
 <!-- Note that each row can be marked as
 active, success, info, waring, danger.
@@ -41,24 +13,60 @@ github : https://github.com/lorenzofox3/Smart-Table
        class="table table-hover table-condensed table-striped table-responsive">
     <thead>
     <tr>
-        <th st-sort="id" class="st-sort-noorder" st-sort-default="true">#</th>
-        <th st-sort="division" class="st-sort-noorder">Division</th>
-        <th st-sort="difficulty" class="st-sort-noorder">Difficulty</th>
-        <th st-sort="problem_number" class="st-sort-noorder">Number</th>
-        <th st-sort="language" class="st-sort-noorder">Language</th>
-        <th st-sort="author.name" class="st-sort-noorder">Author</th>
+        <th>
+            <!--Place holder for solution id-->
+        </th>
+        <th>
+            <select class="form-control input-sm" ng-model="criteria.division"
+                    ng-options="value as key for (key, value) in supported.divisions">
+            </select>
+        </th>
+        <th>
+            <select class="form-control input-sm" ng-model="criteria.difficulty"
+                    ng-options="value as key for (key, value) in supported.difficulties">
+            </select>
+        </th>
+        <th>
+            <!--problem number search-->
+            <input class="form-control input-sm" ng-model="criteria.problem_number" search="problem_number"
+                   placeholder="Problem number" type="number"/>
+
+        </th>
+        <th>
+            <select class="form-control input-sm" ng-model="criteria.language"
+                    ng-options="value as key for (key, value) in supported.languages">
+            </select>
+        </th>
+        <th>
+            <!--Author name search-->
+            <input class="form-control input-sm" ng-model="criteria.author_name" search="author_name"
+                   placeholder="Author search" type="search"/>
+        </th>
+        <th>
+            <!--Place holder for delete button-->
+        </th>
     </tr>
+    <tr>
+        <th style="width:5%" st-sort="id" class="st-sort-noorder" st-sort-default="true">#</th>
+        <th style="width:18%" st-sort="division" class="st-sort-noorder">Division</th>
+        <th style="width:18%" st-sort="difficulty" class="st-sort-noorder">Difficulty</th>
+        <th style="width:18%" st-sort="problem_number" class="st-sort-noorder">Number</th>
+        <th style="width:18%" st-sort="language" class="st-sort-noorder">Language</th>
+        <th style="width:18%" st-sort="author_name" class="st-sort-noorder">Author</th>
+        <th style="width: 5%"><!--Place holder for delete button--></th>
+    </tr>
+
     </thead>
     <tbody>
-    <tr st-select-row="solution" ng-repeat="solution in displayedSolutions" ng-click="pickSolution(solution)">
+    <tr st-select-row="solution" ng-repeat="solution in displayedSolutions | filter:criteria"
+        ng-click="pickSolution(solution)">
         <td>{{solution.id}}</td>
         <td>{{solution.division}}</td>
         <td>{{solution.difficulty}}</td>
         <td>{{solution.problem_number}}</td>
         <td>{{solution.language}}</td>
-        <td>{{solution.author.username}}</td>
+        <td>{{solution.author_name}}</td>
         <td>
-            <!--<button type="button" ng-show="solution.canDelete" ng-click="deleteSolution(solution)"-->
             <button type="button" ng-show="solution.canDelete" ng-click="openConfirm(solution)"
                     class="btn btn-sm btn-danger">
                 <i class="glyphicon glyphicon-remove-circle">
