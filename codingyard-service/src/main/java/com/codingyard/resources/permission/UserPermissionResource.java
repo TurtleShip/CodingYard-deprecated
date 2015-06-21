@@ -76,8 +76,8 @@ public class UserPermissionResource {
     @Path("/edit/firstname")
     @GET
     @UnitOfWork
-    public Response canFirstName(@Auth final CodingyardUser me,
-                                 @PathParam("user_id") final long targetUserId) {
+    public Response canEditFirstName(@Auth final CodingyardUser me,
+                                     @PathParam("user_id") final long targetUserId) {
         final Optional<CodingyardUser> searchResult = userManager.findById(targetUserId);
 
         if (!searchResult.isPresent()) {
@@ -99,6 +99,20 @@ public class UserPermissionResource {
         }
 
         return createAccessResponse(UserAccessApprover.canEditLastName(me, searchResult.get()));
+    }
+
+    @Path("/edit/lastname")
+    @GET
+    @UnitOfWork
+    public Response canEditEmail(@Auth final CodingyardUser me,
+                                    @PathParam("user_id") final long targetUserId) {
+        final Optional<CodingyardUser> searchResult = userManager.findById(targetUserId);
+
+        if (!searchResult.isPresent()) {
+            return createNotFoundResponse(targetUserId);
+        }
+
+        return createAccessResponse(UserAccessApprover.canEditEmail(me, searchResult.get()));
     }
 
     private Response createNotFoundResponse(final long userId) {

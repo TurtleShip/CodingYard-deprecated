@@ -74,4 +74,11 @@ public class UserAccessApprover {
     public static boolean canEditLastName(final CodingyardUser user, final CodingyardUser targetUser) {
         return user.getRole().equals(Role.GLOBAL_ADMIN) || user.equals(targetUser);
     }
+
+    /**
+     * Returns true if {@code user} can edit {@code targetUser}'s email.
+     */
+    public static boolean canEditEmail(final CodingyardUser user, final CodingyardUser targetUser) {
+        return user.getRole().equals(Role.GLOBAL_ADMIN) || user.equals(targetUser);
+    }
 }
