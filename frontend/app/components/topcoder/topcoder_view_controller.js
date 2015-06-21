@@ -3,6 +3,11 @@
 (function () {
     app.controller('TopCoderViewController', function ($scope, $log, $modal, TopCoder, AceEditor, SolutionPermission) {
 
+            $scope.paginationSetting = {
+                itemPerPage: 5,
+                displayedPages: 10
+            };
+
             $scope.alerts = [];
 
             $scope.addAlert = function (isWarning, msg) {

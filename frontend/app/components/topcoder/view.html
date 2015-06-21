@@ -3,10 +3,6 @@
 
 <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 
-<!-- Note that each row can be marked as
-active, success, info, waring, danger.
-Refer to http://getbootstrap.com/css/#tables-contextual-classes
--->
 <!--
 Look at this for demo : http://lorenzofox3.github.io/smart-table-website/
 github : https://github.com/lorenzofox3/Smart-Table
@@ -14,6 +10,16 @@ github : https://github.com/lorenzofox3/Smart-Table
 <table st-table="displayedSolutions" st-safe-src="solutions"
        class="table table-hover table-condensed table-striped table-responsive">
     <thead>
+    <tr>
+        <th></th>
+        <th>Solutions per page</th>
+        <th>
+                <input type="number" class="form-control input-sm" ng-model="paginationSetting.itemPerPage"
+                       placeholder="solution per page"/>
+        </th>
+        <th colspan="4"></th>
+
+    </tr>
     <tr>
         <th>
             <!--Place holder for solution id-->
@@ -81,7 +87,8 @@ github : https://github.com/lorenzofox3/Smart-Table
     <tfoot>
     <tr>
         <td colspan="6" class="text-center">
-            <div st-pagination="" st-items-by-page="5" st-displayed-pages="7"></div>
+            <div st-pagination="" st-items-by-page="paginationSetting.itemPerPage"
+                 st-displayed-pages="paginationSetting.displayPages"></div>
         </td>
     </tr>
     </tfoot>
