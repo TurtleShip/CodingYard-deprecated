@@ -85,8 +85,9 @@ public class CodingyardUser implements BasicEntity {
         return lastName;
     }
 
+    // TODO: Make this nullable once we update db to provide default value to pre-existing users
     @JsonProperty("email")
-    @Column(name = "emaila", nullable = false)
+    @Column(name = "email")
     public String getEmail() {
         return email;
     }

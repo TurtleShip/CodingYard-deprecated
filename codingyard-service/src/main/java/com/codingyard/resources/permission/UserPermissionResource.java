@@ -14,7 +14,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
-import static javax.ws.rs.core.Response.Status.FORBIDDEN;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 /**
@@ -30,7 +29,21 @@ public class UserPermissionResource {
         this.userManager = userManager;
     }
 
-    @Path("/role")
+    @Path("/edit")
+    @GET
+    @UnitOfWork
+    public Response canEdit(@Auth final CodingyardUser user,
+                            @PathParam("user_id") final long targetUserId) {
+        final Optional<CodingyardUser> searchResult = userManager.findById(targetUserId);
+
+        if (!searchResult.isPresent()) {
+            return createNotFoundResponse(targetUserId);
+        }
+
+        return createAccessResponse(UserAccessApprover.canEdit(user, searchResult.get()));
+    }
+
+    @Path("/edit/role")
     @GET
     @UnitOfWork
     public Response canEditRole(@Auth final CodingyardUser approver,
@@ -101,11 +114,11 @@ public class UserPermissionResource {
         return createAccessResponse(UserAccessApprover.canEditLastName(me, searchResult.get()));
     }
 
-    @Path("/edit/lastname")
+    @Path("/edit/email")
     @GET
     @UnitOfWork
     public Response canEditEmail(@Auth final CodingyardUser me,
-                                    @PathParam("user_id") final long targetUserId) {
+                                 @PathParam("user_id") final long targetUserId) {
         final Optional<CodingyardUser> searchResult = userManager.findById(targetUserId);
 
         if (!searchResult.isPresent()) {
@@ -122,10 +135,6 @@ public class UserPermissionResource {
     }
 
     private Response createAccessResponse(final boolean isAllowed) {
-        if (isAllowed) {
-            return Response.ok().build();
-        } else {
-            return Response.status(FORBIDDEN).build();
-        }
+        return Response.ok(isAllowed).build();
     }
 }
