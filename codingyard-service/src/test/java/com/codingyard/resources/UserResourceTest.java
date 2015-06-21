@@ -180,12 +180,12 @@ public class UserResourceTest extends ResourceTest {
     }
 
     @Test
-    public void createUserShouldCreateAGuestUser() {
+    public void createUserShouldCreateAMemberUser() {
         final CodingyardUser newUser = new CodingyardUser.Builder("I am so", "fresh")
             .firstName("Wu")
             .lastName("Kong")
             .email("monkeyKing@lol.com")
-            .role(Role.GUEST)
+            .role(Role.MEMBER)
             .build();
 
         when(userManager.save(newUser)).thenReturn(-1L);
