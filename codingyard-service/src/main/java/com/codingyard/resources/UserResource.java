@@ -105,10 +105,12 @@ public class UserResource {
     public Long createUser(@FormParam("username") @NotNull final String username,
                            @FormParam("password") @NotNull final String password,
                            @FormParam("firstName") @NotNull final String firstName,
-                           @FormParam("lastName") @NotNull final String lastName) {
+                           @FormParam("lastName") @NotNull final String lastName,
+                           @FormParam("email") @NotNull final String email) {
         final CodingyardUser codingyardUser = new CodingyardUser.Builder(username, password)
             .firstName(firstName)
             .lastName(lastName)
+            .email(email)
             .build();
 
         return userManager.save(codingyardUser);

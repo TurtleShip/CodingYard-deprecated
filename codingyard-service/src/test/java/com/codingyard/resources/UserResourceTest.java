@@ -184,6 +184,7 @@ public class UserResourceTest extends ResourceTest {
         final CodingyardUser newUser = new CodingyardUser.Builder("I am so", "fresh")
             .firstName("Wu")
             .lastName("Kong")
+            .email("monkeyKing@lol.com")
             .role(Role.GUEST)
             .build();
 
@@ -193,7 +194,8 @@ public class UserResourceTest extends ResourceTest {
             .param("username", newUser.getUsername())
             .param("password", newUser.getPassword())
             .param("firstName", newUser.getFirstName())
-            .param("lastName", newUser.getLastName());
+            .param("lastName", newUser.getLastName())
+            .param("email", newUser.getEmail());
 
         resources.getJerseyTest().target(ROOT)
             .request(MediaType.APPLICATION_JSON)
