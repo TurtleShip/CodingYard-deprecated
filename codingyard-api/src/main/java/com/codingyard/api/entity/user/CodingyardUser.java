@@ -23,6 +23,7 @@ public class CodingyardUser implements BasicEntity {
     private String password;
     private String firstName;
     private String lastName;
+    private String email;
     private Role role;
     private CodingyardToken token;
     private Set<Solution> solutions = Sets.newHashSet();
@@ -31,11 +32,12 @@ public class CodingyardUser implements BasicEntity {
     CodingyardUser() {
     }
 
-    private CodingyardUser(String username, String password, String firstName, String lastName, Role role) {
+    private CodingyardUser(String username, String password, String firstName, String lastName, String email, Role role) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
         this.role = role;
     }
 
@@ -45,6 +47,7 @@ public class CodingyardUser implements BasicEntity {
         this.password = other.password;
         this.firstName = other.firstName;
         this.lastName = other.lastName;
+        this.email = other.email;
         this.role = other.role;
         this.token = other.token;
         this.solutions = other.solutions;
@@ -80,6 +83,12 @@ public class CodingyardUser implements BasicEntity {
     @Column(name = "last_name", nullable = false)
     public String getLastName() {
         return lastName;
+    }
+
+    @JsonProperty("email")
+    @Column(name = "emaila", nullable = false)
+    public String getEmail() {
+        return email;
     }
 
     @JsonProperty("role")
@@ -121,6 +130,10 @@ public class CodingyardUser implements BasicEntity {
         this.lastName = lastName;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public void setRole(Role role) {
         this.role = role;
     }
@@ -135,7 +148,7 @@ public class CodingyardUser implements BasicEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, firstName, lastName, role);
+        return Objects.hash(username, firstName, lastName, email, role);
     }
 
     @Override
@@ -150,7 +163,8 @@ public class CodingyardUser implements BasicEntity {
         return Objects.equals(this.username, other.username)
             && Objects.equals(this.firstName, other.firstName)
             && Objects.equals(this.lastName, other.lastName)
-            && Objects.equals(this.role, other.role);
+            && Objects.equals(this.role, other.role)
+            && Objects.equals(this.email, other.email);
     }
 
     @Override
@@ -160,6 +174,7 @@ public class CodingyardUser implements BasicEntity {
             .add("userName", username)
             .add("firstName", firstName)
             .add("lastName", lastName)
+            .add("email", email)
             .add("role", role)
             .toString();
     }
@@ -167,12 +182,14 @@ public class CodingyardUser implements BasicEntity {
     public static class Builder {
         private static final String DEFAULT_FIRSTNAME = "default";
         private static final String DEFAULT_LASTNAME = "default";
+        private static final String DEFAULT_EMAIL = "default@codingyard.com";
         private static final Role DEFAULT_ROLE = Role.GUEST;
 
         private final String username;
         private final String password;
         private String firstName = DEFAULT_FIRSTNAME;
         private String lastName = DEFAULT_LASTNAME;
+        private String email = DEFAULT_EMAIL;
         private Role role = DEFAULT_ROLE;
 
         /**
@@ -200,13 +217,18 @@ public class CodingyardUser implements BasicEntity {
             return this;
         }
 
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
         public Builder role(Role role) {
             this.role = role;
             return this;
         }
 
         public CodingyardUser build() {
-            final CodingyardUser user = new CodingyardUser(username, Encryptor.encrypt(password), firstName, lastName, role);
+            final CodingyardUser user = new CodingyardUser(username, Encryptor.encrypt(password), firstName, lastName, email, role);
             final CodingyardToken token = CodingyardToken.Builder.build();
             user.setToken(token);
             token.setUser(user);

@@ -14,6 +14,7 @@ public class TopCoderSolutionTest extends BasicJsonTest<TopCoderSolution> {
         .firstName("Seulgi")
         .lastName("Kim")
         .role(Role.GLOBAL_ADMIN)
+        .email("test@codingyard.com")
         .build();
     final Date submissionDate = new Date(1234L);
     final TopCoderSolution solution = new TopCoderSolution(author, submissionDate, "secure_path",
