@@ -13,13 +13,15 @@
         loginSuccess: 'auth-login-success',
         loginFailed: 'auth-login-failed',
         logout: 'auth-logout',
+        gotBasicUserInfo: 'got-basic-user-info',
         sessionTimeout: 'auth-session-timeout',
         notAuthenticated: 'auth-not-authenticated',
         notAuthorized: 'auth-not-authorized'
     });
 
     app.constant('SESSION_KEYS', {
-        token: 'token'
+        token: 'token',
+        user: 'user'
     });
 
 })();

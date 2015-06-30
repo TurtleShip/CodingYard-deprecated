@@ -1,4 +1,69 @@
-<p ng-show="errorMessage">{{errorMessage}}</p>
-<div ng-if="isAuthorized([userRoles.admin, userRoles.globalAdmin])">You're admin</div>
-<p>User id : {{userId}}</p>
-<pre ng-show="user">{{user | json}}</pre>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+
+<div ng-show="isAuthorized([userRoles.admin, userRoles.globalAdmin], sharedData.currentUser)">You're admin</div>
+
+<div>
+<table class="table table-condensed">
+    <tbody>
+    <tr ng-repeat="editForm in editFormFields">
+        <td style="text-align: right; padding-right: 2%; width: 100px; border: none">
+            <label for="row-form">{{editForm.label}}</label>
+        </td>
+        <td style="padding-right: 2%; width: 30%; white-space: nowrap; border: none">
+            <span ng-if="isArray(canEdit[editForm.canEditKey])"
+                  editable-select="viewedUser[editForm.editField]"
+                  e-ng-options="o as o for o in canEdit[editForm.canEditKey]"
+                    e-form="rowForm">
+                {{viewedUser[editForm.editField]}}
+            </span>
+            <span ng-if="!isArray(canEdit[editForm.canEditKey])" editable-text="viewedUser[editForm.editField]"
+                  e-form="rowForm">{{viewedUser[editForm.editField]}}</span>
+
+        </td>
+        <td style="text-align: left; border: none">
+            <div ng-show="canEdit[editForm.canEditKey]">
+                <form editable-form id="row-form" name="rowForm" ng-show="rowForm.$visible"
+                      class="form-buttons form-inline" onaftersave="editForm.onAfterSave()">
+
+                    <!--Save button-->
+                    <button type="submit" ng-disabled="rowForm.$waiting" class="btn btn-sm btn-primary">
+                        <i class="glyphicon glyphicon-ok"></i>
+                    </button>
+
+                    <!--Cancel button-->
+                    <button type="button" ng-disabled="rowForm.$waiting" ng-click="rowForm.$cancel()"
+                            class="btn btn-sm btn-danger">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </button>
+                </form>
+
+                <button ng-hide="rowForm.$visible"
+                        ng-click="rowForm.$show()"
+                        type="button"
+                        class="btn btn-sm btn-success">
+                    <i class="glyphicon glyphicon-edit">
+                    </i>
+                </button>
+
+                <!--Place holder button-->
+                <button type="button"
+                        class="btn btn-sm btn-success" style="display: none">
+                    <i class="glyphicon glyphicon-edit">
+                    </i>
+                </button>
+            </div>
+            <div ng-hide="canEdit[editForm.canEditKey]">
+                <!--TODO: Put hover over message that you don't have permission-->
+                <button type="button"
+                        class="btn btn-sm btn-default disabled">
+                    <i class="glyphicon glyphicon-edit">
+                    </i>
+                </button>
+            </div>
+        </td>
+    </tr>
+
+    </tbody>
+</table>
+
+</div>

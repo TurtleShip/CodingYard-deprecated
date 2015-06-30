@@ -25,9 +25,27 @@
                 url: '/api/user/token/refresh',
                 method: 'POST'
             },
-            changeRole: {
-                url: '/api/user/role',
+            editRole: {
+                url: '/api/user/edit/role',
                 method: 'PUT'
+            },
+
+            editFirstName: {
+                url: '/api/user/edit/firstname',
+                method: 'PUT',
+                transformRequest: TransformRequest
+            },
+
+            editLastName: {
+                url: '/api/user/edit/lastname',
+                method: 'PUT',
+                transformRequest: TransformRequest
+            },
+
+            editEmail: {
+                url: '/api/user/edit/email',
+                method: 'PUT',
+                transformRequest: TransformRequest
             }
         });
     });

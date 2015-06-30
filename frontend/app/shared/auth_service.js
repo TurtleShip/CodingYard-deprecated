@@ -70,7 +70,7 @@
         };
 
         authService.isAuthenticated = function () {
-            return !!Session.token;
+            return !!SessionStorage.get(SESSION_KEYS.token, false);
         };
 
         /**
@@ -80,6 +80,9 @@
          * @returns {*|boolean} true is user has a role that belongs to authorized roles
          */
         authService.isAuthorized = function (authorizedRoles, user) {
+            if (!user) {
+                return false;
+            }
             if (!angular.isArray(authorizedRoles)) {
                 authorizedRoles = [authorizedRoles];
             }

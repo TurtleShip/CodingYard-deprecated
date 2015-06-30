@@ -1,14 +1,15 @@
 'use strict';
 
 var app = angular.module('codingyard', ['ngRoute', 'ngResource',
-    'base64', 'ui.ace', 'ui.bootstrap', 'ui.router', 'smart-table']);
+    'base64', 'ui.ace', 'ui.bootstrap', 'ui.router', 'smart-table',
+    'xeditable']);
 
 (function () {
 
     /**
      * This is the root controller of www.codingyard.com
      */
-    app.controller('CodingyardController', function ($scope, $route, $routeParams, $location, $log,
+    app.controller('CodingyardController', function ($rootScope, $scope, $route, $routeParams, $location, $log,
                                                      USER_ROLES, AuthService, Session, SessionStorage,
                                                      SESSION_KEYS, AUTH_EVENTS, User, SharedData) {
 
@@ -16,17 +17,17 @@ var app = angular.module('codingyard', ['ngRoute', 'ngResource',
         $scope.$location = $location;
         $scope.$routeParams = $routeParams;
 
-        $scope.currentUser = SharedData.getCurrentUser();
         $scope.token = null;
         $scope.userRoles = USER_ROLES;
         $scope.isAuthorized = AuthService.isAuthorized;
 
+        $scope.sharedData = SharedData.getSharedData();
+
         var getMyInfo = function () {
             User.getMyInfo({},
                 function success(user) {
-                    $scope.currentUser = user;
-                    SharedData.setCurrentUser(user);
-                    $log.info("Successfully retrieved user information.");
+                    $scope.sharedData.currentUser = user;
+                    $rootScope.$broadcast(AUTH_EVENTS.gotBasicUserInfo, user);
                 },
                 function error(response) {
                     $log.info("Failed to retrieve user information. Response : " + response);
@@ -48,7 +49,7 @@ var app = angular.module('codingyard', ['ngRoute', 'ngResource',
 
         // Reset the current user's information when user logs out
         $scope.$on(AUTH_EVENTS.logout, function () {
-            $scope.currentUser = null;
+            $scope.sharedData.currentUser = null;
             $scope.token = null;
         });
     });

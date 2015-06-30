@@ -2,6 +2,9 @@ package com.codingyard.permission;
 
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.entity.user.Role;
+import com.google.common.collect.Lists;
+
+import java.util.List;
 
 /**
  * Utility class that provides a set of method that returns true/false
@@ -37,7 +40,7 @@ public class UserAccessApprover {
     /**
      * Returns true if {@code approver} can approve {@code targetUser}'s role change to {@code newRole}.
      * {@code approver} can approve {@code targetUser}'s role change only if the below conditions are met<br/>
-     * 1) {@code approver} has strictly higher role level that {@code targetUser}<br/>
+     * 1) {@code approver} has strictly higher role level that {@code targetUser} or {@code approver} is a global admin.<br/>
      * 2) {@code approver} has higher or equal role level compared to {@code newRole}<br/>
      *
      * @param approver   The user who is trying to approve.
@@ -46,7 +49,21 @@ public class UserAccessApprover {
      * @return true if {@code approver} can approve {@code targetUser}'s role change to {@code newRole}.
      */
     public static boolean canEditRole(final CodingyardUser approver, final CodingyardUser targetUser, final Role newRole) {
-        return hasHighPermission(approver, targetUser) && approver.getRole().getLevel() >= newRole.getLevel();
+        return (hasHighPermission(approver, targetUser) || approver.getRole().equals(Role.GLOBAL_ADMIN)) && approver.getRole().getLevel() >= newRole.getLevel();
+    }
+
+    /**
+     * Returns a list of roles that {@code approver} can approve for {@code targetUser}.
+     * An empty list will be returned if there is no such role.
+     */
+    public static List<Role> getEditableRoles(final CodingyardUser approver, final CodingyardUser targetUser) {
+        List<Role> editableRoles = Lists.newArrayList();
+        for (final Role role : Role.values()) {
+            if (canEditRole(approver, targetUser, role)) {
+                editableRoles.add(role);
+            }
+        }
+        return editableRoles;
     }
 
     /**
