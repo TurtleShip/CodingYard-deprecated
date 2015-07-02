@@ -4,6 +4,11 @@
 (function () {
     app.factory('User', function UserFactory($log, $resource, TransformRequest) {
         return $resource('/api/user/:id', {}, {
+            getAllUsers: {
+                url: '/api/user/all',
+                method: 'GET',
+                isArray: true
+            },
             getSolutions: {
                 url: '/api/user/:id/solutions',
                 method: 'GET',
@@ -20,6 +25,9 @@
             createUser: {
                 method: 'POST',
                 transformRequest: TransformRequest
+            },
+            deleteUser: {
+                method: 'DELETE'
             },
             refreshToken: {
                 url: '/api/user/token/refresh',

@@ -150,7 +150,7 @@ public class TopCoderSolutionResource {
 
             final TopCoderSolution solution = searchResult.get();
             final CodingyardUser author = solution.getAuthor();
-            final boolean isDeleted = author.getSolutions().remove(solution) && tcManager.deleteById(solutionId);
+            final boolean isDeleted = author.getSolutions().remove(solution) && tcManager.delete(solution);
 
             if (isDeleted) {
                 return Response.ok().build();

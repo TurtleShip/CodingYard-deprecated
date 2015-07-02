@@ -29,6 +29,15 @@ public class UserResource {
         this.userManager = userManager;
     }
 
+    @Path("/all")
+    @GET
+    @Metered
+    @UnitOfWork
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllUsers() {
+        return Response.ok(userManager.findAll()).build();
+    }
+
     @Path("/{id}")
     @GET
     @Metered
@@ -82,6 +91,36 @@ public class UserResource {
             .build();
 
         return userManager.save(codingyardUser);
+    }
+
+    @Path("/{id}")
+    @DELETE
+    @Metered
+    @UnitOfWork
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteUser(@Auth CodingyardUser user,
+                               @PathParam("id") @NotNull Long userId) {
+        final Optional<CodingyardUser> searchResult = userManager.findById(userId);
+
+        /*
+        Note that I am deliberately returning 404 NOT_FOUND even when the target user exists
+        but the requesting user is not authorized to delete the target user. This is to not give out
+        the existence of the target user to the requesting user who is not authorized to delete it.
+        */
+        if (searchResult.isPresent() && UserAccessApprover.canDelete(user, searchResult.get())) {
+
+            final CodingyardUser targetUser = searchResult.get();
+            final boolean isDeleted = userManager.delete(targetUser);
+
+            if (isDeleted) {
+                return Response.ok().build();
+            } else {
+                return Response.serverError().entity("Couldn't delete the user. Please try again later.").build();
+            }
+        } else {
+            return Response.status(Response.Status.NOT_FOUND)
+                .build();
+        }
     }
 
     @Path("/login")
