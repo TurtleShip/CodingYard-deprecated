@@ -43,10 +43,10 @@ public class UserAccessApproverTest {
     public void testGlobalAdminApproval() {
         when(currentCodingyardUser.getRole()).thenReturn(GLOBAL_ADMIN);
 
-        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, GLOBAL_ADMIN));
-        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, ADMIN));
-        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, MEMBER));
-        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, GUEST));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, GLOBAL_ADMIN));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, ADMIN));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, MEMBER));
+        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, globalAdmin, GUEST));
 
         assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, admin, GLOBAL_ADMIN));
         assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, admin, ADMIN));
