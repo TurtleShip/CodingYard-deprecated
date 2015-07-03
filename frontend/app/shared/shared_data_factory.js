@@ -1,15 +1,15 @@
 'use strict';
 
-// Responsible for retrieving/updating/saving current user's information.
+
 (function () {
     app.factory('SharedData', function SharedDataFactory() {
-        var user = null;
+        var sharedData = {
+           currentUser: null
+        };
+
         return {
-            getCurrentUser: function () {
-                return user;
-            },
-            setCurrentUser: function (newUser) {
-                user = newUser;
+            getSharedData: function () {
+                return sharedData;
             }
         }
     });

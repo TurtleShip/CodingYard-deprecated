@@ -16,9 +16,14 @@
                 controller: 'SignUpController'
             })
             .state('userView', {
-                url: '/user/:userId',
+                url: '/user/detail/:userId',
                 templateUrl: '/app/components/users/index.html',
                 controller: 'UserController'
+            })
+            .state('userListView', {
+                url: '/user/list',
+                templateUrl: '/app/components/users/list.html',
+                controller: 'UserListController'
             })
             .state('topcoderView', {
                 url: '/topcoder/view',

@@ -40,14 +40,15 @@
                         <li><a ui-sref="topcoderUpload">TopCoder</a></li>
                     </ul>
                 </li>
+                <li><a ui-sref="userListView">Users</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right" ng-controller="LoginController">
-                <li ng-hide="currentUser"><a ng-href="/" ng-click="openLogin()">Login</a></li>
-                <li ng-hide="currentUser"><a ui-sref="signUp">Signup</a></li>
-                <li ng-show="currentUser"><a ui-sref="userView({userId: currentUser.id})">Welcome,
-                    {{currentUser.username}}!</a></li>
-                <li ng-show="currentUser"><a ng-href="/" ng-click="logout()">logout</a>
+                <li ng-hide="sharedData.currentUser"><a ng-href="/" ng-click="openLogin()">Login</a></li>
+                <li ng-hide="sharedData.currentUser"><a ui-sref="signUp">Signup</a></li>
+                <li ng-show="sharedData.currentUser"><a ui-sref="userView({userId: sharedData.currentUser.id})">Welcome,
+                    {{sharedData.currentUser.username}}!</a></li>
+                <li ng-show="sharedData.currentUser"><a ng-href="/" ng-click="logout()">logout</a>
             </ul>
         </div>
 
@@ -59,10 +60,9 @@
     <div ui-view>
     </div>
 
-    <pre>$location.path() = {{$location.path()}}</pre>
-
     <link rel="stylesheet" type="text/css" href="/assets/libs/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/assets/libs/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="/assets/libs/angular-xeditable/0.1.8/xeditable.css">
     <link rel="stylesheet" href="/assets/css/app.css">
     <link rel="stylesheet" href="/app/components/login/login-modal.css">
     <script src="/assets/libs/ace/min/ace.js"></script>
@@ -74,6 +74,7 @@
     <script src="/assets/libs/angular-ui/ui-ace.js"></script>
     <script src="/assets/libs/angular-ui/ui-router/0.2.15/angular-ui-router.min.js"></script>
     <script src="/assets/libs/angular-ui/bootstrap/ui-bootstrap-tpls-0.13.0.js"></script>
+    <script src="/assets/libs/angular-xeditable/0.1.8/xeditable.min.js"></script>
     <script src="/app/app.module.js"></script>
     <script src="/app/app.routes.js"></script>
     <script src="/app/shared/auth_service.js"></script>
@@ -85,7 +86,11 @@
     <script src="/app/shared/ace_editor_factory.js"></script>
     <script src="/app/shared/shared_data_factory.js"></script>
     <script src="/app/shared/solution_permission_factory.js"></script>
+    <script src="/app/shared/user_permission_factory.js"></script>
     <script src="/app/components/users/user_controller.js"></script>
+    <script src="/app/components/users/user_list_controller.js"></script>
+    <script src="/app/components/users/popup/user_edit_confirm_controller.js"></script>
+    <script src="/app/components/users/popup/user_delete_confirm_controller.js"></script>
     <script src="/app/components/topcoder/topcoder_upload_controller.js"></script>
     <script src="/app/components/topcoder/topcoder_view_controller.js"></script>
     <script src="/app/components/topcoder/delete_confirm_controller.js"></script>

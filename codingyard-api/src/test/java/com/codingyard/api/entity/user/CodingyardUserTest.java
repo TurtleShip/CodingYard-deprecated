@@ -9,6 +9,7 @@ public class CodingyardUserTest extends BasicJsonTest<CodingyardUser> {
         .firstName("Seulgi")
         .lastName("Kim")
         .role(Role.GLOBAL_ADMIN)
+        .email("test@codingyard.com")
         .build();
 
     @Before

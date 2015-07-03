@@ -1,6 +1,7 @@
 package com.codingyard.resources;
 
 import com.codahale.metrics.annotation.Metered;
+import com.codahale.metrics.annotation.Timed;
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.api.payload.RoleChangeRequest;
 import com.codingyard.manager.UserManager;
@@ -26,6 +27,15 @@ public class UserResource {
 
     public UserResource(UserManager userManager) {
         this.userManager = userManager;
+    }
+
+    @Path("/all")
+    @GET
+    @Metered
+    @UnitOfWork
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllUsers() {
+        return Response.ok(userManager.findAll()).build();
     }
 
     @Path("/{id}")
@@ -65,39 +75,6 @@ public class UserResource {
         return Response.ok().entity(user).build();
     }
 
-    @Path("/me/edit")
-    @PUT
-    @Metered
-    @UnitOfWork
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response editMyInfo(@Auth CodingyardUser currentUser,
-                               @Valid CodingyardUser newUser) {
-        // A user can only edit his/her own info
-        if (currentUser.getId().longValue() != newUser.getId().longValue()) {
-            return Response.status(FORBIDDEN).entity("You are not allowed to edit user " + newUser).build();
-        }
-
-        /*
-         Allowed changes:
-            firstName
-            lastName
-            password
-
-         Not allowed changes:
-            username
-            role
-          */
-        if (!currentUser.getUsername().equals(newUser.getUsername())) {
-            return Response.status(FORBIDDEN).entity("You can't change your username").build();
-        }
-        if (!currentUser.getRole().equals(newUser.getRole())) {
-            return Response.status(FORBIDDEN).entity("You can't change your role").build();
-        }
-
-        userManager.save(newUser);
-        return Response.ok().entity(newUser).build();
-    }
-
     @POST
     @Metered
     @UnitOfWork
@@ -105,13 +82,45 @@ public class UserResource {
     public Long createUser(@FormParam("username") @NotNull final String username,
                            @FormParam("password") @NotNull final String password,
                            @FormParam("firstName") @NotNull final String firstName,
-                           @FormParam("lastName") @NotNull final String lastName) {
+                           @FormParam("lastName") @NotNull final String lastName,
+                           @FormParam("email") @NotNull final String email) {
         final CodingyardUser codingyardUser = new CodingyardUser.Builder(username, password)
             .firstName(firstName)
             .lastName(lastName)
+            .email(email)
             .build();
 
         return userManager.save(codingyardUser);
+    }
+
+    @Path("/{id}")
+    @DELETE
+    @Metered
+    @UnitOfWork
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteUser(@Auth CodingyardUser user,
+                               @PathParam("id") @NotNull Long userId) {
+        final Optional<CodingyardUser> searchResult = userManager.findById(userId);
+
+        /*
+        Note that I am deliberately returning 404 NOT_FOUND even when the target user exists
+        but the requesting user is not authorized to delete the target user. This is to not give out
+        the existence of the target user to the requesting user who is not authorized to delete it.
+        */
+        if (searchResult.isPresent() && UserAccessApprover.canDelete(user, searchResult.get())) {
+
+            final CodingyardUser targetUser = searchResult.get();
+            final boolean isDeleted = userManager.delete(targetUser);
+
+            if (isDeleted) {
+                return Response.ok().build();
+            } else {
+                return Response.serverError().entity("Couldn't delete the user. Please try again later.").build();
+            }
+        } else {
+            return Response.status(Response.Status.NOT_FOUND)
+                .build();
+        }
     }
 
     @Path("/login")
@@ -133,12 +142,11 @@ public class UserResource {
         return Response.ok().entity(user.getToken()).build();
     }
 
-    @Path("/role")
+    @Path("/edit/role")
     @PUT
     @Metered
     @UnitOfWork
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response changeRole(@Auth CodingyardUser approver,
                                @Valid RoleChangeRequest request) {
 
@@ -160,6 +168,99 @@ public class UserResource {
             return Response.status(FORBIDDEN)
                 .entity(String.format("User %s does not have permission to change user %s's role to %s.\n", approver.getUsername(), lowerUser.getUsername(), request.getNewRole()))
                 .build();
+        }
+    }
+
+    @Path("/edit/password")
+    @PUT
+    @Timed
+    @UnitOfWork
+    public Response changePassword(@Auth CodingyardUser approver,
+                                   @FormParam("newPassword") @NotNull final String newPassword,
+                                   @FormParam("id") @NotNull final Long targetUserId) {
+        final Optional<CodingyardUser> searchResult = userManager.findById(targetUserId);
+        if (!searchResult.isPresent()) {
+            return Response.status(NOT_FOUND)
+                .entity(String.format("User with id %d was not found.\n", targetUserId))
+                .build();
+        }
+        final CodingyardUser targetUser = searchResult.get();
+
+        if (UserAccessApprover.canEditPassword(approver, targetUser)) {
+            targetUser.setPassword(newPassword);
+            userManager.save(targetUser);
+            return Response.ok().build();
+        } else {
+            return Response.status(FORBIDDEN).build();
+        }
+    }
+
+    @Path("/edit/firstname")
+    @PUT
+    @Timed
+    @UnitOfWork
+    public Response changeFirstName(@Auth CodingyardUser approver,
+                                    @FormParam("newFirstName") @NotNull final String newFirstName,
+                                    @FormParam("id") @NotNull final Long targetUserId) {
+        final Optional<CodingyardUser> searchResult = userManager.findById(targetUserId);
+        if (!searchResult.isPresent()) {
+            return Response.status(NOT_FOUND)
+                .entity(String.format("User with id %d was not found.\n", targetUserId))
+                .build();
+        }
+        final CodingyardUser targetUser = searchResult.get();
+
+        if (UserAccessApprover.canEditFirstName(approver, targetUser)) {
+            targetUser.setFirstName(newFirstName);
+            return Response.ok().build();
+        } else {
+            return Response.status(FORBIDDEN).build();
+        }
+    }
+
+    @Path("/edit/lastname")
+    @PUT
+    @Timed
+    @UnitOfWork
+    public Response changeLastName(@Auth CodingyardUser approver,
+                                   @FormParam("newLastName") @NotNull final String newLastName,
+                                   @FormParam("id") @NotNull final Long targetUserId) {
+        final Optional<CodingyardUser> searchResult = userManager.findById(targetUserId);
+        if (!searchResult.isPresent()) {
+            return Response.status(NOT_FOUND)
+                .entity(String.format("User with id %d was not found.\n", targetUserId))
+                .build();
+        }
+        final CodingyardUser targetUser = searchResult.get();
+
+        if (UserAccessApprover.canEditLastName(approver, targetUser)) {
+            targetUser.setLastName(newLastName);
+            return Response.ok().build();
+        } else {
+            return Response.status(FORBIDDEN).build();
+        }
+    }
+
+    @Path("/edit/email")
+    @PUT
+    @Timed
+    @UnitOfWork
+    public Response changeEmail(@Auth CodingyardUser approver,
+                                @FormParam("newEmail") @NotNull final String newEmail,
+                                @FormParam("id") @NotNull final Long targetUserId) {
+        final Optional<CodingyardUser> searchResult = userManager.findById(targetUserId);
+        if (!searchResult.isPresent()) {
+            return Response.status(NOT_FOUND)
+                .entity(String.format("User with id %d was not found.\n", targetUserId))
+                .build();
+        }
+        final CodingyardUser targetUser = searchResult.get();
+
+        if (UserAccessApprover.canEditEmail(approver, targetUser)) {
+            targetUser.setEmail(newEmail);
+            return Response.ok().build();
+        } else {
+            return Response.status(FORBIDDEN).build();
         }
     }
 }

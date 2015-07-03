@@ -67,65 +67,6 @@ public class UserResourceTest extends ResourceTest {
     }
 
     @Test
-    public void userCannotChangeOtherUserInfo() {
-        final Response response = resources.getJerseyTest()
-            .target(ROOT)
-            .path("me/edit")
-            .request(MediaType.APPLICATION_JSON)
-            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, admin.getUsername())
-            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, admin.getPassword())
-            .put(Entity.json(member));
-        assertThat(response.getStatus()).isEqualTo(FORBIDDEN.getStatusCode());
-    }
-
-    @Test
-    public void userCannotChangeUsername() {
-        final CodingyardUser newAdmin = new CodingyardUser(admin);
-        newAdmin.setUsername("Cool new name");
-        final Response response = resources.getJerseyTest()
-            .target(ROOT)
-            .path("me/edit")
-            .request(MediaType.APPLICATION_JSON)
-            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, admin.getUsername())
-            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, admin.getPassword())
-            .put(Entity.json(newAdmin));
-        assertThat(response.getStatus()).isEqualTo(FORBIDDEN.getStatusCode());
-    }
-
-
-    // Note the careful test naming. Users **can** change their roles through different endpoint : /user/role
-    @Test
-    public void userCannotChangeRoleThroughUserEdit() {
-        final CodingyardUser newAdmin = new CodingyardUser(admin);
-        newAdmin.setRole(Role.GLOBAL_ADMIN);
-        final Response response = resources.getJerseyTest()
-            .target(ROOT)
-            .path("me/edit")
-            .request(MediaType.APPLICATION_JSON)
-            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, admin.getUsername())
-            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, admin.getPassword())
-            .put(Entity.json(newAdmin));
-        assertThat(response.getStatus()).isEqualTo(FORBIDDEN.getStatusCode());
-    }
-
-    @Test
-    public void userCanEditNamesAndPassword() {
-        final CodingyardUser newAdmin = new CodingyardUser(admin);
-        newAdmin.setFirstName("new first name");
-        newAdmin.setLastName("new last name");
-        newAdmin.setPassword("new and secure password");
-
-        final Response response = resources.getJerseyTest()
-            .target(ROOT)
-            .path("me/edit")
-            .request(MediaType.APPLICATION_JSON)
-            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, admin.getUsername())
-            .property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, admin.getPassword())
-            .put(Entity.json(newAdmin));
-        assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
-    }
-
-    @Test
     public void getSolutionsShouldReturnExistingSolutions() {
         TopCoderSolution solution = new TopCoderSolution(member, new Date(),
             Language.CPP, TopCoderDifficulty.HARD, TopCoderDivision.DIV1, 255L);
@@ -180,11 +121,12 @@ public class UserResourceTest extends ResourceTest {
     }
 
     @Test
-    public void createUserShouldCreateAGuestUser() {
+    public void createUserShouldCreateAMemberUser() {
         final CodingyardUser newUser = new CodingyardUser.Builder("I am so", "fresh")
             .firstName("Wu")
             .lastName("Kong")
-            .role(Role.GUEST)
+            .email("monkeyKing@lol.com")
+            .role(Role.MEMBER)
             .build();
 
         when(userManager.save(newUser)).thenReturn(-1L);
@@ -193,7 +135,8 @@ public class UserResourceTest extends ResourceTest {
             .param("username", newUser.getUsername())
             .param("password", newUser.getPassword())
             .param("firstName", newUser.getFirstName())
-            .param("lastName", newUser.getLastName());
+            .param("lastName", newUser.getLastName())
+            .param("email", newUser.getEmail());
 
         resources.getJerseyTest().target(ROOT)
             .request(MediaType.APPLICATION_JSON)
@@ -243,7 +186,7 @@ public class UserResourceTest extends ResourceTest {
     public void adminCanPromoteGuestToMember() {
         final Response response = resources.getJerseyTest()
             .target(ROOT)
-            .path("role")
+            .path("edit/role")
             .request(MediaType.APPLICATION_JSON)
             .header(AUTHORIZATION_HEADER, bearerToken(admin.getToken().getValue()))
             .put(Entity.json(new RoleChangeRequest(guest.getId(), Role.MEMBER)));
@@ -256,7 +199,7 @@ public class UserResourceTest extends ResourceTest {
     public void memberCannotPromoteGuestToAdmin() {
         final Response response = resources.getJerseyTest()
             .target(ROOT)
-            .path("role")
+            .path("edit/role")
             .request(MediaType.APPLICATION_JSON)
             .header(AUTHORIZATION_HEADER, bearerToken(member.getToken().getValue()))
             .put(Entity.json(new RoleChangeRequest(guest.getId(), Role.ADMIN)));
@@ -269,7 +212,7 @@ public class UserResourceTest extends ResourceTest {
     public void changeRoleShouldReturnUnauthorizedForNonExistingUsers() {
         final Response response = resources.getJerseyTest()
             .target(ROOT)
-            .path("role")
+            .path("edit/role")
             .request(MediaType.APPLICATION_JSON)
             .header(AUTHORIZATION_HEADER, bearerToken(nonExistingUser.getToken().getValue()))
             .put(Entity.json(new RoleChangeRequest(guest.getId(), Role.MEMBER)));

@@ -1,7 +1,6 @@
 package com.codingyard.resources.permission;
 
 import com.codingyard.api.entity.user.CodingyardUser;
-import com.codingyard.api.entity.user.Role;
 import com.codingyard.manager.UserManager;
 import com.codingyard.permission.UserAccessApprover;
 import com.google.common.base.Optional;
@@ -11,10 +10,10 @@ import io.dropwizard.hibernate.UnitOfWork;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static javax.ws.rs.core.Response.Status.FORBIDDEN;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 /**
@@ -30,19 +29,33 @@ public class UserPermissionResource {
         this.userManager = userManager;
     }
 
-    @Path("/role")
+    @Path("/edit")
     @GET
     @UnitOfWork
-    public Response canEditRole(@Auth final CodingyardUser approver,
-                                @PathParam("user_id") final long targetUserId,
-                                @QueryParam("role") final Role role) {
+    public Response canEdit(@Auth final CodingyardUser user,
+                            @PathParam("user_id") final long targetUserId) {
         final Optional<CodingyardUser> searchResult = userManager.findById(targetUserId);
 
         if (!searchResult.isPresent()) {
             return createNotFoundResponse(targetUserId);
         }
 
-        return createAccessResponse(UserAccessApprover.canEditRole(approver, searchResult.get(), role));
+        return Response.ok().entity(UserAccessApprover.canEdit(user, searchResult.get())).build();
+    }
+
+    @Path("/edit/role")
+    @GET
+    @UnitOfWork
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getEditableRoles(@Auth final CodingyardUser approver,
+                                     @PathParam("user_id") final long targetUserId) {
+        final Optional<CodingyardUser> searchResult = userManager.findById(targetUserId);
+
+        if (!searchResult.isPresent()) {
+            return createNotFoundResponse(targetUserId);
+        }
+
+        return Response.ok().entity(UserAccessApprover.getEditableRoles(approver, searchResult.get())).build();
     }
 
     @Path("/delete")
@@ -56,7 +69,7 @@ public class UserPermissionResource {
             return createNotFoundResponse(targetUserId);
         }
 
-        return createAccessResponse(UserAccessApprover.canDelete(me, searchResult.get()));
+        return Response.ok().entity(UserAccessApprover.canDelete(me, searchResult.get())).build();
     }
 
     @Path("/edit/password")
@@ -70,21 +83,21 @@ public class UserPermissionResource {
             return createNotFoundResponse(targetUserId);
         }
 
-        return createAccessResponse(UserAccessApprover.canEditPassword(me, searchResult.get()));
+        return Response.ok().entity(UserAccessApprover.canEditPassword(me, searchResult.get())).build();
     }
 
     @Path("/edit/firstname")
     @GET
     @UnitOfWork
-    public Response canFirstName(@Auth final CodingyardUser me,
-                                 @PathParam("user_id") final long targetUserId) {
+    public Response canEditFirstName(@Auth final CodingyardUser me,
+                                     @PathParam("user_id") final long targetUserId) {
         final Optional<CodingyardUser> searchResult = userManager.findById(targetUserId);
 
         if (!searchResult.isPresent()) {
             return createNotFoundResponse(targetUserId);
         }
 
-        return createAccessResponse(UserAccessApprover.canEditFirstName(me, searchResult.get()));
+        return Response.ok().entity(UserAccessApprover.canEditFirstName(me, searchResult.get())).build();
     }
 
     @Path("/edit/lastname")
@@ -98,20 +111,26 @@ public class UserPermissionResource {
             return createNotFoundResponse(targetUserId);
         }
 
-        return createAccessResponse(UserAccessApprover.canEditLastName(me, searchResult.get()));
+        return Response.ok().entity(UserAccessApprover.canEditLastName(me, searchResult.get())).build();
+    }
+
+    @Path("/edit/email")
+    @GET
+    @UnitOfWork
+    public Response canEditEmail(@Auth final CodingyardUser me,
+                                 @PathParam("user_id") final long targetUserId) {
+        final Optional<CodingyardUser> searchResult = userManager.findById(targetUserId);
+
+        if (!searchResult.isPresent()) {
+            return createNotFoundResponse(targetUserId);
+        }
+
+        return Response.ok().entity(UserAccessApprover.canEditEmail(me, searchResult.get())).build();
     }
 
     private Response createNotFoundResponse(final long userId) {
         return Response.status(NOT_FOUND)
             .entity(String.format("user with id %d is not found.", userId))
             .build();
-    }
-
-    private Response createAccessResponse(final boolean isAllowed) {
-        if (isAllowed) {
-            return Response.ok().build();
-        } else {
-            return Response.status(FORBIDDEN).build();
-        }
     }
 }
