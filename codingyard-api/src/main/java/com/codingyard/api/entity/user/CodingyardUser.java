@@ -100,7 +100,7 @@ public class CodingyardUser implements BasicEntity {
     }
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.EAGER, optional = false, mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToOne(fetch = FetchType.EAGER, optional = false, mappedBy = "user", cascade = {CascadeType.ALL})
     public CodingyardToken getToken() {
         return token;
     }

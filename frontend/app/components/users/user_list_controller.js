@@ -2,7 +2,6 @@
 
 (function () {
     app.controller('UserListController', function ($scope, $q, $log, $modal, User, UserPermission) {
-
         var deferred = $q.defer();
 
         $scope.displayedUsers = null;
@@ -62,18 +61,27 @@
                 });
         };
 
-        $scope.userToDelete = null;
+        $scope.userToEdit = null;
 
-        $scope.pickUser = function (user) {
-            // TODO: IMPLEMENT ME
-            $scope.selectedUser = user;
-            $log.info("Pick user called");
+        $scope.openEdit = function (user) {
+            $scope.userToEdit = user;
+            $modal.open({
+                animation: true,
+                templateUrl: '/app/components/users/popup/edit.html?bust=' + Math.random().toString(36).slice(2),
+                controller: 'UserEditConfirmController',
+                resolve: {
+                    userToEdit: function () {
+                        return $scope.userToEdit;
+                    }
+                }
+            });
+
+
         };
 
-        $scope.openConfirm = function (user) {
+        $scope.userToDelete = null;
 
-            // TODO: IMPLEMENT ME
-            $log.info("Open confirm called");
+        $scope.openConfirm = function (user) {
 
             $scope.userToDelete = user;
 

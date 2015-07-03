@@ -1,10 +1,20 @@
 'use strict';
 
 (function () {
-    app.controller('UserController', function ($stateParams, $scope, $log, $q,
-                                               User, UserPermission, USER_ROLES,
-                                               AUTH_EVENTS,
-                                               SharedData, AuthService) {
+    app.controller('UserEditConfirmController', function ($scope, $modalInstance,
+                                                          $log,
+                                                          $q,
+                                                          User, UserPermission, USER_ROLES,
+                                                          AUTH_EVENTS,
+                                                          SharedData, AuthService,
+                                                          userToEdit) {
+
+        $scope.viewedUser = userToEdit;
+
+        $scope.ok = function () {
+            $modalInstance.close($scope.viewedUser);
+        };
+
         $scope.alerts = [];
 
         $scope.addAlert = function (isWarning, msg) {
@@ -18,14 +28,10 @@
             $scope.alerts.splice(index, 1);
         };
 
-        $scope.isAuthorized = AuthService.isAuthorized;
-
         $scope.userRoles = USER_ROLES;
-        $scope.errorMessage = null;
 
         $scope.sharedData = SharedData.getSharedData();
 
-        $scope.viewedUser = null;
 
         $scope.canEdit = {
             userName: false,
@@ -141,10 +147,9 @@
         ];
 
         var populatePermission = function () {
-            var viewedUserId = $stateParams.userId;
+            var viewedUserId = $scope.viewedUser.id;
             UserPermission.canEditFirstName({id: viewedUserId},
                 function (data) {
-                    $log.log("Edit access for firstname is approved");
                     $scope.canEdit.firstName = data.isAllowed;
                 }
             );
@@ -163,7 +168,6 @@
 
             UserPermission.getEditableRoles({id: viewedUserId},
                 function (data) {
-                    $log.log("Allowed role : " + data);
                     $scope.canEdit.role = data;
                 }
             );
@@ -173,19 +177,5 @@
             populatePermission();
         }
         $scope.$on(AUTH_EVENTS.gotBasicUserInfo, populatePermission);
-
-        if (!!$scope.sharedData.currentUser && $scope.sharedData.currentUser.id === $stateParams.userId) {
-            $scope.viewedUser = $scope.sharedData.currentUser;
-
-        } else {
-            User.get({id: $stateParams.userId},
-                function (data) {
-                    $scope.viewedUser = data;
-                },
-                function () {
-                    $scope.errorMessage = "Sorry, we are having trouble loading user " + $stateParams.userId;
-                }
-            );
-        }
     });
 })();
