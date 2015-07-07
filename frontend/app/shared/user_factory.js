@@ -1,4 +1,4 @@
-'user strict';
+'use strict';
 
 // Provide a factory to access User resource endpoint.
 (function () {
