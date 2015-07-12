@@ -81,8 +81,7 @@ logging:
 
   # Logger-specific levels.
   loggers:
-    com.example: INFO
-    org.hibernate.SQL: ALL
+    org.hibernate.engine: WARN
 
   appenders:
     - type: console
