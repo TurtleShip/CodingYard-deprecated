@@ -4,7 +4,7 @@
  * This class is responsible for Authentication and Authorization of the current user.
  */
 (function () {
-    app.factory('AuthService', function ($rootScope, $http, $log, $base64, User, Session, SessionStorage, SESSION_KEYS, AUTH_EVENTS) {
+    app.factory('AuthService', function ($rootScope, $http, $log, $base64, $q, User, Session, SessionStorage, SESSION_KEYS, AUTH_EVENTS) {
         var authService = {};
 
         /**
@@ -47,18 +47,24 @@
          */
         authService.login = function (credentials) {
             setBasicAuthHeader(credentials);
+            var deferred = $q.defer();
 
             $http.get('/api/user/login')
                 .success(function success(token) {
                     setBearerOauthHeader(token);
                     SessionStorage.set(SESSION_KEYS.token, token);
                     $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                    deferred.resolve(true);
                 })
-                .catch(function catchError(e) {
-                    $log.warn("login failed. Response status : " + e.status);
+                .catch(function catchError(errorResponse) {
+                    // status code can be accessed using errorResponse.status
                     unsetAuthHeader();
                     $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+                    deferred.reject(errorResponse);
                 });
+
+            return deferred.promise;
+
         };
 
         authService.logout = function () {
