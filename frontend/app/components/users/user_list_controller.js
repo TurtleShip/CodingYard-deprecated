@@ -10,6 +10,10 @@
         User.getAllUsers({}, function (user) {
             $scope.users = user;
             $scope.users.forEach(function (user) {
+                user.canEdit = false;
+                UserPermission.canEdit({id: user.id}, function (permission) {
+                    user.canEdit = permission.isAllowed;
+                });
                 user.canDelete = false;
                 UserPermission.canDelete({id: user.id}, function (permission) {
                     user.canDelete = permission.isAllowed;
