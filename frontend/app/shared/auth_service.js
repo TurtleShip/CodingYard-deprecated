@@ -15,7 +15,7 @@
         var setBasicAuthHeader = function (credential) {
             var authData = $base64.encode(credential.username + ":" + credential.password);
             $http.defaults.headers.common = {
-                Authorization: 'basic ' + authData
+                Authorization: 'BasicNoPopup ' + authData
             };
         };
 
@@ -25,7 +25,7 @@
          */
         var setBearerOauthHeader = function (token) {
             $http.defaults.headers.common = {
-                Authorization: 'bearer ' + token
+                Authorization: 'Bearer ' + token
             };
         };
 
@@ -49,18 +49,16 @@
             setBasicAuthHeader(credentials);
 
             $http.get('/api/user/login')
-                .then(
-                function success(response) {
-                    var token = response.data;
+                .success(function success(token) {
                     setBearerOauthHeader(token);
                     SessionStorage.set(SESSION_KEYS.token, token);
                     $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-                },
-                function () {
+                })
+                .catch(function catchError(e) {
+                    $log.warn("login failed. Response status : " + e.status);
                     unsetAuthHeader();
                     $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-                }
-            );
+                });
         };
 
         authService.logout = function () {

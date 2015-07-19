@@ -86,9 +86,20 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
     }
 
     private void addAuthentication(final Environment environment, final UserDAO userDAO, final TokenDAO tokenDAO) {
-
+        /**
+         * For Basic authentication, we use a custom header "BasicNoPopup" instead of standard "Basic."
+         * If we use basic, a browser displays a popup window to enter credentials when 401 is returned by server,
+         * and this is not the behaviour users want when they hit an api and get a failure response.
+         *
+         * One possible solution is to not use Basic as 'WWW-Authenticate'
+         *
+         * references
+         * Dropwizard issue report : https://github.com/dropwizard/dropwizard/issues/798
+         * Stack overflow : http://stackoverflow.com/questions/24130308/preventing-http-basic-auth-dialog-using-angularjs-interceptors
+         */
         final ChainedAuthFactory<CodingyardUser> chainedAuthFactory = new ChainedAuthFactory<>(
-            new BasicAuthFactory<>(new UserCredentialAuthenticator(userDAO), "Basic User Auth", CodingyardUser.class),
+            new BasicAuthFactory<>(new UserCredentialAuthenticator(userDAO), "Basic No Popup User Auth", CodingyardUser.class)
+                .prefix("BasicNoPopup"),
             new OAuthFactory<>(new TokenAuthenticator(tokenDAO), "Bearer User OAuth", CodingyardUser.class)
         );
 
