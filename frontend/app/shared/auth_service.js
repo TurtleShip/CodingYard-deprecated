@@ -4,7 +4,7 @@
  * This class is responsible for Authentication and Authorization of the current user.
  */
 (function () {
-    app.factory('AuthService', function ($rootScope, $http, $log, $base64, User, Session, SessionStorage, SESSION_KEYS, AUTH_EVENTS) {
+    app.factory('AuthService', function ($rootScope, $http, $log, $base64, $q, User, Session, SessionStorage, SESSION_KEYS, AUTH_EVENTS) {
         var authService = {};
 
         /**
@@ -15,7 +15,7 @@
         var setBasicAuthHeader = function (credential) {
             var authData = $base64.encode(credential.username + ":" + credential.password);
             $http.defaults.headers.common = {
-                Authorization: 'basic ' + authData
+                Authorization: 'BasicNoPopup ' + authData
             };
         };
 
@@ -25,7 +25,7 @@
          */
         var setBearerOauthHeader = function (token) {
             $http.defaults.headers.common = {
-                Authorization: 'bearer ' + token
+                Authorization: 'Bearer ' + token
             };
         };
 
@@ -47,20 +47,24 @@
          */
         authService.login = function (credentials) {
             setBasicAuthHeader(credentials);
+            var deferred = $q.defer();
 
             $http.get('/api/user/login')
-                .then(
-                function success(response) {
-                    var token = response.data;
+                .success(function success(token) {
                     setBearerOauthHeader(token);
                     SessionStorage.set(SESSION_KEYS.token, token);
                     $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-                },
-                function () {
+                    deferred.resolve(true);
+                })
+                .catch(function catchError(errorResponse) {
+                    // status code can be accessed using errorResponse.status
                     unsetAuthHeader();
                     $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-                }
-            );
+                    deferred.reject(errorResponse);
+                });
+
+            return deferred.promise;
+
         };
 
         authService.logout = function () {
