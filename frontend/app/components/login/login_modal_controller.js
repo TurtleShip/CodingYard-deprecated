@@ -2,8 +2,10 @@
 
 (function () {
     app.controller('LoginModalController', function ($scope, $log, $modalInstance, AuthService) {
-        $scope.login = function (credential) {
 
+        $scope.message = null;
+
+        $scope.login = function (credential) {
             var loggedIn = AuthService.login(credential);
 
             loggedIn.then(
@@ -11,7 +13,12 @@
                     $modalInstance.close();
                 },
                 function loginFailed(error) {
-                    $log.info("LOGIN FAILED! Status code : " + error.status);
+                    if (error.status === 401) {
+                        $scope.message = "Invalid credential :(";
+                    } else {
+                        $scope.message = "Oops. Error on our side. Try again, please.";
+                    }
+
                 }
             );
         };
