@@ -39,7 +39,6 @@ var app = angular.module('codingyard', ['ngRoute', 'ngResource',
         var oauthToken = SessionStorage.get(SESSION_KEYS.token, undefined);
 
         if (!(angular.isUndefined(oauthToken) || oauthToken == null)) {
-            $log.info("Found oauth token in session : " + oauthToken);
             AuthService.setBearerOauthHeader(oauthToken);
             getMyInfo();
         }

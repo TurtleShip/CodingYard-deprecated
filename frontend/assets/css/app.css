@@ -4,6 +4,11 @@ body {
     padding-top: 70px;
 }
 
+/* Hide raw angular variables {{...}} until they are populated */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
 .dropdown:hover > .dropdown-menu {
     display: block;
 }
