@@ -1,0 +1,16 @@
+.signup-form {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.signup-note {
+    margin-bottom: 5%;
+}
+
+.signup-button {
+    margin-top: 3%;
+    margin-left: 35%;
+    margin-right: 35%;
+    width: 30%;
+}

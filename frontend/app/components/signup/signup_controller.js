@@ -10,25 +10,26 @@
             username: null,
             password: null,
             firstName: null,
-            lastName: null
+            lastName: null,
+            email: null
         };
 
         $scope.createUser = function (request) {
 
             // put some pre check on the request
-
-            User.createUser(request,
-                function (response) {
-                    $scope.message = response;
-                    $scope.error = null;
-                    $scope.signedup = true;
-                },
-                function (response) {
-                    $scope.message = null;
-                    $scope.error = response;
-                    $scope.signedup = false;
-                }
-            );
+            $log.info("Create user called.");
+            //User.createUser(request,
+            //    function (response) {
+            //        $scope.message = response;
+            //        $scope.error = null;
+            //        $scope.signedup = true;
+            //    },
+            //    function (response) {
+            //        $scope.message = null;
+            //        $scope.error = response;
+            //        $scope.signedup = false;
+            //    }
+            //);
         };
     });
 })();

@@ -12,7 +12,7 @@
             })
             .state('signUp', {
                 url: '/signup',
-                templateUrl: '/app/components/signup/index.html',
+                templateUrl: '/app/components/signup/signup.html',
                 controller: 'SignUpController'
             })
             .state('userView', {
