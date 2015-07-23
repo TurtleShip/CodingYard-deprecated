@@ -23,7 +23,16 @@
                 method: 'PUT'
             },
             isUsernameAvailable: {
-                url: '/api/user/available',
+                url: '/api/user/available/username/',
+                method: "GET",
+                transformResponse: function (available) {
+                    return {
+                        isAvailable: available === 'true'
+                    }
+                }
+            },
+            isEmailAvailable: {
+                url: '/api/user/available/email/',
                 method: "GET",
                 transformResponse: function (available) {
                     return {

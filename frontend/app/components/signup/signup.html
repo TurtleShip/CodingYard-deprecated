@@ -13,7 +13,8 @@
             <label for="username" class="col-sm-2 control-label">Username</label>
 
             <div class="col-sm-10"
-                 ng-class="{'has-error' : signupForm.username.$invalid || signupForm.username.$pristine || !isUsernameAvailable}">
+                 ng-class="{'has-error' : signupForm.username.$invalid || signupForm.username.$pristine || !isUsernameAvailable,
+                 'has-success': signupForm.username.$valid && isUsernameAvailable}">
                 <input type="text"
                        class="form-control"
                        id="username" name="username" placeholder="Enter username"
@@ -24,7 +25,7 @@
                        ng-change="checkUsernameAvailable(request.username)">
 
                 <p ng-show="signupForm.username.$pristine ||
-                (signupForm.username.$invalid && !signupForm.username.$error.minlength && !request.username)"
+                (signupForm.username.$invalid && !signupForm.username.$error.minlength && !signupForm.username.$error.maxlength && !request.username)"
                    class="text-danger">
                     Username is required
                 </p>
@@ -51,14 +52,15 @@
             <label for="password" class="col-sm-2 control-label">Password</label>
 
             <div class="col-sm-10"
-                 ng-class="{'has-error': signupForm.password.$pristine || signupForm.password.$invalid}">
+                 ng-class="{'has-error': signupForm.password.$pristine || signupForm.password.$invalid,
+                 'has-success': signupForm.password.$valid}">
                 <input type="password" class="form-control" id="password" name="password" ng-model="request.password"
                        required
                        ng-minlength="5"
                        ng-maxlength="50">
 
                 <p ng-show="signupForm.password.$pristine ||
-                (signupForm.password.$invalid && !signupForm.password.$error.minlength && !request.password)"
+                (signupForm.password.$invalid && !signupForm.password.$error.minlength && !signupForm.password.$error.maxlength && !request.password)"
                    class="text-danger">
                     Password is required
                 </p>
@@ -75,11 +77,19 @@
             <label for="email" class="col-sm-2 control-label">Email</label>
 
             <div class="col-sm-10"
-                 ng-class="{'has-error': signupForm.email.$pristine || signupForm.email.$invalid}">
-                <input type="email" class="form-control" id="email" name="email" ng-model="request.email" required>
+                 ng-class="{'has-error': signupForm.email.$pristine || signupForm.email.$invalid || !isEmailAvailable,
+                 'has-success': signupForm.email.$valid && isEmailAvailable}">
+
+                <input type="email" class="form-control" id="email" name="email" ng-model="request.email"
+                       ng-change="checkEmailAvailable(request.email)"
+                       required>
 
                 <p ng-show="signupForm.email.$pristine || signupForm.email.$invalid" class="text-danger">Enter a valid
                     email</p>
+
+                <p ng-show="signupForm.email.$valid && isEmailAvailable" class="text-success">{{emailCheckMessage}}</p>
+
+                <p ng-show="signupForm.email.$valid && !isEmailAvailable" class="text-danger">{{emailCheckMessage}}</p>
             </div>
         </div>
 
@@ -87,7 +97,8 @@
             <label for="firstname" class="col-sm-2 control-label">First name</label>
 
             <div class="col-sm-10"
-                 ng-class="{'has-error': signupForm.firstname.$pristine || signupForm.firstname.$invalid}">
+                 ng-class="{'has-error': signupForm.firstname.$pristine || signupForm.firstname.$invalid,
+                 'has-success': signupForm.firstname.$valid}">
                 <input type="text" class="form-control" id="firstname" name="firstname" ng-model="request.firstName"
                        required>
 
@@ -100,7 +111,8 @@
             <label for="lastname" class="col-sm-2 control-label">Last name</label>
 
             <div class="col-sm-10"
-                 ng-class="{'has-error': signupForm.lastname.$pristine || signupForm.lastname.$invalid}">
+                 ng-class="{'has-error': signupForm.lastname.$pristine || signupForm.lastname.$invalid,
+                 'has-success': signupForm.lastname.$valid}">
                 <input type="text" class="form-control" id="lastname" name="lastname" ng-model="request.lastName"
                        required>
 
@@ -110,7 +122,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary signup-button"
-                ng-disabled="signupForm.$invalid || !isUsernameAvailable">Sign up!
+                ng-disabled="!(signupForm.$valid && isUsernameAvailable && isEmailAvailable)">Sign up!
         </button>
     </form>
 

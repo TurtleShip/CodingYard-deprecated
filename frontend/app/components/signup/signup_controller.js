@@ -6,6 +6,8 @@
         $scope.signupFailed = false;
         $scope.isUsernameAvailable = false;
         $scope.usernameCheckMessage = null;
+        $scope.isEmailAvailable = false;
+        $scope.emailCheckMessage = null;
 
         $scope.request = {
             username: null,
@@ -41,6 +43,25 @@
                     $scope.usernameCheckMessage = "Failed to check for availability.";
                 });
         };
+
+        $scope.checkEmailAvailable = function (email) {
+            $scope.emailCheckMessage = "Checking for availability...";
+            User.isEmailAvailable({
+                email: email
+            }).$promise
+                .then(function (response) {
+                    $scope.isEmailAvailable = response.isAvailable;
+                    if ($scope.isEmailAvailable) {
+                        $scope.emailCheckMessage = email + " is available!";
+                    } else {
+                        $scope.emailCheckMessage = email + " is already associated with an account.";
+                    }
+
+                })
+                .catch(function () {
+                    $scope.emailCheckMessage = "Failed to check for availability.";
+                });
+        }
 
         $scope.createUser = function (request) {
 

@@ -75,11 +75,19 @@ public class UserResource {
         return Response.ok().entity(user).build();
     }
 
-    @Path("/available")
+    @Path("/available/username")
     @GET
     @UnitOfWork
-    public Response isAvailable(@QueryParam("username") final String username) {
+    public Response isUsernameAvailable(@QueryParam("username") final String username) {
         final boolean isAvailable = !userManager.findByUsername(username).isPresent();
+        return Response.ok(isAvailable).build();
+    }
+
+    @Path("/available/email")
+    @GET
+    @UnitOfWork
+    public Response isEmailAvailable(@QueryParam("email") final String email) {
+        final boolean isAvailable = !userManager.findByEmail(email).isPresent();
         return Response.ok(isAvailable).build();
     }
 
