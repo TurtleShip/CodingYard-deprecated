@@ -19,4 +19,12 @@ public class UserDAO extends BasicDAO<CodingyardUser> {
 
         return Optional.fromNullable(result);
     }
+
+    public Optional<CodingyardUser> findByEmail(final String email) {
+        final CodingyardUser result = (CodingyardUser) currentSession().createCriteria(CodingyardUser.class)
+            .add(Restrictions.eq("email", email))
+            .uniqueResult();
+
+        return Optional.fromNullable(result);
+    }
 }

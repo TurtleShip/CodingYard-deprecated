@@ -22,6 +22,10 @@ public class UserManager extends BasicEntityManager<CodingyardUser> {
         return userDAO.findByUsername(username);
     }
 
+    public Optional<CodingyardUser> findByEmail(final String email) {
+        return userDAO.findByEmail(email);
+    }
+
     public CodingyardToken refreshToken(final CodingyardUser user) {
         final CodingyardToken newToken = CodingyardToken.Builder.build();
         user.getToken().setCreatedAt(newToken.getCreatedAt());

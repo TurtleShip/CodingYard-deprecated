@@ -22,6 +22,15 @@
                 url: '/api/user/me/edit',
                 method: 'PUT'
             },
+            isUsernameAvailable: {
+                url: '/api/user/available',
+                method: "GET",
+                transformResponse: function (available) {
+                    return {
+                        isAvailable: available === 'true'
+                    }
+                }
+            },
             createUser: {
                 method: 'POST',
                 transformRequest: TransformRequest
