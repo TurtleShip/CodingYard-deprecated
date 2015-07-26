@@ -1,27 +1,26 @@
 'use strict';
 
 (function () {
-    app.controller('UserListController', function ($scope, $q, $log, $modal, User, UserPermission) {
-        var deferred = $q.defer();
+    app.controller('UserListController', function ($scope, $q, $log, $modal, User, UserPermission, AuthService) {
 
         $scope.displayedUsers = null;
         $scope.selectedUser = null;
+        var loggedIn = AuthService.isAuthenticated();
 
-        User.getAllUsers({}, function (user) {
-            $scope.users = user;
-            $scope.users.forEach(function (user) {
-                user.canEdit = false;
-                UserPermission.canEdit({id: user.id}, function (permission) {
-                    user.canEdit = permission.isAllowed;
+        User.getAllUsers({}, function (users) {
+            $scope.users = users;
+
+            if (loggedIn) {
+                $scope.users.forEach(function (user) {
+
+                    UserPermission.canEdit({id: user.id}, function (permission) {
+                        user.canEdit = permission.isAllowed;
+                    });
+                    UserPermission.canDelete({id: user.id}, function (permission) {
+                        user.canDelete = permission.isAllowed;
+                    });
                 });
-                user.canDelete = false;
-                UserPermission.canDelete({id: user.id}, function (permission) {
-                    user.canDelete = permission.isAllowed;
-                });
-            });
-            deferred.resolve();
-        }, function () {
-            deferred.resolve();
+            }
         });
 
 
