@@ -26,26 +26,27 @@
             $scope.pickedSolution = null;
 
             $scope.supported = {
-                divisions: {
-                    'Any': '',
-                    'Div 1': 'DIV1',
-                    'Div 2': 'DIV2'
-                },
-                difficulties: {
-                    Any: '',
-                    easy: 'EASY',
-                    medium: 'MEDIUM',
-                    hard: 'HARD'
-                },
-                languages: {
-                    Any: '',
-                    Java: 'JAVA',
-                    Cpp: 'CPP',
-                    C: 'C',
-                    Python: 'PYTHON',
-                    Ruby: 'RUBY',
-                    Other: 'OTHER'
-                }
+                divisions: [
+                    {key: 'Any', value: ''},
+                    {key: 'Div 1', value: 'DIV1'},
+                    {key: 'Div 2', value: 'DIV2'}
+                ],
+                difficulties: [
+                    {key: 'Any', value: ''},
+                    {key: 'easy', value: 'EASY'},
+                    {key: 'medium', value: 'MEDIUM'},
+                    {key: 'hard', value: 'HARD'}
+                ],
+                languages: [
+                    {key: 'Any', value: ''},
+                    {key: 'Java', value: 'JAVA'},
+                    {key: 'Cpp', value: 'CPP'},
+                    {key: 'C', value: 'C'},
+                    {key: 'Python', value: 'PYTHON'},
+                    {key: 'Ruby', value: 'RUBY'},
+                    {key: 'Other', value: 'OTHER'}
+
+                ]
             };
 
             $scope.criteria = {

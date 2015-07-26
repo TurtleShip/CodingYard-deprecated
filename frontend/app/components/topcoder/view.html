@@ -14,8 +14,8 @@ github : https://github.com/lorenzofox3/Smart-Table
         <th></th>
         <th>Solutions per page</th>
         <th>
-                <input type="number" class="form-control input-sm" ng-model="paginationSetting.itemPerPage"
-                       placeholder="solution per page"/>
+            <input type="number" class="form-control input-sm" ng-model="paginationSetting.itemPerPage"
+                   placeholder="solution per page"/>
         </th>
         <th colspan="4"></th>
 
@@ -25,29 +25,35 @@ github : https://github.com/lorenzofox3/Smart-Table
             <!--Place holder for solution id-->
         </th>
         <th>
-            <select class="form-control input-sm" ng-model="criteria.division"
-                    ng-options="value as key for (key, value) in supported.divisions">
+            <select class="form-control input-sm" st-search="division">
+                <option ng-repeat="division in supported.divisions" value="{{division.value}}">
+                    {{division.key}}
+                </option>
+
             </select>
         </th>
         <th>
-            <select class="form-control input-sm" ng-model="criteria.difficulty"
-                    ng-options="value as key for (key, value) in supported.difficulties">
+            <select class="form-control input-sm" st-search="difficulty">
+                <option ng-repeat="difficulty in supported.difficulties" value="{{difficulty.value}}">
+                    {{difficulty.key}}
             </select>
         </th>
         <th>
             <!--problem number search-->
-            <input class="form-control input-sm" ng-model="criteria.problem_number" search="problem_number"
+            <input class="form-control input-sm" ng-model="criteria.problem_number" st-search="problem_number"
                    placeholder="Problem number" type="number"/>
 
         </th>
         <th>
-            <select class="form-control input-sm" ng-model="criteria.language"
-                    ng-options="value as key for (key, value) in supported.languages">
+            <select class="form-control input-sm" st-search="language">
+                <option ng-repeat="language in supported.languages" value="{{language.value}}">
+                    {{language.key}}
+                </option>
             </select>
         </th>
         <th>
             <!--Author name search-->
-            <input class="form-control input-sm" ng-model="criteria.author_name" search="author_name"
+            <input class="form-control input-sm" st-search="author_name"
                    placeholder="Author search" type="search"/>
         </th>
         <th>
@@ -66,13 +72,13 @@ github : https://github.com/lorenzofox3/Smart-Table
 
     </thead>
     <tbody>
-    <tr st-select-row="solution" ng-repeat="solution in displayedSolutions | filter:criteria"
+    <tr st-select-row="solution" ng-repeat="solution in displayedSolutions"
         ng-click="pickSolution(solution)">
         <td>{{solution.id}}</td>
-        <td>{{solution.division}}</td>
-        <td>{{solution.difficulty}}</td>
+        <td>{{solution.division | lowercase}}</td>
+        <td>{{solution.difficulty | lowercase}}</td>
         <td>{{solution.problem_number}}</td>
-        <td>{{solution.language}}</td>
+        <td>{{solution.language | lowercase}}</td>
         <td>{{solution.author_name}}</td>
         <td>
             <button type="button" ng-show="solution.canDelete" ng-click="openConfirm(solution)"
