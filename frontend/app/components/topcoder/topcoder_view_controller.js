@@ -106,12 +106,13 @@
 
                             if (AuthService.isAuthenticated()) {
                                 SolutionPermission.canDelete({
-                                        id: solution.id,
-                                        contest: 'TOP_CODER'
-                                    }, function () {
+                                    id: solution.id,
+                                    contest: 'TOP_CODER'
+                                }).$promise
+                                    .then(function () {
                                         solution.canDelete = true;
-                                    }
-                                );
+                                    })
+
                             }
 
                         });
