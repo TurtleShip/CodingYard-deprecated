@@ -74,6 +74,7 @@
                 .catch(function (response) {
                     // it is possible that the request failed because username is taken.
                     $scope.checkUsernameAvailable($scope.request.username);
+                    $scope.checkEmailAvailable($scope.request.email);
                     $log.warn("Signup for server responded with " + response.status);
 
                     $scope.signedup = false;

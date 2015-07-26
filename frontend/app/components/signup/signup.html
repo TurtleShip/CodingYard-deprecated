@@ -126,8 +126,12 @@
         </button>
     </form>
 
-    <div ng-show="signupFailed" class="text-danger">
-        <h2>Something went wrong.. Please click Sign up again.</h2>
+    <div ng-show="signupFailed" class="signup-warning text-center">
+        <p class="text-danger">Oops.. Something went wrong. Please click Sign up again.</p>
+
+        <p class="text-danger" ng-hide="isUsernameAvailable">Username {{request.username}} is taken.</p>
+
+        <p class="text-danger" ng-hide="isEmailAvailable">Email {{request.email}} is taken.</p>
     </div>
 </div>
 
