@@ -1,7 +1,8 @@
 'use strict';
 
 (function () {
-    app.controller('TopCoderViewController', function ($scope, $log, $modal, TopCoder, AceEditor, SolutionPermission) {
+    app.controller('TopCoderViewController', function ($scope, $log, $modal, TopCoder, AceEditor, SolutionPermission,
+                                                       AuthService, AUTH_EVENTS) {
 
             $scope.paginationSetting = {
                 itemPerPage: 5,
@@ -100,15 +101,19 @@
                     function (response) { // success
                         $scope.solutions = response;
                         $scope.solutions.forEach(function (solution) {
-                            solution.canDelete = false;
+
                             solution.author_name = solution.author.username;
-                            SolutionPermission.canDelete({
-                                    id: solution.id,
-                                    contest: 'TOP_CODER'
-                                }, function () {
-                                    solution.canDelete = true;
-                                }
-                            );
+
+                            if (AuthService.isAuthenticated()) {
+                                SolutionPermission.canDelete({
+                                        id: solution.id,
+                                        contest: 'TOP_CODER'
+                                    }, function () {
+                                        solution.canDelete = true;
+                                    }
+                                );
+                            }
+
                         });
                         if ($scope.solutions.length == 0) {
                             $scope.addAlert(false, "Sorry. We don't have any content for TopCoder yet.");
@@ -137,6 +142,7 @@
             };
 
             $scope.getSolutions();
+            $scope.$on(AUTH_EVENTS.gotBasicUserInfo, $scope.getSolutions());
         }
     );
 })();
