@@ -1,9 +1,18 @@
 'use strict';
 
 (function () {
-    app.controller('TopCoderUploadController', function ($scope, $log, TopCoder, AceEditor) {
+    app.controller('TopCoderUploadController', function ($scope, $log, TopCoder, AceEditor,
+                                                         SharedData, AuthService, AUTH_EVENTS) {
 
         $scope.alerts = [];
+        $scope.canSubmit = false;
+        $scope.getPermission = function () {
+            $scope.currentUser = SharedData.getSharedData().currentUser;
+            $scope.canSubmit = AuthService.isAuthorized(['GLOBAL_ADMIN', 'ADMIN', 'MEMBER'], $scope.currentUser);
+        };
+        
+        $scope.getPermission();
+        $scope.$on(AUTH_EVENTS.gotBasicUserInfo, $scope.getPermission);
 
         $scope.addAlert = function (isWarning, msg) {
             $scope.alerts.push({
