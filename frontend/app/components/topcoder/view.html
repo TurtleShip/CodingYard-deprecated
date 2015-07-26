@@ -40,7 +40,7 @@ github : https://github.com/lorenzofox3/Smart-Table
         </th>
         <th>
             <!--problem number search-->
-            <input class="form-control input-sm" ng-model="criteria.problem_number" st-search="problem_number"
+            <input class="form-control input-sm" st-search="problem_number"
                    placeholder="Problem number" type="number"/>
 
         </th>
@@ -57,17 +57,21 @@ github : https://github.com/lorenzofox3/Smart-Table
                    placeholder="Author search" type="search"/>
         </th>
         <th>
+            <!--Place holder for submission date-->
+        </th>
+        <th>
             <!--Place holder for delete button-->
         </th>
     </tr>
     <tr>
-        <th style="width:5%" st-sort="id" class="st-sort-noorder" st-sort-default="true">#</th>
-        <th style="width:18%" st-sort="division" class="st-sort-noorder">Division</th>
-        <th style="width:18%" st-sort="difficulty" class="st-sort-noorder">Difficulty</th>
-        <th style="width:18%" st-sort="problem_number" class="st-sort-noorder">Number</th>
-        <th style="width:18%" st-sort="language" class="st-sort-noorder">Language</th>
-        <th style="width:18%" st-sort="author_name" class="st-sort-noorder">Author</th>
-        <th style="width: 5%"><!--Place holder for delete button--></th>
+        <th st-sort="id" class="st-sort-noorder index-header" st-sort-default="true">#</th>
+        <th st-sort="division" class="st-sort-noorder">Division</th>
+        <th st-sort="difficulty" class="st-sort-noorder">Difficulty</th>
+        <th st-sort="problem_number" class="st-sort-noorder">Number</th>
+        <th st-sort="language" class="st-sort-noorder">Language</th>
+        <th st-sort="author_name" class="st-sort-noorder">Author</th>
+        <th st-sort="submitted" class="st-sort-noorder">Uploaded at</th>
+        <th class="button-header"><!--Place holder for delete button--></th>
     </tr>
 
     </thead>
@@ -80,6 +84,7 @@ github : https://github.com/lorenzofox3/Smart-Table
         <td>{{solution.problem_number}}</td>
         <td>{{solution.language | lowercase}}</td>
         <td>{{solution.author_name}}</td>
+        <td>{{solution.submitted | date:'medium'}}</td>
         <td>
             <button type="button" ng-show="solution.canDelete" ng-click="openConfirm(solution)"
                     class="btn btn-sm btn-danger">

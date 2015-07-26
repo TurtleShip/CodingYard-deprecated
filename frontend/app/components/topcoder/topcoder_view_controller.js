@@ -49,14 +49,6 @@
                 ]
             };
 
-            $scope.criteria = {
-                division: '',
-                difficulty: '',
-                problem_number: '',
-                language: '',
-                author_username: ''
-
-            };
             $scope.solutionToDelete = null;
 
             $scope.deleteSolution = function (solution) {
