@@ -1,7 +1,7 @@
 # Overview
-This is a website for sharing solutions to coding competitions. It is hosted at [www.codingyard.com](http://www.codingyard.com), or you can host it yourself. Check out [installation guide](docs/INSTALL_GUIDE.md) if you want to host it yourself.
+This is a website for sharing solutions to coding competitions. It is hosted at [www.codingyard.com](http://www.codingyard.com), or you can host it yourself. Check out **[installation guide](docs/INSTALL_GUIDE.md)** if you want to host it yourself.
 
-Also, check out [manual](docs/MANUAL.md) to learn how to manage CodingYard ( ex> user management ) and [FAQ](docs/FAQ.md) if you have questions.
+Also, check out **[manual](docs/MANUAL.md)** to learn how to manage CodingYard ( ex> user management ) and **[FAQ](docs/FAQ.md)** if you have questions.
 
 # Features
 ## View solutions
