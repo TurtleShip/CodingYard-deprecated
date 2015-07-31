@@ -32,7 +32,6 @@ public class UserAccessApprover {
      * @return true if {@code user} can edit {@code targetUser}'s information.
      */
     public static boolean canEdit(final CodingyardUser user, final CodingyardUser targetUser) {
-
         return user.equals(targetUser) || user.getRole().getLevel() >= Role.ADMIN.getLevel();
     }
 
