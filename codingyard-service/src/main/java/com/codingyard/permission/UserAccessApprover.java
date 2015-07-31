@@ -26,22 +26,23 @@ public class UserAccessApprover {
 
     /**
      * Returns true if {@code user} can edit {@code targetUser}'s information.
-     * {@code user} should be able to edit field(s) of {@code targetUser}'s info if the {@code user}
-     * has strictly higher role than {@code targetUser} or if the {@code user} is a global admin.
      *
      * @param user       The user who needs to be authorized to edit {@code targetUser}
      * @param targetUser The user whom the user wants to edit.
      * @return true if {@code user} can edit {@code targetUser}'s information.
      */
     public static boolean canEdit(final CodingyardUser user, final CodingyardUser targetUser) {
-        return hasHighPermission(user, targetUser) || user.getRole().equals(Role.GLOBAL_ADMIN);
+
+        return user.equals(targetUser) || user.getRole().getLevel() >= Role.ADMIN.getLevel();
     }
 
     /**
      * Returns true if {@code approver} can approve {@code targetUser}'s role change to {@code newRole}.
-     * {@code approver} can approve {@code targetUser}'s role change only if the below conditions are met<br/>
-     * 1) {@code approver} has strictly higher role level that {@code targetUser} or {@code approver} is a global admin.<br/>
-     * 2) {@code approver} has higher or equal role level compared to {@code newRole}<br/>
+     * {@code approver} can approve {@code targetUser}'s role change only in below case<br/>
+     * 1) {@code approver} is a global admin.<br/>
+     * 2) {@code approver} is an admin, and<br/>
+     * - {@code targetUser} is lower than an admin
+     * - {@code newRole} is equal to or lower than Admin
      *
      * @param approver   The user who is trying to approve.
      * @param targetUser The user whose role is being changed.
@@ -49,7 +50,10 @@ public class UserAccessApprover {
      * @return true if {@code approver} can approve {@code targetUser}'s role change to {@code newRole}.
      */
     public static boolean canEditRole(final CodingyardUser approver, final CodingyardUser targetUser, final Role newRole) {
-        return (hasHighPermission(approver, targetUser) || approver.getRole().equals(Role.GLOBAL_ADMIN)) && approver.getRole().getLevel() >= newRole.getLevel();
+        final Role approverRole = approver.getRole();
+        final Role targetUserRole = targetUser.getRole();
+        return approverRole.equals(Role.GLOBAL_ADMIN)
+            || (approverRole.equals(Role.ADMIN) && targetUserRole.getLevel() < Role.ADMIN.getLevel() && newRole.getLevel() <= Role.ADMIN.getLevel());
     }
 
     /**

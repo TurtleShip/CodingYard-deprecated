@@ -110,8 +110,8 @@ public class UserAccessApproverTest {
 
         assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, guest, GLOBAL_ADMIN));
         assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, guest, ADMIN));
-        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, guest, MEMBER));
-        assertTrue(UserAccessApprover.canEditRole(currentCodingyardUser, guest, GUEST));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, guest, MEMBER));
+        assertFalse(UserAccessApprover.canEditRole(currentCodingyardUser, guest, GUEST));
     }
 
     @Test
