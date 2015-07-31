@@ -26,7 +26,7 @@
                 controller: 'UserListController'
             })
             .state('topcoderView', {
-                url: '/topcoder/view',
+                url: '/topcoder/view?id',
                 templateUrl: '/app/components/topcoder/view.html',
                 controller: 'TopCoderViewController'
             })

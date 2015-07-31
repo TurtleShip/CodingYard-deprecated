@@ -22,14 +22,15 @@ github : https://github.com/lorenzofox3/Smart-Table
     </tr>
     <tr>
         <th>
-            <!--Place holder for solution id-->
+            <!-- solution id search -->
+            <input class="form-control input-sm" st-search="id"
+                   placeholder="id" type="number"/>
         </th>
         <th>
             <select class="form-control input-sm" st-search="division">
                 <option ng-repeat="division in supported.divisions" value="{{division.value}}">
                     {{division.key}}
                 </option>
-
             </select>
         </th>
         <th>
@@ -83,7 +84,7 @@ github : https://github.com/lorenzofox3/Smart-Table
         <td>{{solution.difficulty | lowercase}}</td>
         <td>{{solution.problem_number}}</td>
         <td>{{solution.language | lowercase}}</td>
-        <td>{{solution.author_name}}</td>
+        <td><a ui-sref="userView({userId: solution.author.id})" target="_blank">{{solution.author.username}}</a></td>
         <td>{{solution.submitted | date:'medium'}}</td>
         <td>
             <button type="button" ng-show="solution.canDelete" ng-click="openConfirm(solution)"
@@ -107,6 +108,35 @@ github : https://github.com/lorenzofox3/Smart-Table
         </td>
     </tr>
     </tfoot>
+</table>
+
+<table ng-show="pickedSolution" class="table">
+    <thead>
+    <tr>
+        <th colspan="7" class="bg-success">You selected the below solution</th>
+    </tr>
+    <tr>
+        <th>#</th>
+        <th>Division</th>
+        <th>Difficulty</th>
+        <th>Number</th>
+        <th>Language</th>
+        <th>Author</th>
+        <th>Uploaded at</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{pickedSolution.id}}</td>
+        <td>{{pickedSolution.division | lowercase}}</td>
+        <td>{{pickedSolution.difficulty | lowercase}}</td>
+        <td>{{pickedSolution.problem_number}}</td>
+        <td>{{pickedSolution.language | lowercase}}</td>
+        <td><a ui-sref="userView({userId: pickedSolution.author.id})"
+               target="_blank">{{pickedSolution.author.username}}</a></td>
+        <td>{{pickedSolution.submitted | date:'medium'}}</td>
+    </tr>
+    </tbody>
 </table>
 
 <div ui-ace="aceOption" readonly ng-model="pickedSolution.content" style="height: 500px"></div>

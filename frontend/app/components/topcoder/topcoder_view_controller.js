@@ -1,8 +1,9 @@
 'use strict';
 
 (function () {
-    app.controller('TopCoderViewController', function ($scope, $log, $modal, TopCoder, AceEditor, SolutionPermission,
-                                                       AuthService, AUTH_EVENTS) {
+    app.controller('TopCoderViewController', function ($scope, $log, $modal, $filter, $timeout,
+                                                       TopCoder, AceEditor, SolutionPermission,
+                                                       AuthService, AUTH_EVENTS, $stateParams) {
 
             $scope.paginationSetting = {
                 itemPerPage: 5,
@@ -10,6 +11,7 @@
             };
 
             $scope.alerts = [];
+            $scope.pickedId = parseInt($stateParams.id);
 
             $scope.addAlert = function (isWarning, msg) {
                 $scope.alerts.push({
@@ -102,8 +104,6 @@
                         $scope.solutions = response;
                         $scope.solutions.forEach(function (solution) {
 
-                            solution.author_name = solution.author.username;
-
                             if (AuthService.isAuthenticated()) {
                                 SolutionPermission.canDelete({
                                     id: solution.id,
@@ -112,7 +112,6 @@
                                     .then(function () {
                                         solution.canDelete = true;
                                     })
-
                             }
 
                         });
@@ -132,6 +131,8 @@
                             language: solution.language,
                             content: response.content
                         };
+                        angular.extend($scope.pickedSolution, solution);
+
                         $scope.error = null;
                         $scope.modeChanged();
                     },
@@ -144,6 +145,15 @@
 
             $scope.getSolutions();
             $scope.$on(AUTH_EVENTS.gotBasicUserInfo, $scope.getSolutions());
+
+            // show picked solution if a user specified the id of solution to display.
+            if ($scope.pickedId) {
+                TopCoder.get({id: $scope.pickedId})
+                    .$promise
+                    .then(function (solution) {
+                        $scope.pickSolution(solution);
+                    });
+            }
         }
     );
 })();
