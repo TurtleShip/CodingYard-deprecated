@@ -85,10 +85,6 @@ public class SolutionPermissionResource {
     }
 
     private Response createAccessResponse(final boolean isAllowed) {
-        if (isAllowed) {
-            return Response.ok().build();
-        } else {
-            return Response.status(FORBIDDEN).build();
-        }
+        return Response.ok(isAllowed).build();
     }
 }

@@ -109,12 +109,13 @@
                                     id: solution.id,
                                     contest: 'TOP_CODER'
                                 }).$promise
-                                    .then(function () {
-                                        solution.canDelete = true;
+                                    .then(function (response) {
+                                        solution.canDelete = response.isAllowed;
                                     })
                             }
 
                         });
+
                         if ($scope.solutions.length == 0) {
                             $scope.addAlert(false, "Sorry. We don't have any content for TopCoder yet.");
                         }
