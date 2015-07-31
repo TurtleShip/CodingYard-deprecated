@@ -10,6 +10,10 @@
                 url: '/',
                 templateUrl: '/app/components/home/home.html'
             })
+            .state('about', {
+                url: '/about',
+                templateUrl: '/app/components/about/about.html'
+            })
             .state('signUp', {
                 url: '/signup',
                 templateUrl: '/app/components/signup/signup.html',
