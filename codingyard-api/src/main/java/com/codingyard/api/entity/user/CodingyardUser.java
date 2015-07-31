@@ -183,7 +183,7 @@ public class CodingyardUser implements BasicEntity {
         private static final String DEFAULT_FIRSTNAME = "default";
         private static final String DEFAULT_LASTNAME = "default";
         private static final String DEFAULT_EMAIL = "default@codingyard.com";
-        private static final Role DEFAULT_ROLE = Role.MEMBER;
+        private static final Role DEFAULT_ROLE = Role.GUEST;
 
         private final String username;
         private final String password;
