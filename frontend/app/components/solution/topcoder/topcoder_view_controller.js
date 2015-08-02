@@ -74,7 +74,7 @@
                 mode: "text",
                 useWrapMode: true,
                 showGutter: true,
-                theme: 'twilight',
+                theme: 'solarized_light',
                 onLoad: function (_ace) {
                     $scope.modeChanged = function () {
                         if ($scope.pickedSolution) {
