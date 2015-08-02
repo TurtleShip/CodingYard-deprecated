@@ -44,8 +44,8 @@
             $log.info("Implement me~!!!");
             var modalInstance = $modal.open({
                 animation: true,
-                templateUrl: '/app/components/uva/delete_confirm.html?bust=' + Math.random().toString(36).slice(2),
-                controller: 'UVaDeleteConfirmController',
+                templateUrl: '/app/components/solution/delete/delete_confirm.html?bust=' + Math.random().toString(36).slice(2),
+                controller: 'DeleteConfirmController',
                 size: 'sm',
                 resolve: {
                     solutionToDelete: function () {
