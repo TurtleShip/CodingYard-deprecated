@@ -1,0 +1,37 @@
+<form novalidate class="form-horizontal" ng-submit="uploadSolution(solution)">
+    <div class="form-group">
+        <label for="problem-number-form" class="col-sm-2 control-label">problem number</label>
+
+        <div class="col-sm-3">
+            <input type="number" class="form-control" ng-model="solution.problem_number" id="problem-number-form"
+                   placeholder="problem number"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="language-form" class="col-sm-2 control-label">Language</label>
+
+        <div class="col-sm-3">
+
+            <select id="language-form" class="form-control input-sm" ng-model="solution.language"
+                    ng-change="modeChanged()">
+                <option value="JAVA">Java</option>
+                <option value="CPP">cpp</option>
+                <option value="C">ANSI C</option>
+                <option value="PYTHON">Python</option>
+                <option value="RUBY">Ruby</option>
+                <option value="OTHER">Other</option>
+            </select>
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button ng-disabled="!canSubmit" type="submit" class="btn btn-default">Submit</button>
+        </div>
+    </div>
+    <div ui-ace="aceOption" ng-model="solution.content" style="height: 500px">
+    </div>
+</form>
+

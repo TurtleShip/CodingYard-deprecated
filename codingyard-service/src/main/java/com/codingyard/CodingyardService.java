@@ -3,6 +3,7 @@ package com.codingyard;
 import com.codingyard.api.entity.auth.CodingyardToken;
 import com.codingyard.api.entity.contest.Solution;
 import com.codingyard.api.entity.contest.topcoder.TopCoderSolution;
+import com.codingyard.api.entity.contest.uva.UVaSolution;
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.auth.TokenAuthenticator;
 import com.codingyard.auth.UserCredentialAuthenticator;
@@ -83,7 +84,8 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
             CodingyardUser.class,
             CodingyardToken.class,
             Solution.class,
-            TopCoderSolution.class
+            TopCoderSolution.class,
+            UVaSolution.class
         ) {
             @Override
             public DataSourceFactory getDataSourceFactory(CodingyardConfiguration configuration) {

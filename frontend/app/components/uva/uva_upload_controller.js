@@ -1,8 +1,8 @@
 'use strict';
 
 (function () {
-    app.controller('TopCoderUploadController', function ($scope, $log, TopCoder, AceEditor,
-                                                         SharedData, AuthService, AlertService, AUTH_EVENTS) {
+    app.controller('UVaSolutionUploadController', function ($scope, $log, UVa, AceEditor,
+                                                            SharedData, AuthService, AlertService, AUTH_EVENTS) {
 
         $scope.canSubmit = false;
         $scope.getPermission = function () {
@@ -32,7 +32,7 @@
 
         $scope.uploadSolution = function (solutionToUpload) {
 
-            TopCoder.upload({}, solutionToUpload, function () {
+            UVa.upload({}, solutionToUpload, function () {
                     AlertService.fireSuccess("Upload was successful :)");
                 },
                 function () {

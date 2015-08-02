@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Objects;
@@ -15,6 +17,8 @@ import java.util.Objects;
 /**
  * Represents a solution to UVA Online Judge : https://uva.onlinejudge.org/
  */
+@Entity
+@Table(name = "uva_solution")
 public class UVaSolution extends Solution {
 
     private Long problemNumber;
@@ -42,6 +46,16 @@ public class UVaSolution extends Solution {
         this.problemNumber = problemNumber;
     }
 
+    @JsonProperty("problem_number")
+    @Column(name = "problem_number", nullable = false)
+    public Long getProblemNumber() {
+        return problemNumber;
+    }
+
+    public void setProblemNumber(Long problemNumber) {
+        this.problemNumber = problemNumber;
+    }
+
     @Override
     public int hashCode() {
         return 31 * super.hashCode() + Objects.hash(problemNumber);
@@ -60,15 +74,5 @@ public class UVaSolution extends Solution {
         }
         final UVaSolution other = (UVaSolution) obj;
         return Objects.equals(this.problemNumber, other.problemNumber);
-    }
-
-    @JsonProperty("problem_number")
-    @Column(name = "problem_number", nullable = false)
-    public Long getProblemNumber() {
-        return problemNumber;
-    }
-
-    public void setProblemNumber(Long problemNumber) {
-        this.problemNumber = problemNumber;
     }
 }

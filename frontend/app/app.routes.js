@@ -38,7 +38,13 @@
                 url: '/topcoder/upload',
                 templateUrl: '/app/components/topcoder/upload.html',
                 controller: 'TopCoderUploadController'
-            });
+            })
+            .state('uvaUpload', {
+                url: '/uva/upload',
+                templateUrl: '/app/components/uva/upload.html',
+                controller: 'UVaSolutionUploadController'
+            })
+        ;
 
         $urlRouterProvider.when('', '/')
             .otherwise('/');
