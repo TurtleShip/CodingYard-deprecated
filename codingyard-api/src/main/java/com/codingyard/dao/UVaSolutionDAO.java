@@ -2,12 +2,12 @@ package com.codingyard.dao;
 
 import com.codingyard.api.entity.contest.Language;
 import com.codingyard.api.entity.contest.uva.UVaSolution;
+import com.google.common.base.Optional;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
-import java.util.Optional;
 
 public class UVaSolutionDAO extends BasicDAO<UVaSolution> {
 
