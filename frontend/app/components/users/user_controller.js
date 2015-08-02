@@ -19,7 +19,7 @@
             firstName: false,
             lastName: false,
             email: false,
-            role: []
+            role: false
         };
 
         $scope.isArray = angular.isArray;
@@ -131,7 +131,6 @@
             var viewedUserId = $stateParams.userId;
             UserPermission.canEditFirstName({id: viewedUserId},
                 function (data) {
-                    $log.log("Edit access for firstname is approved");
                     $scope.canEdit.firstName = data.isAllowed;
                 }
             );
@@ -150,7 +149,7 @@
 
             UserPermission.getEditableRoles({id: viewedUserId},
                 function (data) {
-                    $scope.canEdit.role = data;
+                    $scope.canEdit.role = data.length > 0 ? data : false;
                 }
             );
         };
