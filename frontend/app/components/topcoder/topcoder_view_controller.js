@@ -102,7 +102,7 @@
             };
 
             $scope.populatePermission = function () {
-                if (AuthService.isAuthenticated()) {
+                if (AuthService.isLoggedIn()) {
                     $scope.solutions.forEach(function (solution) {
                         SolutionPermission.canDelete({
                             id: solution.id,
