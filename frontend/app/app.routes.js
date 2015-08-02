@@ -39,10 +39,15 @@
                 templateUrl: '/app/components/topcoder/upload.html',
                 controller: 'TopCoderUploadController'
             })
+            .state('uvaView', {
+                url: '/uva/view?id',
+                templateUrl: '/app/components/uva/view.html',
+                controller: 'UVaViewController'
+            })
             .state('uvaUpload', {
                 url: '/uva/upload',
                 templateUrl: '/app/components/uva/upload.html',
-                controller: 'UVaSolutionUploadController'
+                controller: 'UVaUploadController'
             })
         ;
 

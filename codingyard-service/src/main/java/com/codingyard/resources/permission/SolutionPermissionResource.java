@@ -3,8 +3,10 @@ package com.codingyard.resources.permission;
 import com.codingyard.api.entity.contest.Contest;
 import com.codingyard.api.entity.contest.Solution;
 import com.codingyard.api.entity.contest.topcoder.TopCoderSolution;
+import com.codingyard.api.entity.contest.uva.UVaSolution;
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.manager.TopCoderSolutionManager;
+import com.codingyard.manager.UVaSolutionManager;
 import com.codingyard.permission.SolutionAccessApprover;
 import com.google.common.base.Optional;
 import io.dropwizard.auth.Auth;
@@ -15,7 +17,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
-import static javax.ws.rs.core.Response.Status.FORBIDDEN;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 /**
@@ -26,9 +27,11 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 public class SolutionPermissionResource {
 
     private final TopCoderSolutionManager tcoSolutionManager;
+    private final UVaSolutionManager uvaSolutionManager;
 
-    public SolutionPermissionResource(TopCoderSolutionManager tcoSolutionManager) {
+    public SolutionPermissionResource(TopCoderSolutionManager tcoSolutionManager, UVaSolutionManager uvaSolutionManager) {
         this.tcoSolutionManager = tcoSolutionManager;
+        this.uvaSolutionManager = uvaSolutionManager;
     }
 
     @GET
@@ -70,8 +73,11 @@ public class SolutionPermissionResource {
                                             final long solutionId) {
         switch (contest) {
             case TOP_CODER:
-                final Optional<TopCoderSolution> searchResult = tcoSolutionManager.findById(solutionId);
-                return searchResult.isPresent() ? Optional.of(searchResult.get()) : Optional.absent();
+                final Optional<TopCoderSolution> tcoResult = tcoSolutionManager.findById(solutionId);
+                return tcoResult.isPresent() ? Optional.of(tcoResult.get()) : Optional.absent();
+            case UVA_ONLINE_JUDGE:
+                final Optional<UVaSolution> uvaResult = uvaSolutionManager.findById(solutionId);
+                return uvaResult.isPresent() ? Optional.of(uvaResult.get()) : Optional.absent();
             default:
                 throw new IllegalArgumentException("Contest of type " + contest + " is not supported");
         }

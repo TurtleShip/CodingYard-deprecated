@@ -1,0 +1,117 @@
+<!--
+Look at this for demo : http://lorenzofox3.github.io/smart-table-website/
+github : https://github.com/lorenzofox3/Smart-Table
+-->
+<table st-table="displayedSolutions" st-safe-src="solutions"
+       class="table table-hover table-condensed table-striped table-responsive">
+    <thead>
+    <tr>
+        <th></th>
+        <th>Solutions per page</th>
+        <th>
+            <input type="number" class="form-control input-sm" ng-model="paginationSetting.itemPerPage"
+                   placeholder="solution per page"/>
+        </th>
+        <th colspan="2"></th>
+
+    </tr>
+    <tr>
+        <th>
+            <!-- solution id search -->
+            <input class="form-control input-sm" st-search="id"
+                   placeholder="id" type="number"/>
+        </th>
+
+        <th>
+            <!--problem number search-->
+            <input class="form-control input-sm" st-search="problem_number"
+                   placeholder="Problem number" type="number"/>
+
+        </th>
+        <th>
+            <select class="form-control input-sm" st-search="language">
+                <option ng-repeat="language in supported.languages" value="{{language.value}}">
+                    {{language.key}}
+                </option>
+            </select>
+        </th>
+        <th>
+            <!--Author name search-->
+            <input class="form-control input-sm" st-search="author_name"
+                   placeholder="Author search" type="search"/>
+        </th>
+        <th>
+            <!--Place holder for submission date-->
+        </th>
+        <th>
+            <!--Place holder for delete button-->
+        </th>
+    </tr>
+    <tr>
+        <th st-sort="id" class="st-sort-noorder index-header" st-sort-default="true">#</th>
+        <th st-sort="problem_number" class="st-sort-noorder">Number</th>
+        <th st-sort="language" class="st-sort-noorder">Language</th>
+        <th st-sort="author_name" class="st-sort-noorder">Author</th>
+        <th st-sort="submitted" class="st-sort-noorder">Uploaded at</th>
+        <th class="button-header"><!--Place holder for delete button--></th>
+    </tr>
+
+    </thead>
+    <tbody>
+    <tr st-select-row="solution" ng-repeat="solution in displayedSolutions"
+        ng-click="pickSolution(solution)">
+        <td>{{solution.id}}</td>
+        <td>{{solution.problem_number}}</td>
+        <td>{{solution.language | lowercase}}</td>
+        <td><a ui-sref="userView({userId: solution.author.id})" target="_blank">{{solution.author.username}}</a></td>
+        <td>{{solution.submitted | date:'medium'}}</td>
+        <td>
+            <button type="button" ng-show="solution.canDelete" ng-click="openConfirm(solution)"
+                    class="btn btn-sm btn-danger">
+                <i class="glyphicon glyphicon-remove-circle">
+                </i>
+            </button>
+            <button type="button" ng-hide="solution.canDelete" class="btn btn-sm btn-default" disabled>
+                <i class="glyphicon glyphicon-remove-circle">
+                </i>
+            </button>
+        </td>
+    </tr>
+    </tbody>
+
+    <tfoot>
+    <tr>
+        <td colspan="4" class="text-center">
+            <div st-pagination="" st-items-by-page="paginationSetting.itemPerPage"
+                 st-displayed-pages="paginationSetting.displayPages"></div>
+        </td>
+    </tr>
+    </tfoot>
+</table>
+
+<table ng-show="pickedSolution" class="table">
+    <thead>
+    <tr>
+        <th colspan="5" class="bg-success">You selected the below solution</th>
+    </tr>
+    <tr>
+        <th>#</th>
+        <th>Number</th>
+        <th>Language</th>
+        <th>Author</th>
+        <th>Uploaded at</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{pickedSolution.id}}</td>
+        <td>{{pickedSolution.problem_number}}</td>
+        <td>{{pickedSolution.language | lowercase}}</td>
+        <td><a ui-sref="userView({userId: pickedSolution.author.id})"
+               target="_blank">{{pickedSolution.author.username}}</a></td>
+        <td>{{pickedSolution.submitted | date:'medium'}}</td>
+    </tr>
+    </tbody>
+</table>
+
+<div ui-ace="aceOption" readonly ng-model="pickedSolution.content" style="height: 500px"></div>

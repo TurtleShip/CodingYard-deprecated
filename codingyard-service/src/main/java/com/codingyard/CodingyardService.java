@@ -75,7 +75,7 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
         environment.jersey().register(new TopCoderSolutionResource(userManager, tcManager));
         environment.jersey().register(new UVaSolutionResource(userManager, uvaManager));
         environment.jersey().register(new UserResource(userManager));
-        environment.jersey().register(new SolutionPermissionResource(tcManager));
+        environment.jersey().register(new SolutionPermissionResource(tcManager, uvaManager));
         environment.jersey().register(new UserPermissionResource(userManager));
     }
 

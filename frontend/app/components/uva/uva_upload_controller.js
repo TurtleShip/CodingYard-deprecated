@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-    app.controller('UVaSolutionUploadController', function ($scope, $log, UVa, AceEditor,
+    app.controller('UVaUploadController', function ($scope, $log, UVa, AceEditor,
                                                             SharedData, AuthService, AlertService, AUTH_EVENTS) {
 
         $scope.canSubmit = false;
