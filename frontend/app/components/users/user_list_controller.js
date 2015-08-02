@@ -5,7 +5,7 @@
 
         $scope.displayedUsers = null;
         $scope.selectedUser = null;
-        var loggedIn = AuthService.isAuthenticated();
+        var loggedIn = AuthService.isLoggedIn();
 
         User.getAllUsers({}, function (users) {
             $scope.users = users;

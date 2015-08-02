@@ -6,6 +6,7 @@
 (function () {
     app.factory('AuthService', function ($rootScope, $http, $log, $base64, $q, User, Session, SessionStorage, SESSION_KEYS, AUTH_EVENTS) {
         var authService = {};
+        var hasBearerToken = false;
 
         /**
          * Sets base64 encoded Basic Authorization header.
@@ -24,6 +25,7 @@
          * @param token Bearer token. String.
          */
         var setBearerOauthHeader = function (token) {
+            hasBearerToken = true;
             $http.defaults.headers.common = {
                 Authorization: 'Bearer ' + token
             };
@@ -33,6 +35,7 @@
          * Unset Authorization header
          */
         var unsetAuthHeader = function () {
+            hasBearerToken = false;
             $http.defaults.headers.common = {};
         };
 
@@ -73,8 +76,8 @@
             unsetAuthHeader();
         };
 
-        authService.isAuthenticated = function () {
-            return !!SessionStorage.get(SESSION_KEYS.token, false);
+        authService.isLoggedIn = function() {
+            return hasBearerToken;
         };
 
         /**

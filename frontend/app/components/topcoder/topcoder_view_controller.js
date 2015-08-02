@@ -90,20 +90,7 @@
                 TopCoder.findAll({},
                     function (response) { // success
                         $scope.solutions = response;
-                        $scope.solutions.forEach(function (solution) {
-
-                            if (AuthService.isAuthenticated()) {
-                                SolutionPermission.canDelete({
-                                    id: solution.id,
-                                    contest: 'TOP_CODER'
-                                }).$promise
-                                    .then(function (response) {
-                                        solution.canDelete = response.isAllowed;
-                                    })
-                            }
-
-                        });
-
+                        $scope.populatePermission();
                         if ($scope.solutions.length == 0) {
                             // Having no content is not an error. So use success instead of warning here.
                             AlertService.fireSuccess("Sorry. We don't have any content for TopCoder yet.");
@@ -112,6 +99,20 @@
                     function () { // error
                         AlertService.fireWarning("The site is having trouble loading solutions for TopCoder. Please try again later :p");
                     });
+            };
+
+            $scope.populatePermission = function () {
+                if (AuthService.isAuthenticated()) {
+                    $scope.solutions.forEach(function (solution) {
+                        SolutionPermission.canDelete({
+                            id: solution.id,
+                            contest: 'TOP_CODER'
+                        }).$promise
+                            .then(function (response) {
+                                solution.canDelete = response.isAllowed;
+                            })
+                    });
+                }
             };
 
             $scope.pickSolution = function (solution) {
@@ -133,14 +134,11 @@
                 );
             };
 
-            // TODO: Separate getting solutions and getting authentication for permission for solutions.
-            if(AuthService.isAuthenticated) {
+            $scope.getSolutions();
+
+            if (!AuthService.isLoggedIn()) {
                 $scope.$on(AUTH_EVENTS.gotBasicUserInfo, $scope.getSolutions);
-            } else {
-                $scope.getSolutions();
             }
-
-
 
             // show picked solution if a user specified the id of solution to display.
             if ($scope.pickedId) {
