@@ -29,9 +29,9 @@ public class UVaSolutionResource {
     private final UVaSolutionManager uvaManager;
     private final UserManager userManager;
 
-    public UVaSolutionResource(UVaSolutionManager uvaManager, UserManager userManager) {
-        this.uvaManager = uvaManager;
+    public UVaSolutionResource(UserManager userManager, UVaSolutionManager uvaManager) {
         this.userManager = userManager;
+        this.uvaManager = uvaManager;
     }
 
     @POST
