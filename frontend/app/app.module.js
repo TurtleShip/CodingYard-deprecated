@@ -11,7 +11,7 @@ var app = angular.module('codingyard', ['ngRoute', 'ngResource',
      */
     app.controller('CodingyardController', function ($rootScope, $scope, $route, $routeParams, $location, $log,
                                                      USER_ROLES, AuthService, Session, SessionStorage,
-                                                     SESSION_KEYS, AUTH_EVENTS, User, SharedData) {
+                                                     SESSION_KEYS, AUTH_EVENTS, ALERT_EVENTS, User, SharedData) {
 
         $scope.$route = $route;
         $scope.$location = $location;
@@ -51,5 +51,22 @@ var app = angular.module('codingyard', ['ngRoute', 'ngResource',
             $scope.sharedData.currentUser = null;
             $scope.token = null;
         });
+
+        $scope.alerts = [];
+
+        $scope.addAlert = function (event, isWarning, msg) {
+            $log.info("YO!");
+            $scope.alerts.push({
+                type: isWarning ? 'danger' : 'success',
+                msg: msg
+            });
+        };
+
+        $scope.closeAlert = function (index) {
+            $scope.alerts.splice(index, 1);
+        };
+
+        $scope.$on(ALERT_EVENTS.alertFired, $scope.addAlert);
+
     });
 })();

@@ -57,6 +57,10 @@
 
 <!-- main components -->
 <div class="container">
+
+    <!-- alerts -->
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+
     <div ui-view>
     </div>
 
@@ -87,6 +91,7 @@
     <script src="/app/app.module.js"></script>
     <script src="/app/app.routes.js"></script>
     <script src="/app/shared/auth_service.js"></script>
+    <script src="/app/shared/alert_service.js"></script>
     <script src="/app/shared/user_factory.js"></script>
     <script src="/app/shared/topcoder_factory.js"></script>
     <script src="/app/shared/constants.js"></script>

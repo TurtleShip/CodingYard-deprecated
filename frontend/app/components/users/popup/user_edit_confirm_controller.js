@@ -6,26 +6,13 @@
                                                           $q,
                                                           User, UserPermission, USER_ROLES,
                                                           AUTH_EVENTS,
-                                                          SharedData, AuthService,
+                                                          SharedData, AuthService, AlertService,
                                                           userToEdit) {
 
         $scope.viewedUser = userToEdit;
 
         $scope.ok = function () {
             $modalInstance.close($scope.viewedUser);
-        };
-
-        $scope.alerts = [];
-
-        $scope.addAlert = function (isWarning, msg) {
-            $scope.alerts.push({
-                type: isWarning ? 'danger' : 'success',
-                msg: msg
-            });
-        };
-
-        $scope.closeAlert = function (index) {
-            $scope.alerts.splice(index, 1);
         };
 
         $scope.userRoles = USER_ROLES;
@@ -50,11 +37,11 @@
                 newFirstName: $scope.viewedUser.first_name,
                 id: $scope.viewedUser.id
             }, function () {
-                $scope.addAlert(false, "Firstname has successfully been changed to " + $scope.viewedUser.first_name);
+                AlertService.fireSuccess("Firstname has successfully been changed to " + $scope.viewedUser.first_name);
                 deferred.resolve();
             }, function () {
                 // TODO: Display message differently depend on the error code ( ex> 401 vs 500 )
-                $scope.addAlert(true, "We couldn't update the first name.");
+                AlertService.fireWarning("We couldn't update the first name.");
                 deferred.resolve("Error editing first name.");
             });
 
@@ -68,10 +55,10 @@
                     newLastName: $scope.viewedUser.last_name,
                     id: $scope.viewedUser.id
                 }, function success() {
-                    $scope.addAlert(false, "Last name has successfully been changed to " + $scope.viewedUser.last_name);
+                    AlertService.fireSuccess("Last name has successfully been changed to " + $scope.viewedUser.last_name);
                     deferred.resolve();
                 }, function error() {
-                    $scope.addAlert(true, "We couldn't update last name.");
+                    AlertService.fireWarning("We couldn't update last name.");
                     deferred.resolve("Error editing last name.");
                 }
             );
@@ -86,10 +73,10 @@
                 newEmail: $scope.viewedUser.email,
                 id: $scope.viewedUser.id
             }, function success() {
-                $scope.addAlert(false, "Email has successfully been changed to " + $scope.viewedUser.email);
+                AlertService.fireSuccess("Email has successfully been changed to " + $scope.viewedUser.email);
                 deferred.resolve();
             }, function error() {
-                $scope.addAlert(true, "We couldn't update email.");
+                AlertService.fireWarning("We couldn't update email.");
                 deferred.resolve("Error editing email.");
             });
 
@@ -103,10 +90,10 @@
                 new_role: $scope.viewedUser.role,
                 user_id: $scope.viewedUser.id
             }, function success() {
-                $scope.addAlert(false, "Role has successfully been changed to " + $scope.viewedUser.role);
+                AlertService.fireSuccess("Role has successfully been changed to " + $scope.viewedUser.role);
                 deferred.resolve();
             }, function error() {
-                $scope.addAlert(true, "We couldn't update role.");
+                AlertService.fireWarning("We couldn't update role.");
                 deferred.resolve("WTF");
             });
 

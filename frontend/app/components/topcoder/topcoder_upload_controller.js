@@ -2,28 +2,16 @@
 
 (function () {
     app.controller('TopCoderUploadController', function ($scope, $log, TopCoder, AceEditor,
-                                                         SharedData, AuthService, AUTH_EVENTS) {
+                                                         SharedData, AuthService, AlertService, AUTH_EVENTS) {
 
-        $scope.alerts = [];
         $scope.canSubmit = false;
         $scope.getPermission = function () {
             $scope.currentUser = SharedData.getSharedData().currentUser;
             $scope.canSubmit = AuthService.isAuthorized(['GLOBAL_ADMIN', 'ADMIN', 'MEMBER'], $scope.currentUser);
         };
-        
+
         $scope.getPermission();
         $scope.$on(AUTH_EVENTS.gotBasicUserInfo, $scope.getPermission);
-
-        $scope.addAlert = function (isWarning, msg) {
-            $scope.alerts.push({
-                type: isWarning ? 'danger' : 'success',
-                msg: msg
-            });
-        };
-
-        $scope.closeAlert = function (index) {
-            $scope.alerts.splice(index, 1);
-        };
 
         $scope.solution = {
             division: "DIV1",
@@ -45,10 +33,10 @@
         $scope.uploadSolution = function (solutionToUpload) {
 
             TopCoder.upload({}, solutionToUpload, function () {
-                    $scope.addAlert(false, "Upload was successful :)");
+                    AlertService.fireSuccess("Upload was successful :)");
                 },
                 function () {
-                    $scope.addAlert(true, "Sorry, we couldn't upload your solution.");
+                    AlertService.fireWarning("Sorry, we couldn't upload your solution.");
                 })
         };
 

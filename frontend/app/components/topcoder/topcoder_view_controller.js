@@ -3,26 +3,14 @@
 (function () {
     app.controller('TopCoderViewController', function ($scope, $log, $modal, $filter, $timeout,
                                                        TopCoder, AceEditor, SolutionPermission,
-                                                       AuthService, AUTH_EVENTS, $stateParams) {
+                                                       AuthService, AUTH_EVENTS, AlertService, $stateParams) {
 
             $scope.paginationSetting = {
                 itemPerPage: 5,
                 displayedPages: 10
             };
 
-            $scope.alerts = [];
             $scope.pickedId = parseInt($stateParams.id);
-
-            $scope.addAlert = function (isWarning, msg) {
-                $scope.alerts.push({
-                    type: isWarning ? 'danger' : 'success',
-                    msg: msg
-                });
-            };
-
-            $scope.closeAlert = function (index) {
-                $scope.alerts.splice(index, 1);
-            };
 
             $scope.solutions = null;
             $scope.displayedSolutions = null;
@@ -117,11 +105,12 @@
                         });
 
                         if ($scope.solutions.length == 0) {
-                            $scope.addAlert(false, "Sorry. We don't have any content for TopCoder yet.");
+                            // Having no content is not an error. So use success instead of warning here.
+                            AlertService.fireSuccess("Sorry. We don't have any content for TopCoder yet.");
                         }
                     },
                     function () { // error
-                        $scope.addAlert(true, "The site is having trouble loading solutions for TopCoder. Please try again later :p");
+                        AlertService.fireWarning("The site is having trouble loading solutions for TopCoder. Please try again later :p");
                     });
             };
 
@@ -144,8 +133,14 @@
                 );
             };
 
-            $scope.getSolutions();
-            $scope.$on(AUTH_EVENTS.gotBasicUserInfo, $scope.getSolutions());
+            // TODO: Separate getting solutions and getting authentication for permission for solutions.
+            if(AuthService.isAuthenticated) {
+                $scope.$on(AUTH_EVENTS.gotBasicUserInfo, $scope.getSolutions);
+            } else {
+                $scope.getSolutions();
+            }
+
+
 
             // show picked solution if a user specified the id of solution to display.
             if ($scope.pickedId) {

@@ -19,6 +19,10 @@
         notAuthorized: 'auth-not-authorized'
     });
 
+    app.constant('ALERT_EVENTS', {
+        alertFired: 'alert-fired'
+    });
+
     app.constant('SESSION_KEYS', {
         token: 'token',
         user: 'user'
