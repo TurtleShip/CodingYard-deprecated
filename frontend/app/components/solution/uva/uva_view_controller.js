@@ -134,24 +134,5 @@
                     $scope.pickSolution(solution);
                 });
         }
-
-        $scope.copyToClipboard = function copyToClipboard(text, btnId) {
-
-            var copyTextarea = $('#_for_copying');
-            var successful;
-            try {
-                copyTextarea.removeAttr('hidden');
-                copyTextarea.val(text);
-                copyTextarea.select();
-                successful = document.execCommand('copy');
-            } catch (err) {
-                successful = false;
-                console.error('Oops, unable to copy to clipboard', err);
-            } finally {
-                copyTextarea.attr('hidden', 'hidden');
-            }
-            var msg = successful ? 'COPIED!' : 'FAILED!';
-            $('#' + btnId).text(msg);
-        }
     });
 })();
