@@ -120,7 +120,8 @@
                     function (response) {
                         $scope.pickedSolution = {
                             language: solution.language,
-                            content: response.content
+                            content: response.content,
+                            link: "www.codingyard.com/topcoder/view?id=" + solution.id
                         };
                         angular.extend($scope.pickedSolution, solution);
                         $scope.modeChanged();
@@ -135,7 +136,7 @@
             $scope.getSolutions();
 
             if (!AuthService.isLoggedIn()) {
-                $scope.$on(AUTH_EVENTS.gotBasicUserInfo, $scope.getSolutions);
+                $scope.$on(AUTH_EVENTS.gotBasicUserInfo, $scope.populatePermission);
             }
 
             // show picked solution if a user specified the id of solution to display.

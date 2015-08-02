@@ -108,7 +108,7 @@ github : https://github.com/lorenzofox3/Smart-Table
 <table ng-show="pickedSolution" class="table">
     <thead>
     <tr>
-        <th colspan="7" class="bg-success">You selected the below solution</th>
+        <th colspan="8" class="bg-success">You selected the below solution</th>
     </tr>
     <tr>
         <th>#</th>
@@ -118,6 +118,7 @@ github : https://github.com/lorenzofox3/Smart-Table
         <th>Language</th>
         <th>Author</th>
         <th>Uploaded at</th>
+        <th>Link</th>
     </tr>
     </thead>
     <tbody>
@@ -130,6 +131,7 @@ github : https://github.com/lorenzofox3/Smart-Table
         <td><a ui-sref="userView({userId: pickedSolution.author.id})"
                target="_blank">{{pickedSolution.author.username}}</a></td>
         <td>{{pickedSolution.submitted | date:'medium'}}</td>
+        <td>{{pickedSolution.link}}</td>
     </tr>
     </tbody>
 </table>
