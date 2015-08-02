@@ -31,22 +31,22 @@
             })
             .state('topcoderView', {
                 url: '/topcoder/view?id',
-                templateUrl: '/app/components/topcoder/view.html',
+                templateUrl: '/app/components/solution/topcoder/view.html',
                 controller: 'TopCoderViewController'
             })
             .state('topcoderUpload', {
                 url: '/topcoder/upload',
-                templateUrl: '/app/components/topcoder/upload.html',
+                templateUrl: '/app/components/solution/topcoder/upload.html',
                 controller: 'TopCoderUploadController'
             })
             .state('uvaView', {
                 url: '/uva/view?id',
-                templateUrl: '/app/components/uva/view.html',
+                templateUrl: '/app/components/solution/uva/view.html',
                 controller: 'UVaViewController'
             })
             .state('uvaUpload', {
                 url: '/uva/upload',
-                templateUrl: '/app/components/uva/upload.html',
+                templateUrl: '/app/components/solution/uva/upload.html',
                 controller: 'UVaUploadController'
             })
         ;

@@ -57,8 +57,8 @@
 
                 var modalInstance = $modal.open({
                     animation: true,
-                    templateUrl: '/app/components/topcoder/delete_confirm.html?bust=' + Math.random().toString(36).slice(2),
-                    controller: 'TopCoderDeleteConfirmController',
+                    templateUrl: '/app/components/solution/delete/delete_confirm.html?bust=' + Math.random().toString(36).slice(2),
+                    controller: 'DeleteConfirmController',
                     size: 'sm',
                     resolve: {
                         solutionToDelete: function () {
