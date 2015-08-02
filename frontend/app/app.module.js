@@ -55,7 +55,6 @@ var app = angular.module('codingyard', ['ngRoute', 'ngResource',
         $scope.alerts = [];
 
         $scope.addAlert = function (event, isWarning, msg) {
-            $log.info("YO!");
             $scope.alerts.push({
                 type: isWarning ? 'danger' : 'success',
                 msg: msg

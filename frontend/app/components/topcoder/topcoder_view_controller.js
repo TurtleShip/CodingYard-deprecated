@@ -123,12 +123,10 @@
                             content: response.content
                         };
                         angular.extend($scope.pickedSolution, solution);
-
-                        $scope.error = null;
                         $scope.modeChanged();
                     },
                     function () {
-                        $scope.error = "Oops... we had trouble loading the content for the chosen solution. Please try later.";
+                        AlertService.fireWarning("Oops... we had trouble loading the content for the chosen solution. Please try later.");
                         $scope.pickedSolution = null;
                     }
                 );
