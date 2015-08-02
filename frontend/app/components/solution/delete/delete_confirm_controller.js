@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-    app.controller('TopCoderDeleteConfirmController', function ($scope, $modalInstance, solutionToDelete) {
+    app.controller('DeleteConfirmController', function ($scope, $modalInstance, solutionToDelete) {
         $scope.solution = solutionToDelete;
 
         $scope.ok = function () {

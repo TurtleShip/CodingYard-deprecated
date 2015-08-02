@@ -1,8 +1,8 @@
 'use strict';
 
 (function () {
-    app.controller('TopCoderUploadController', function ($scope, $log, TopCoder, AceEditor,
-                                                         SharedData, AuthService, AlertService, AUTH_EVENTS) {
+    app.controller('UVaUploadController', function ($scope, $log, UVa, AceEditor,
+                                                            SharedData, AuthService, AlertService, AUTH_EVENTS) {
 
         $scope.canSubmit = false;
         $scope.getPermission = function () {
@@ -18,7 +18,7 @@
             difficulty: "EASY",
             problem_number: 1,
             language: "JAVA",
-            content: "Hello world! :)"
+            content: "// Enter your solution here please ;)"
         };
 
         $scope.languages = {
@@ -32,7 +32,7 @@
 
         $scope.uploadSolution = function (solutionToUpload) {
 
-            TopCoder.upload({}, solutionToUpload, function () {
+            UVa.upload({}, solutionToUpload, function () {
                     AlertService.fireSuccess("Upload was successful :)");
                 },
                 function () {

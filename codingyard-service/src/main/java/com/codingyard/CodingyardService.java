@@ -3,6 +3,7 @@ package com.codingyard;
 import com.codingyard.api.entity.auth.CodingyardToken;
 import com.codingyard.api.entity.contest.Solution;
 import com.codingyard.api.entity.contest.topcoder.TopCoderSolution;
+import com.codingyard.api.entity.contest.uva.UVaSolution;
 import com.codingyard.api.entity.user.CodingyardUser;
 import com.codingyard.auth.TokenAuthenticator;
 import com.codingyard.auth.UserCredentialAuthenticator;
@@ -10,13 +11,16 @@ import com.codingyard.config.CodingyardConfiguration;
 import com.codingyard.config.UserConfiguration;
 import com.codingyard.dao.TokenDAO;
 import com.codingyard.dao.TopCoderSolutionDAO;
+import com.codingyard.dao.UVaSolutionDAO;
 import com.codingyard.dao.UserDAO;
 import com.codingyard.manager.TopCoderSolutionManager;
+import com.codingyard.manager.UVaSolutionManager;
 import com.codingyard.manager.UserManager;
 import com.codingyard.resources.UserResource;
 import com.codingyard.resources.permission.SolutionPermissionResource;
 import com.codingyard.resources.permission.UserPermissionResource;
 import com.codingyard.resources.solution.TopCoderSolutionResource;
+import com.codingyard.resources.solution.UVaSolutionResource;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthFactory;
 import io.dropwizard.auth.ChainedAuthFactory;
@@ -55,19 +59,23 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
 
         final UserDAO userDAO = new UserDAO(hibernate.getSessionFactory());
         final TokenDAO tokenDAO = new TokenDAO(hibernate.getSessionFactory());
-        final TopCoderSolutionDAO tcDAO = new TopCoderSolutionDAO(hibernate.getSessionFactory());
 
-        addResources(configuration, environment, new UserManager(userDAO), tcDAO);
+        addResources(configuration, environment, new UserManager(userDAO));
         addAuthentication(environment, userDAO, tokenDAO);
         prePopulateUsers(configuration.getUsers(), userDAO);
     }
 
     private void addResources(final CodingyardConfiguration configuration, final Environment environment,
-                              final UserManager userManager, final TopCoderSolutionDAO tcDAO) {
+                              final UserManager userManager) {
+        final TopCoderSolutionDAO tcDAO = new TopCoderSolutionDAO(hibernate.getSessionFactory());
         final TopCoderSolutionManager tcManager = new TopCoderSolutionManager(tcDAO, configuration.getSolutionDir());
+
+        final UVaSolutionDAO uvaDAO = new UVaSolutionDAO(hibernate.getSessionFactory());
+        final UVaSolutionManager uvaManager = new UVaSolutionManager(uvaDAO, configuration.getSolutionDir());
         environment.jersey().register(new TopCoderSolutionResource(userManager, tcManager));
+        environment.jersey().register(new UVaSolutionResource(userManager, uvaManager));
         environment.jersey().register(new UserResource(userManager));
-        environment.jersey().register(new SolutionPermissionResource(tcManager));
+        environment.jersey().register(new SolutionPermissionResource(tcManager, uvaManager));
         environment.jersey().register(new UserPermissionResource(userManager));
     }
 
@@ -76,7 +84,8 @@ public class CodingyardService extends Application<CodingyardConfiguration> {
             CodingyardUser.class,
             CodingyardToken.class,
             Solution.class,
-            TopCoderSolution.class
+            TopCoderSolution.class,
+            UVaSolution.class
         ) {
             @Override
             public DataSourceFactory getDataSourceFactory(CodingyardConfiguration configuration) {

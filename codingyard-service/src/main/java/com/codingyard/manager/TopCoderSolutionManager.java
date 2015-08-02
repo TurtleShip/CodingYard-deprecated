@@ -1,5 +1,6 @@
 package com.codingyard.manager;
 
+import com.codingyard.api.entity.contest.Contest;
 import com.codingyard.api.entity.contest.Language;
 import com.codingyard.api.entity.contest.topcoder.TopCoderDifficulty;
 import com.codingyard.api.entity.contest.topcoder.TopCoderDivision;
@@ -125,6 +126,7 @@ public class TopCoderSolutionManager extends BasicEntityManager<TopCoderSolution
                             final Language language,
                             final Date createdDate) throws IOException {
         return Paths.get(root.toString(),
+            Contest.TOP_CODER.toString(),
             division.name(),
             difficulty.name(),
             Long.toString(problemId),

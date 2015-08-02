@@ -94,7 +94,7 @@
                 authorizedRoles = [authorizedRoles];
             }
 
-            return (authService.isAuthenticated() && authorizedRoles.indexOf(user.role) != -1);
+            return (authService.isLoggedIn() && authorizedRoles.indexOf(user.role) != -1);
         };
 
 

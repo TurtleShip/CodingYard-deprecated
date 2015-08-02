@@ -29,6 +29,7 @@
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a ui-sref="topcoderView">TopCoder</a></li>
+                        <li><a ui-sref="uvaView">UVa</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" dropdown>
@@ -37,6 +38,7 @@
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a ui-sref="topcoderUpload">TopCoder</a></li>
+                        <li><a ui-sref="uvaUpload">UVa</a></li>
                     </ul>
                 </li>
                 <li><a ui-sref="userListView">Users</a></li>
@@ -94,6 +96,7 @@
     <script src="/app/shared/alert_service.js"></script>
     <script src="/app/shared/user_factory.js"></script>
     <script src="/app/shared/topcoder_factory.js"></script>
+    <script src="/app/shared/uva_factory.js"></script>
     <script src="/app/shared/constants.js"></script>
     <script src="/app/shared/session_storage.js"></script>
     <script src="/app/shared/transform_request_factory.js"></script>
@@ -105,9 +108,11 @@
     <script src="/app/components/users/user_list_controller.js"></script>
     <script src="/app/components/users/popup/user_edit_confirm_controller.js"></script>
     <script src="/app/components/users/popup/user_delete_confirm_controller.js"></script>
-    <script src="/app/components/topcoder/topcoder_upload_controller.js"></script>
-    <script src="/app/components/topcoder/topcoder_view_controller.js"></script>
-    <script src="/app/components/topcoder/delete_confirm_controller.js"></script>
+    <script src="/app/components/solution/topcoder/topcoder_upload_controller.js"></script>
+    <script src="/app/components/solution/topcoder/topcoder_view_controller.js"></script>
+    <script src="/app/components/solution/delete/delete_confirm_controller.js"></script>
+    <script src="/app/components/solution/uva/uva_upload_controller.js"></script>
+    <script src="/app/components/solution/uva/uva_view_controller.js"></script>
     <script src="/app/components/signup/signup_controller.js"></script>
     <script src="/app/components/login/login_controller.js"></script>
     <script src="/app/components/login/login_modal_controller.js"></script>
