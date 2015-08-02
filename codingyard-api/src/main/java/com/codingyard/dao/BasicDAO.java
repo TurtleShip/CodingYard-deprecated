@@ -7,7 +7,8 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 
 public class BasicDAO<E extends BasicEntity> extends AbstractDAO<E> {
 
@@ -37,8 +38,18 @@ public class BasicDAO<E extends BasicEntity> extends AbstractDAO<E> {
         return Optional.fromNullable(get(id));
     }
 
-    public List<E> findAll() {
-        return list(currentSession().createCriteria(entityClass));
+    /*
+        When fetch type is Eager, list(*) through hibernate will do Join, resulting in
+        multiple objects being returned multiple times depending on the number of children they have.
+        The concept is explained here :
+            http://stackoverflow.com/questions/1995080/hibernate-criteria-returns-children-multiple-times-with-fetchtype-eager
+
+        Ideally, fetch type should be Lazy to be performant, but hibernate wouldn't fetch all fields
+         properly for serializing data when in FetchType.Lazy, resulting in
+         json representation of objects missing fields.
+     */
+    public Collection<E> findAll() {
+        return new HashSet<>(list(currentSession().createCriteria(entityClass)));
     }
 
     /**

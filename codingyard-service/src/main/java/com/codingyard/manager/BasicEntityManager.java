@@ -4,6 +4,7 @@ import com.codingyard.api.entity.BasicEntity;
 import com.codingyard.dao.BasicDAO;
 import com.google.common.base.Optional;
 
+import java.util.Collection;
 import java.util.List;
 
 public class BasicEntityManager<E extends BasicEntity> {
@@ -26,7 +27,7 @@ public class BasicEntityManager<E extends BasicEntity> {
         return basicDAO.findById(id);
     }
 
-    public List<E> findAll() {
+    public Collection<E> findAll() {
         return basicDAO.findAll();
     }
 
