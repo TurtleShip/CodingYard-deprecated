@@ -32,7 +32,7 @@ database:
   # whether or not idle connections should be validated
   checkConnectionWhileIdle: false
 
-solutionDir: "solution"
+solutionDir: "tmp"
 
 users:
   - username: global_admin

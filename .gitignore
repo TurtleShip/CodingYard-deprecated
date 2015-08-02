@@ -10,6 +10,6 @@
 *.swp
 *~
 logs
-solution
+tmp
 node_modules
 target
