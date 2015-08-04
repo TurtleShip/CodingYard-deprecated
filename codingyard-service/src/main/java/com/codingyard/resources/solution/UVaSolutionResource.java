@@ -19,6 +19,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
@@ -145,6 +147,12 @@ public class UVaSolutionResource {
 
             final UVaSolution solution = searchResult.get();
             final CodingyardUser author = solution.getAuthor();
+
+            try {
+                Files.deleteIfExists(Paths.get(solution.getFilePath()));
+            } catch (IOException e) {
+                LOG.warn("Unable to find solution {} locally. Skipping content deletion.", solution);
+            }
             final boolean isDeleted = author.getSolutions().remove(solution) && uvaManager.delete(solution);
 
             if (isDeleted) {
