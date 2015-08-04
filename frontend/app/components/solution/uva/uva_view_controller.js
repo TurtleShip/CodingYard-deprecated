@@ -3,11 +3,9 @@
 (function () {
     app.controller('UVaViewController', function ($scope, $log, $modal, $filter,
                                                   UVa, AceEditor, SolutionPermission,
+                                                  SolutionView,
                                                   AuthService, AUTH_EVENTS, AlertService, $stateParams) {
-        $scope.paginationSetting = {
-            itemPerPage: 5,
-            displayedPages: 10
-        };
+        $scope.paginationSetting = SolutionView.paginationSetting;
 
         $scope.pickedId = parseInt($stateParams.id);
 
