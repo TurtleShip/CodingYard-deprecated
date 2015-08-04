@@ -23,6 +23,15 @@
             }
         };
 
+        aceEditor.getSetting = function () {
+            return {
+                mode: "text",
+                useWrapMode: true,
+                showGutter: true,
+                theme: 'solarized_light'
+            }
+        };
+
         return aceEditor;
     });
 })();

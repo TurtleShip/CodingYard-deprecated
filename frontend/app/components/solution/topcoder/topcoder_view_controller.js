@@ -70,20 +70,15 @@
                 modalInstance.result.then($scope.deleteSolution);
             };
 
-            $scope.aceOption = {
-                mode: "text",
-                useWrapMode: true,
-                showGutter: true,
-                theme: 'solarized_light',
-                onLoad: function (_ace) {
-                    $scope.modeChanged = function () {
-                        if ($scope.pickedSolution) {
-                            _ace.getSession().setMode("ace/mode/" + AceEditor.getMode($scope.pickedSolution.language));
-                        }
-                    };
+            $scope.aceOption = AceEditor.getSetting();
+            $scope.aceOption["onLoad"] = function (_ace) {
+                $scope.modeChanged = function () {
+                    if ($scope.pickedSolution) {
+                        _ace.getSession().setMode("ace/mode/" + AceEditor.getMode($scope.pickedSolution.language));
+                    }
+                };
 
-                    _ace.$blockScrolling = Infinity;
-                }
+                _ace.$blockScrolling = Infinity;
             };
 
             $scope.getSolutions = function () {
