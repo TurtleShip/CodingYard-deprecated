@@ -1,0 +1,25 @@
+.solution-selected-indicator-wrapper {
+    border-radius: 10px;
+    background-color: #A6CB45;
+}
+
+.solution-selected-indicator {
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.solution-metadata-wrapper {
+    border-radius: 10px;
+    background-color: #FEFCD7;
+}
+
+.solution-metadata {
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.solution-row {
+    padding-bottom: 2px;
+}

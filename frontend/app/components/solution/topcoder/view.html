@@ -63,7 +63,7 @@ github : https://github.com/lorenzofox3/Smart-Table
         <th st-sort="id" class="st-sort-noorder index-header" st-sort-default="true">#</th>
         <th st-sort="division" class="st-sort-noorder">Division</th>
         <th st-sort="difficulty" class="st-sort-noorder">Difficulty</th>
-        <th st-sort="problem_number" class="st-sort-noorder">Number</th>
+        <th st-sort="problem_number" class="st-sort-noorder">SRM #</th>
         <th st-sort="language" class="st-sort-noorder">Language</th>
         <th st-sort="author_name" class="st-sort-noorder">Author</th>
         <th st-sort="submitted" class="st-sort-noorder">Uploaded at</th>
@@ -105,35 +105,58 @@ github : https://github.com/lorenzofox3/Smart-Table
     </tfoot>
 </table>
 
-<table ng-show="pickedSolution" class="table">
-    <thead>
-    <tr>
-        <th colspan="8" class="bg-success">You selected the below solution</th>
-    </tr>
-    <tr>
-        <th>#</th>
-        <th>Division</th>
-        <th>Difficulty</th>
-        <th>Number</th>
-        <th>Language</th>
-        <th>Author</th>
-        <th>Uploaded at</th>
-        <th>Link</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>{{pickedSolution.id}}</td>
-        <td>{{pickedSolution.division | lowercase}}</td>
-        <td>{{pickedSolution.difficulty | lowercase}}</td>
-        <td>{{pickedSolution.problem_number}}</td>
-        <td>{{pickedSolution.language | lowercase}}</td>
-        <td><a ui-sref="userView({userId: pickedSolution.author.id})"
-               target="_blank">{{pickedSolution.author.username}}</a></td>
-        <td>{{pickedSolution.submitted | date:'medium'}}</td>
-        <td>{{pickedSolution.link}}</td>
-    </tr>
-    </tbody>
-</table>
+<div ng-show="pickedSolution" class="solution-selected-indicator-wrapper bg-success">
+    <div class="solution-selected-indicator">
+        <!-- TODO: Perhaps put te problem name if one exists instead of the below message? -->
+        <strong>You selected the below solution :)</strong>
+    </div>
+</div>
+
+<div ng-show="pickedSolution" class="solution-metadata-wrapper">
+    <div class="solution-metadata">
+
+
+        <div class="row solution-row">
+            <div class="col-md-2"><strong>Division</strong></div>
+            <div class="col-md-10">{{pickedSolution.division | lowercase}}</div>
+        </div>
+
+        <div class="row solution-row">
+            <div class="col-md-2"><strong>Difficulty</strong></div>
+            <div class="col-md-10">{{pickedSolution.difficulty | lowercase}}</div>
+        </div>
+
+        <div class="row solution-row">
+            <div class="col-md-2"><strong>SRM #</strong></div>
+            <div class="col-md-10">{{pickedSolution.problem_number}}</div>
+        </div>
+
+        <div class="row solution-row">
+            <div class="col-md-2"><strong>Language</strong></div>
+            <div class="col-md-10">{{pickedSolution.language}}</div>
+        </div>
+
+        <div class="row solution-row">
+            <div class="col-md-2"><strong>Uploaded at</strong></div>
+            <div class="col-md-10">{{pickedSolution.submitted | date:'medium'}}</div>
+        </div>
+
+        <div class="row solution-row">
+            <div class="col-md-2"><strong>Author</strong></div>
+            <div class="col-md-10"><a ui-sref="userView({userId: pickedSolution.author.id})" target="_blank">{{pickedSolution.author.username}}</a></div>
+        </div>
+
+        <div class="row solution-row">
+            <div class="col-md-2"><strong>Problem name</strong></div>
+            <div class="col-md-10">Wassup</div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2"><strong>Url to the problem</strong></div>
+            <div class="col-md-10">http://www.putmesomelink.com/goodprobs?id=3</div>
+        </div>
+    </div>
+</div>
+
 
 <div ui-ace="aceOption" readonly ng-model="pickedSolution.content" style="height: 500px"></div>

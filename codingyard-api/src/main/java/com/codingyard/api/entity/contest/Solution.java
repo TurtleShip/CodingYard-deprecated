@@ -14,12 +14,18 @@ import java.util.Objects;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Solution implements BasicEntity {
 
+    // required fields
     private Long id;
     private Contest contest;
     private CodingyardUser author;
     private Date submissionDate;
     private String filePath;
     private Language language;
+
+    // Optional fields
+    private Date lastModifiedDate;
+    private String problemName;
+    private String problemLink;
 
     // Needed for Hibernate
     protected Solution() {
@@ -83,6 +89,18 @@ public abstract class Solution implements BasicEntity {
         return language;
     }
 
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public String getProblemName() {
+        return problemName;
+    }
+
+    public String getProblemLink() {
+        return problemLink;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -105,6 +123,18 @@ public abstract class Solution implements BasicEntity {
 
     public void setLanguage(Language language) {
         this.language = language;
+    }
+
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public void setProblemName(String problemName) {
+        this.problemName = problemName;
+    }
+
+    public void setProblemLink(String problemLink) {
+        this.problemLink = problemLink;
     }
 
     @Override
