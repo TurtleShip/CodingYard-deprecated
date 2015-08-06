@@ -24,6 +24,8 @@ public abstract class BasicJsonTest<Pojo> {
     public void serializeToJson() throws Exception {
         final String actual = MAPPER.writeValueAsString(getValidPojo());
         final String expected = fixture(getJsonFilePath());
+        System.out.println(actual);
+        System.out.println(expected);
         assertTrue(isSameInJson(actual, expected));
     }
 
@@ -35,6 +37,8 @@ public abstract class BasicJsonTest<Pojo> {
 
     public boolean isSameInJson(final String actual,
                                 final String expected) throws IOException {
+        JsonNode act = toJsonNode(actual);
+        JsonNode exp = toJsonNode(expected);
         return toJsonNode(actual).equals(toJsonNode(expected));
     }
 

@@ -23,7 +23,6 @@ public abstract class Solution implements BasicEntity {
     private Language language;
 
     // Optional fields
-    private Date lastModifiedDate;
     private String problemName;
     private String problemLink;
 
@@ -89,14 +88,14 @@ public abstract class Solution implements BasicEntity {
         return language;
     }
 
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
+    @JsonProperty("problem_name")
+    @Column(name = "problem_name", nullable = true)
     public String getProblemName() {
         return problemName;
     }
 
+    @JsonProperty("problem_link")
+    @Column(name = "problem_link", nullable = true)
     public String getProblemLink() {
         return problemLink;
     }
@@ -123,10 +122,6 @@ public abstract class Solution implements BasicEntity {
 
     public void setLanguage(Language language) {
         this.language = language;
-    }
-
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
     }
 
     public void setProblemName(String problemName) {
@@ -163,9 +158,11 @@ public abstract class Solution implements BasicEntity {
             .add("id", id)
             .add("contest", contest)
             .add("author", author)
-            .add("submissionDate", submissionDate)
+            .add("submission date", submissionDate)
             .add("filePath", filePath)
             .add("language", language)
+            .add("problem name", problemName)
+            .add("problem link", problemLink)
             .toString();
     }
 }

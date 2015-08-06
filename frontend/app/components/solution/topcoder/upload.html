@@ -22,12 +22,13 @@
         </div>
     </div>
 
+    <!-- TODO: Clearly show that this is required. Make this red if someone delete a number -->
     <div class="form-group">
-        <label for="problem-number-form" class="col-sm-2 control-label">problem number</label>
+        <label for="problem-number-form" class="col-sm-2 control-label">SRM #</label>
 
         <div class="col-sm-3">
             <input type="number" class="form-control" ng-model="solution.problem_number" id="problem-number-form"
-                   placeholder="problem number"/>
+                   placeholder="SRM number"/>
         </div>
     </div>
 
@@ -46,6 +47,22 @@
                 <option value="OTHER">Other</option>
             </select>
 
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="name-form" class="col-sm-2 control-label">Name</label>
+
+        <div class="col-sm-3">
+            <input id="name-form" class="form-control input-sm" ng-model="solution.problem_name" placeholder="problem name"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="link-form" class="col-sm-2 control-label">Problem link</label>
+
+        <div class="col-sm-3">
+            <input id="link-form" class="form-control input-sm" ng-model="solution.problem_link" placeholder="Link to the problem"/>
         </div>
     </div>
 

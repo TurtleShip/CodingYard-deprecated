@@ -13,5 +13,7 @@
   "language": "JAVA",
   "difficulty": "HARD",
   "division": "DIV1",
-  "problem_number": 256
+  "problem_number": 256,
+  "problem_name": null,
+  "problem_link": null
 }

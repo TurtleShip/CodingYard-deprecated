@@ -43,11 +43,13 @@ public class TopCoderSolutionResource {
     @UnitOfWork
     @Produces(MediaType.APPLICATION_JSON)
     public Response uploadSolution(@Auth CodingyardUser author,
-                                   @FormParam("division") TopCoderDivision division,
-                                   @FormParam("difficulty") TopCoderDifficulty difficulty,
-                                   @FormParam("problem_number") Long problemNumber,
-                                   @FormParam("language") Language language,
-                                   @FormParam("content") String content) {
+                                   @FormParam("division") @NotNull TopCoderDivision division,
+                                   @FormParam("difficulty") @NotNull TopCoderDifficulty difficulty,
+                                   @FormParam("problem_number") @NotNull Long problemNumber,
+                                   @FormParam("language") @NotNull Language language,
+                                   @FormParam("content") @NotNull String content,
+                                   @FormParam("problem_name") Optional<String> problemName,
+                                   @FormParam("problem_link") Optional<String> problemLink) {
 
         if (!SolutionAccessApprover.canCreate(author)) {
             return Response.status(Response.Status.FORBIDDEN)
@@ -59,6 +61,12 @@ public class TopCoderSolutionResource {
             final Date submissionDate = new Date();
             final String filePath = tcManager.save(author, content, division, difficulty, problemNumber, language, submissionDate).toString();
             final TopCoderSolution solution = new TopCoderSolution(author, submissionDate, filePath, language, difficulty, division, problemNumber);
+            if (problemName.isPresent()) {
+                solution.setProblemName(problemName.get());
+            }
+            if (problemLink.isPresent()) {
+                solution.setProblemLink(problemLink.get());
+            }
             userManager.saveSolution(author, solution);
             userManager.flush();
             return Response.status(Response.Status.CREATED)
