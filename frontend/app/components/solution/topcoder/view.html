@@ -105,54 +105,51 @@ github : https://github.com/lorenzofox3/Smart-Table
     </tfoot>
 </table>
 
-<div ng-show="pickedSolution" class="solution-selected-indicator-wrapper bg-success">
-    <div class="solution-selected-indicator">
-        <!-- TODO: Perhaps put te problem name if one exists instead of the below message? -->
-        <strong>You selected the below solution :)</strong>
-    </div>
-</div>
-
 <div ng-show="pickedSolution" class="solution-metadata-wrapper">
     <div class="solution-metadata">
-
-
         <div class="row solution-row">
-            <div class="col-md-2"><strong>Division</strong></div>
+            <div class="col-md-2 text-right"><strong>Division</strong></div>
             <div class="col-md-10">{{pickedSolution.division | lowercase}}</div>
         </div>
 
         <div class="row solution-row">
-            <div class="col-md-2"><strong>Difficulty</strong></div>
+            <div class="col-md-2 text-right"><strong>Difficulty</strong></div>
             <div class="col-md-10">{{pickedSolution.difficulty | lowercase}}</div>
         </div>
 
         <div class="row solution-row">
-            <div class="col-md-2"><strong>SRM #</strong></div>
+            <div class="col-md-2 text-right"><strong>SRM #</strong></div>
             <div class="col-md-10">{{pickedSolution.problem_number}}</div>
         </div>
 
         <div class="row solution-row">
-            <div class="col-md-2"><strong>Language</strong></div>
-            <div class="col-md-10">{{pickedSolution.language}}</div>
+            <div class="col-md-2 text-right"><strong>Language</strong></div>
+            <div class="col-md-10">{{pickedSolution.language | lowercase}}</div>
         </div>
 
         <div class="row solution-row">
-            <div class="col-md-2"><strong>Uploaded at</strong></div>
-            <div class="col-md-10">{{pickedSolution.submitted | date:'medium'}}</div>
-        </div>
-
-        <div class="row solution-row">
-            <div class="col-md-2"><strong>Author</strong></div>
+            <div class="col-md-2 text-right"><strong>Author</strong></div>
             <div class="col-md-10"><a ui-sref="userView({userId: pickedSolution.author.id})" target="_blank">{{pickedSolution.author.username}}</a></div>
         </div>
 
         <div class="row solution-row">
-            <div class="col-md-2"><strong>Problem name</strong></div>
+            <div class="col-md-2 text-right"><strong>Uploaded at</strong></div>
+            <div class="col-md-10">{{pickedSolution.submitted | date:'medium'}}</div>
+        </div>
+
+        <div class="row solution-row">
+            <div class="col-md-2 text-right"><strong>Link</strong></div>
+            <div class="col-md-10">{{pickedSolution.link}}</div>
+        </div>
+
+
+        <div class="row solution-row">
+            <div class="col-md-2 text-right"><strong>Problem name</strong></div>
             <div class="col-md-10">Wassup</div>
         </div>
 
         <div class="row">
-            <div class="col-md-2"><strong>Url to the problem</strong></div>
+            <div class="col-md-2 text-right"><strong>Url to the problem</strong></div>
             <div class="col-md-10">http://www.putmesomelink.com/goodprobs?id=3</div>
         </div>
     </div>
