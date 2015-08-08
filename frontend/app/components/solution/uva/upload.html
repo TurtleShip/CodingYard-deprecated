@@ -27,6 +27,24 @@
     </div>
 
     <div class="form-group">
+        <label for="name-form" class="col-sm-2 control-label">Name</label>
+
+        <div class="col-sm-3">
+            <input id="name-form" class="form-control input-sm" ng-model="solution.problem_name"
+                   placeholder="problem name"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="link-form" class="col-sm-2 control-label">Problem link</label>
+
+        <div class="col-sm-3">
+            <input id="link-form" class="form-control input-sm" ng-model="solution.problem_link"
+                   placeholder="Link to the problem"/>
+        </div>
+    </div>
+
+    <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
             <button ng-disabled="!canSubmit" type="submit" class="btn btn-default">Submit</button>
         </div>

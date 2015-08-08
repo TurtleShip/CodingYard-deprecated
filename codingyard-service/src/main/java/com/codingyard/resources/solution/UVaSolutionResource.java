@@ -43,9 +43,11 @@ public class UVaSolutionResource {
     @UnitOfWork
     @Produces(MediaType.APPLICATION_JSON)
     public Response uploadSolution(@Auth CodingyardUser author,
-                                   @FormParam("problem_number") Long problemNumber,
-                                   @FormParam("language") Language language,
-                                   @FormParam("content") String content) {
+                                   @FormParam("problem_number") @NotNull Long problemNumber,
+                                   @FormParam("language") @NotNull Language language,
+                                   @FormParam("content") @NotNull String content,
+                                   @FormParam("problem_name") Optional<String> problemName,
+                                   @FormParam("problem_link") Optional<String> problemLink) {
 
         if (!SolutionAccessApprover.canCreate(author)) {
             return Response.status(FORBIDDEN)
@@ -57,7 +59,12 @@ public class UVaSolutionResource {
             final Date submissionDate = new Date();
             final String filePath = uvaManager.save(author, content, problemNumber, language, submissionDate).toString();
             final UVaSolution solution = new UVaSolution(author, submissionDate, filePath, language, problemNumber);
-
+            if (problemName.isPresent()) {
+                solution.setProblemName(problemName.get());
+            }
+            if (problemLink.isPresent()) {
+                solution.setProblemLink(problemLink.get());
+            }
             userManager.saveSolution(author, solution);
             userManager.flush();
             return Response.status(CREATED)
