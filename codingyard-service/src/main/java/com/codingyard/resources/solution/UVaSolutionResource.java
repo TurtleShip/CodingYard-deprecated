@@ -24,6 +24,8 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
+import static javax.ws.rs.core.Response.Status.*;
+
 @Path("/solution/uva")
 public class UVaSolutionResource {
 
@@ -46,7 +48,7 @@ public class UVaSolutionResource {
                                    @FormParam("content") String content) {
 
         if (!SolutionAccessApprover.canCreate(author)) {
-            return Response.status(Response.Status.FORBIDDEN)
+            return Response.status(FORBIDDEN)
                 .entity(String.format("%s is not authorized to upload a solution.\n", author))
                 .build();
         }
@@ -58,7 +60,7 @@ public class UVaSolutionResource {
 
             userManager.saveSolution(author, solution);
             userManager.flush();
-            return Response.status(Response.Status.CREATED)
+            return Response.status(CREATED)
                 .entity(solution.getId())
                 .build();
         } catch (IOException e) {
@@ -77,7 +79,7 @@ public class UVaSolutionResource {
 
         final Optional<UVaSolution> searchResult = uvaManager.findById(solutionId);
         if (!searchResult.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND)
+            return Response.status(NOT_FOUND)
                 .entity(String.format("There is no solution with id %d.\n", solutionId))
                 .build();
         }
@@ -94,7 +96,7 @@ public class UVaSolutionResource {
     public Response getContent(@PathParam("solution_id") @NotNull Long solutionId) {
         final Optional<UVaSolution> searchResult = uvaManager.findById(solutionId);
         if (!searchResult.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND)
+            return Response.status(NOT_FOUND)
                 .entity(String.format("There is no solution with id %d.\n", solutionId))
                 .build();
         }
@@ -118,7 +120,7 @@ public class UVaSolutionResource {
         if (username.isPresent()) {
             final Optional<CodingyardUser> searchResult = userManager.findByUsername(username.get());
             if (!searchResult.isPresent()) {
-                return Response.status(Response.Status.NOT_FOUND)
+                return Response.status(NOT_FOUND)
                     .entity(String.format("There is no user with username %s.\n", username))
                     .build();
             }
@@ -161,7 +163,45 @@ public class UVaSolutionResource {
                 return Response.serverError().entity("Couldn't delete the solution. Please try again later.").build();
             }
         } else {
-            return Response.status(Response.Status.NOT_FOUND)
+            return Response.status(NOT_FOUND)
+                .entity("Couldn't find solution with id " + solutionId)
+                .build();
+        }
+    }
+
+    @Path("/edit/name")
+    @PUT
+    @UnitOfWork
+    public Response editProblemName(@Auth CodingyardUser user,
+                                    @FormParam("solution_id") @NotNull Long solutionId,
+                                    @FormParam("problem_name") String problemName) {
+        final Optional<UVaSolution> searchResult = uvaManager.findById(solutionId);
+        if (searchResult.isPresent() && SolutionAccessApprover.canEdit(user, searchResult.get())) {
+            final UVaSolution solution = searchResult.get();
+            solution.setProblemName(problemName);
+            uvaManager.save(solution);
+            return Response.ok().build();
+        } else {
+            return Response.status(NOT_FOUND)
+                .entity("Couldn't find solution with id " + solutionId)
+                .build();
+        }
+    }
+
+    @Path("/edit/link")
+    @PUT
+    @UnitOfWork
+    public Response editProblemURL(@Auth final CodingyardUser user,
+                                   @FormParam("solution_id") @NotNull final Long solutionId,
+                                   @FormParam("problem_link") final String problemLink) {
+        final Optional<UVaSolution> searchResult = uvaManager.findById(solutionId);
+        if (searchResult.isPresent() && SolutionAccessApprover.canEdit(user, searchResult.get())) {
+            final UVaSolution solution = searchResult.get();
+            solution.setProblemLink(problemLink);
+            uvaManager.save(solution);
+            return Response.ok().build();
+        } else {
+            return Response.status(NOT_FOUND)
                 .entity("Couldn't find solution with id " + solutionId)
                 .build();
         }

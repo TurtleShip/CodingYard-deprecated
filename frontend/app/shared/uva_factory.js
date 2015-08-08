@@ -29,6 +29,16 @@
             deleteSolution: {
                 method: 'DELETE',
                 url: '/api/solution/uva/:id'
+            },
+            editProblemName: {
+                url: '/api/solution/uva/edit/name',
+                method: 'PUT',
+                transformRequest: TransformRequest
+            },
+            editProblemLink: {
+                url: '/api/solution/uva/edit/link',
+                method: 'PUT',
+                transformRequest: TransformRequest
             }
         });
     });

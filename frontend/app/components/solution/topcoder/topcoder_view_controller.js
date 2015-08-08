@@ -134,8 +134,6 @@
                 );
             };
 
-            $scope.getSolutions();
-
             $scope.editProblemName = function () {
                 var deferred = $q.defer();
                 TopCoder.editProblemName({
@@ -178,6 +176,8 @@
 
                 return deferred.promise;
             };
+
+            $scope.getSolutions();
 
             if (!AuthService.isLoggedIn()) {
                 $scope.$on(AUTH_EVENTS.gotBasicUserInfo, $scope.populatePermission);
