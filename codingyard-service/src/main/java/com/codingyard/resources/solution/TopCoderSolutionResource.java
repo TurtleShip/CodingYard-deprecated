@@ -26,6 +26,8 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
+import static javax.ws.rs.core.Response.Status.*;
+
 @Path("/solution/topcoder")
 public class TopCoderSolutionResource {
 
@@ -43,14 +45,16 @@ public class TopCoderSolutionResource {
     @UnitOfWork
     @Produces(MediaType.APPLICATION_JSON)
     public Response uploadSolution(@Auth CodingyardUser author,
-                                   @FormParam("division") TopCoderDivision division,
-                                   @FormParam("difficulty") TopCoderDifficulty difficulty,
-                                   @FormParam("problem_number") Long problemNumber,
-                                   @FormParam("language") Language language,
-                                   @FormParam("content") String content) {
+                                   @FormParam("division") @NotNull TopCoderDivision division,
+                                   @FormParam("difficulty") @NotNull TopCoderDifficulty difficulty,
+                                   @FormParam("problem_number") @NotNull Long problemNumber,
+                                   @FormParam("language") @NotNull Language language,
+                                   @FormParam("content") @NotNull String content,
+                                   @FormParam("problem_name") Optional<String> problemName,
+                                   @FormParam("problem_link") Optional<String> problemLink) {
 
         if (!SolutionAccessApprover.canCreate(author)) {
-            return Response.status(Response.Status.FORBIDDEN)
+            return Response.status(FORBIDDEN)
                 .entity(String.format("%s is not authorized to upload a solution.\n", author))
                 .build();
         }
@@ -59,9 +63,15 @@ public class TopCoderSolutionResource {
             final Date submissionDate = new Date();
             final String filePath = tcManager.save(author, content, division, difficulty, problemNumber, language, submissionDate).toString();
             final TopCoderSolution solution = new TopCoderSolution(author, submissionDate, filePath, language, difficulty, division, problemNumber);
+            if (problemName.isPresent()) {
+                solution.setProblemName(problemName.get());
+            }
+            if (problemLink.isPresent()) {
+                solution.setProblemLink(problemLink.get());
+            }
             userManager.saveSolution(author, solution);
             userManager.flush();
-            return Response.status(Response.Status.CREATED)
+            return Response.status(CREATED)
                 .entity(solution.getId())
                 .build();
         } catch (IOException e) {
@@ -80,7 +90,7 @@ public class TopCoderSolutionResource {
 
         final Optional<TopCoderSolution> searchResult = tcManager.findById(solutionId);
         if (!searchResult.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND)
+            return Response.status(NOT_FOUND)
                 .entity(String.format("There is no solution with id %d.\n", solutionId))
                 .build();
         }
@@ -97,7 +107,7 @@ public class TopCoderSolutionResource {
     public Response getContent(@PathParam("solution_id") @NotNull Long solutionId) {
         final Optional<TopCoderSolution> searchResult = tcManager.findById(solutionId);
         if (!searchResult.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND)
+            return Response.status(NOT_FOUND)
                 .entity(String.format("There is no solution with id %d.\n", solutionId))
                 .build();
         }
@@ -123,7 +133,7 @@ public class TopCoderSolutionResource {
         if (username.isPresent()) {
             final Optional<CodingyardUser> searchResult = userManager.findByUsername(username.get());
             if (!searchResult.isPresent()) {
-                return Response.status(Response.Status.NOT_FOUND)
+                return Response.status(NOT_FOUND)
                     .entity(String.format("There is no user with username %s.\n", username))
                     .build();
             }
@@ -166,7 +176,45 @@ public class TopCoderSolutionResource {
                 return Response.serverError().entity("Couldn't delete the solution. Please try again later.").build();
             }
         } else {
-            return Response.status(Response.Status.NOT_FOUND)
+            return Response.status(NOT_FOUND)
+                .entity("Couldn't find solution with id " + solutionId)
+                .build();
+        }
+    }
+
+    @Path("/edit/name")
+    @PUT
+    @UnitOfWork
+    public Response editProblemName(@Auth CodingyardUser user,
+                                    @FormParam("solution_id") @NotNull Long solutionId,
+                                    @FormParam("problem_name") String problemName) {
+        final Optional<TopCoderSolution> searchResult = tcManager.findById(solutionId);
+        if (searchResult.isPresent() && SolutionAccessApprover.canEdit(user, searchResult.get())) {
+            final TopCoderSolution solution = searchResult.get();
+            solution.setProblemName(problemName);
+            tcManager.save(solution);
+            return Response.ok().build();
+        } else {
+            return Response.status(NOT_FOUND)
+                .entity("Couldn't find solution with id " + solutionId)
+                .build();
+        }
+    }
+
+    @Path("/edit/link")
+    @PUT
+    @UnitOfWork
+    public Response editProblemURL(@Auth final CodingyardUser user,
+                                   @FormParam("solution_id") @NotNull final Long solutionId,
+                                   @FormParam("problem_link") final String problemLink) {
+        final Optional<TopCoderSolution> searchResult = tcManager.findById(solutionId);
+        if (searchResult.isPresent() && SolutionAccessApprover.canEdit(user, searchResult.get())) {
+            final TopCoderSolution solution = searchResult.get();
+            solution.setProblemLink(problemLink);
+            tcManager.save(solution);
+            return Response.ok().build();
+        } else {
+            return Response.status(NOT_FOUND)
                 .entity("Couldn't find solution with id " + solutionId)
                 .build();
         }

@@ -29,6 +29,16 @@
             deleteSolution: {
                 method: 'DELETE',
                 url: '/api/solution/topcoder/:id'
+            },
+            editProblemName: {
+                url: '/api/solution/topcoder/edit/name',
+                method: 'PUT',
+                transformRequest: TransformRequest
+            },
+            editProblemLink: {
+                url: '/api/solution/topcoder/edit/link',
+                method: 'PUT',
+                transformRequest: TransformRequest
             }
         });
     });

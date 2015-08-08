@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-    app.controller('UVaViewController', function ($scope, $log, $modal, $filter,
+    app.controller('UVaViewController', function ($scope, $log, $modal, $filter, $q,
                                                   UVa, AceEditor, SolutionPermission,
                                                   SolutionView,
                                                   AuthService, AUTH_EVENTS, AlertService, $stateParams) {
@@ -89,7 +89,14 @@
                     }).$promise
                         .then(function (response) {
                             solution.canDelete = response.isAllowed;
-                        })
+                        });
+                    SolutionPermission.canEdit({
+                        contest: 'UVA_ONLINE_JUDGE',
+                        id: solution.id
+                    }).$promise
+                        .then(function (response) {
+                            solution.canEdit = response.isAllowed;
+                        });
                 });
             }
         };
@@ -110,6 +117,49 @@
                     $scope.pickedSolution = null;
                 }
             );
+        };
+
+        $scope.editProblemName = function () {
+            var deferred = $q.defer();
+            UVa.editProblemName({
+                solution_id: $scope.pickedSolution.id,
+                problem_name: $scope.pickedSolution.problem_name
+            })
+                .$promise
+                .then(function success() {
+                    AlertService.fireSuccess("Problem name has been changed to " + $scope.pickedSolution.problem_name);
+                    deferred.resolve();
+                })
+                .catch(function error() {
+                    AlertService.fireWarning("Sorry. We couldn't change the problem name to " + $scope.pickedSolution.problem_name + ", try again later.");
+                    deferred.resolve("Error while editing problem link.");
+                });
+
+            return deferred.promise;
+        };
+
+        //$scope.editProblemLink = function (id, link) {
+        $scope.editProblemLink = function () {
+            /*
+             Return deferred here to tell x-editable whether editing was successful or not.
+             If editing wasn't successful, then we ned to let x-editable know so that
+             it can revert $scope.pickedSolution.problem_link to its original value.
+             */
+            var deferred = $q.defer();
+            UVa.editProblemLink({
+                solution_id: $scope.pickedSolution.id,
+                problem_link: $scope.pickedSolution.problem_link
+            }).$promise
+                .then(function success() {
+                    AlertService.fireSuccess("Problem link has been changed to " + $scope.pickedSolution.problem_link);
+                    deferred.resolve();
+                })
+                .catch(function error() {
+                    AlertService.fireWarning("Sorry. We couldn't change the problem link to " + $scope.pickedSolution.problem_link + ", try again later.");
+                    deferred.resolve("Error while editing problem link.");
+                });
+
+            return deferred.promise;
         };
 
         $scope.getSolutions();

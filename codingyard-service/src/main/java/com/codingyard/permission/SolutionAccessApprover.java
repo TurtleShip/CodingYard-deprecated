@@ -38,14 +38,14 @@ public class SolutionAccessApprover {
     }
 
     /**
-     * Only the author can edit its solution.
+     * The author, admin, or global admin can edit a solution.
      *
      * @param user     user who wants to edit {@code solution}
      * @param solution solution to be edited.
      * @return {@code true} if the user can edit the solution. {@code false} otherwise.
      */
     public static boolean canEdit(final CodingyardUser user, final Solution solution) {
-        return user.equals(solution.getAuthor());
+        return user.equals(solution.getAuthor()) || user.getRole().getLevel() >= Role.ADMIN.getLevel();
     }
 
     /**
