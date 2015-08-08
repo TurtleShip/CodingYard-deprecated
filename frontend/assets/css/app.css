@@ -40,3 +40,7 @@ body {
 .st-selected {
     background-color: #C8EFB4 !important;
 }
+
+.wordwrap {
+    word-break: break-all;
+}
