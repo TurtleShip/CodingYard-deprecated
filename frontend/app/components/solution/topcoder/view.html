@@ -129,7 +129,8 @@ github : https://github.com/lorenzofox3/Smart-Table
 
         <div class="row solution-row">
             <div class="col-md-2 text-right"><strong>Author</strong></div>
-            <div class="col-md-10"><a ui-sref="userView({userId: pickedSolution.author.id})" target="_blank">{{pickedSolution.author.username}}</a></div>
+            <div class="col-md-10"><a ui-sref="userView({userId: pickedSolution.author.id})" target="_blank">{{pickedSolution.author.username}}</a>
+            </div>
         </div>
 
         <div class="row solution-row">
@@ -142,15 +143,69 @@ github : https://github.com/lorenzofox3/Smart-Table
             <div class="col-md-10">{{pickedSolution.link}}</div>
         </div>
 
-
         <div class="row solution-row">
             <div class="col-md-2 text-right"><strong>Problem name</strong></div>
-            <div class="col-md-10">{{pickedSolution.problem_name}}</div>
+            <div class="col-md-4">
+                <span editable-text="pickedSolution.problem_name" e-form="nameForm">
+                    {{pickedSolution.problem_name}}
+                </span>
+            </div>
+            <div class="col-md-6 text-left" ng-show="pickedSolution.canEdit">
+                <form editable-form name="nameForm" ng-show="nameForm.$visible"
+                      class="form-buttons form-inline" onaftersave="editProblemName()">
+
+                    <!-- Save button -->
+                    <button type="submit" ng-disabled="nameForm.$waiting" class="btn btn-sm btn-primary">
+                        <i class="glyphicon glyphicon-ok"></i>
+                    </button>
+
+                    <!-- Cancel button -->
+                    <button type="button" ng-disabled="nameForm.$waiting" ng-click="nameForm.$cancel()"
+                            class="btn btn-sm btn-danger">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </button>
+                </form>
+
+                <button ng-hide="nameForm.$visible"
+                        ng-click="nameForm.$show()"
+                        type="button"
+                        class="btn btn-sm btn-success">
+                    <i class="glyphicon glyphicon-edit"></i>
+                </button>
+            </div>
         </div>
 
         <div class="row">
             <div class="col-md-2 text-right"><strong>Url to the problem</strong></div>
-            <div class="col-md-10">{{pickedSolution.problem_link}}</div>
+            <div class="col-md-4">
+                <span editable-text="pickedSolution.problem_link" e-form="linkForm">
+                    {{pickedSolution.problem_link}}
+                </span>
+            </div>
+            <div class="col-md-6 text-left" ng-show="pickedSolution.canEdit">
+                <form editable-form name="linkForm" ng-show="linkForm.$visible"
+                      class="form-buttons form-inline" onaftersave="editProblemLink()">
+
+                    <!-- Save button -->
+                    <button type="submit" ng-disabled="linkForm.$waiting" class="btn btn-sm btn-primary">
+                        <i class="glyphicon glyphicon-ok"></i>
+                    </button>
+
+                    <!-- Cancel button -->
+                    <button type="button" ng-disabled="linkForm.$waiting" ng-click="linkForm.$cancel()"
+                            class="btn btn-sm btn-danger">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </button>
+                </form>
+
+                <button ng-hide="linkForm.$visible"
+                        ng-click="linkForm.$show()"
+                        type="button"
+                        class="btn btn-sm btn-success">
+                    <i class="glyphicon glyphicon-edit"></i>
+                </button>
+
+            </div>
         </div>
     </div>
 </div>
