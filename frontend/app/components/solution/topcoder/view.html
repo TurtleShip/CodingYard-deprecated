@@ -108,49 +108,49 @@ github : https://github.com/lorenzofox3/Smart-Table
 <div ng-show="pickedSolution" class="solution-metadata-wrapper wordwrap">
     <div class="solution-metadata">
         <div class="row solution-row">
-            <div class="col-md-2 text-right"><strong>Division</strong></div>
-            <div class="col-md-10">{{pickedSolution.division | lowercase}}</div>
+            <div class="col-xs-2 text-right"><strong>Division</strong></div>
+            <div class="col-xs-10">{{pickedSolution.division | lowercase}}</div>
         </div>
 
         <div class="row solution-row">
-            <div class="col-md-2 text-right"><strong>Difficulty</strong></div>
-            <div class="col-md-10">{{pickedSolution.difficulty | lowercase}}</div>
+            <div class="col-xs-2 text-right"><strong>Difficulty</strong></div>
+            <div class="col-xs-10">{{pickedSolution.difficulty | lowercase}}</div>
         </div>
 
         <div class="row solution-row">
-            <div class="col-md-2 text-right"><strong>SRM #</strong></div>
-            <div class="col-md-10">{{pickedSolution.problem_number}}</div>
+            <div class="col-xs-2 text-right"><strong>SRM #</strong></div>
+            <div class="col-xs-10">{{pickedSolution.problem_number}}</div>
         </div>
 
         <div class="row solution-row">
-            <div class="col-md-2 text-right"><strong>Language</strong></div>
-            <div class="col-md-10">{{pickedSolution.language | lowercase}}</div>
+            <div class="col-xs-2 text-right"><strong>Language</strong></div>
+            <div class="col-xs-10">{{pickedSolution.language | lowercase}}</div>
         </div>
 
         <div class="row solution-row">
-            <div class="col-md-2 text-right"><strong>Author</strong></div>
-            <div class="col-md-10"><a ui-sref="userView({userId: pickedSolution.author.id})" target="_blank">{{pickedSolution.author.username}}</a>
+            <div class="col-xs-2 text-right"><strong>Author</strong></div>
+            <div class="col-xs-10"><a ui-sref="userView({userId: pickedSolution.author.id})" target="_blank">{{pickedSolution.author.username}}</a>
             </div>
         </div>
 
         <div class="row solution-row">
-            <div class="col-md-2 text-right"><strong>Uploaded at</strong></div>
-            <div class="col-md-10">{{pickedSolution.submitted | date:'medium'}}</div>
+            <div class="col-xs-2 text-right"><strong>Uploaded at</strong></div>
+            <div class="col-xs-10">{{pickedSolution.submitted | date:'medium'}}</div>
         </div>
 
         <div class="row solution-row">
-            <div class="col-md-2 text-right"><strong>Link</strong></div>
-            <div class="col-md-10">{{pickedSolution.link}}</div>
+            <div class="col-xs-2 text-right"><strong>Link</strong></div>
+            <div class="col-xs-10">{{pickedSolution.link}}</div>
         </div>
 
         <div class="row solution-row">
-            <div class="col-md-2 text-right"><strong>Problem name</strong></div>
-            <div class="col-md-4">
+            <div class="col-xs-2 text-right"><strong>Problem name</strong></div>
+            <div class="col-xs-4">
                 <span editable-text="pickedSolution.problem_name" e-form="nameForm">
                     {{pickedSolution.problem_name}}
                 </span>
             </div>
-            <div class="col-md-6 text-left" ng-show="pickedSolution.canEdit">
+            <div class="col-xs-6 text-left" ng-show="pickedSolution.canEdit">
                 <form editable-form name="nameForm" ng-show="nameForm.$visible"
                       class="form-buttons form-inline" onaftersave="editProblemName()">
 
@@ -176,13 +176,13 @@ github : https://github.com/lorenzofox3/Smart-Table
         </div>
 
         <div class="row">
-            <div class="col-md-2 text-right"><strong>Url to the problem</strong></div>
-            <div class="col-md-4">
+            <div class="col-xs-2 text-right"><strong>Url to the problem</strong></div>
+            <div class="col-xs-4">
                 <span editable-text="pickedSolution.problem_link" e-form="linkForm">
                     {{pickedSolution.problem_link}}
                 </span>
             </div>
-            <div class="col-md-6 text-left" ng-show="pickedSolution.canEdit">
+            <div class="col-xs-6 text-left" ng-show="pickedSolution.canEdit">
                 <form editable-form name="linkForm" ng-show="linkForm.$visible"
                       class="form-buttons form-inline" onaftersave="editProblemLink()">
 
