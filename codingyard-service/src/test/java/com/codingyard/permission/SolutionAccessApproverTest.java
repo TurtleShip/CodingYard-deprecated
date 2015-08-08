@@ -126,18 +126,18 @@ public class SolutionAccessApproverTest {
     }
 
     @Test
-    public void solutionCanBeEditedOnlyByItsAuthor() {
-        assertFalse(SolutionAccessApprover.canEdit(globalAdmin, globalAdminSolutionTwo));
+    public void solutionCanBeEditByAuthorAdminAndGlobalAdmin() {
+        assertTrue(SolutionAccessApprover.canEdit(globalAdmin, globalAdminSolutionTwo));
         assertTrue(SolutionAccessApprover.canEdit(globalAdmin, globalAdminSolution));
-        assertFalse(SolutionAccessApprover.canEdit(globalAdmin, adminSolution));
-        assertFalse(SolutionAccessApprover.canEdit(globalAdmin, memberSolution));
-        assertFalse(SolutionAccessApprover.canEdit(globalAdmin, guestSolution));
+        assertTrue(SolutionAccessApprover.canEdit(globalAdmin, adminSolution));
+        assertTrue(SolutionAccessApprover.canEdit(globalAdmin, memberSolution));
+        assertTrue(SolutionAccessApprover.canEdit(globalAdmin, guestSolution));
 
-        assertFalse(SolutionAccessApprover.canEdit(admin, globalAdminSolution));
-        assertFalse(SolutionAccessApprover.canEdit(admin, adminSolutionTwo));
+        assertTrue(SolutionAccessApprover.canEdit(admin, globalAdminSolution));
+        assertTrue(SolutionAccessApprover.canEdit(admin, adminSolutionTwo));
         assertTrue(SolutionAccessApprover.canEdit(admin, adminSolution));
-        assertFalse(SolutionAccessApprover.canEdit(admin, memberSolution));
-        assertFalse(SolutionAccessApprover.canEdit(admin, guestSolution));
+        assertTrue(SolutionAccessApprover.canEdit(admin, memberSolution));
+        assertTrue(SolutionAccessApprover.canEdit(admin, guestSolution));
 
         assertFalse(SolutionAccessApprover.canEdit(member, globalAdminSolution));
         assertFalse(SolutionAccessApprover.canEdit(member, adminSolution));
