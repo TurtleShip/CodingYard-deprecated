@@ -1,3 +1,6 @@
+# This is deprecated.
+After trying to a lot of tasks common to web development, such as user authentication, ORM, etc., I realized it is not worth it. It was a good learning experience, but not practical. I am re-writing this in RoR for velocity and better development cycle. The RoR version of CodingYard can be found [here](https://github.com/TurtleShip/CodingYard)
+
 # Overview
 This is a website for sharing solutions to coding competitions. It is hosted at [www.codingyard.com](http://www.codingyard.com), or you can host it yourself. Check out **[installation guide](docs/INSTALL_GUIDE.md)** if you want to host it yourself.
 
